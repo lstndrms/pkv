@@ -1,3 +1,4 @@
+/* eslint-disable */
 import {createStore} from 'vuex';
 
 export default createStore({
@@ -6,17 +7,20 @@ export default createStore({
             auth_token: ''
         }
     },
-    getters() {
-
-    },
-    mutations() {
-        SET_TOKEN: (state, payload) => {
-            state.auth_token = payload;
+    getters: {
+        TOKEN: state => {
+            return state.auth_token
         }
     },
-    actions() {
-        SET_TOKEN: (context, payload) => {
-            context.commit('SET_TOKEN', payload);
+    mutations: {
+        setToken: (state, payload) => {
+            state.auth_token = payload;
+        },
+
+    },
+    actions: {
+        setToken: async (context, payload) => {
+            context.commit('setToken', payload);
         }
     }
 })

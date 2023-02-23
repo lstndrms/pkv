@@ -30,7 +30,6 @@ import useValidate from '@vuelidate/core'
 import { email, required, minLength} from '@vuelidate/validators'
 import { computed, reactive } from 'vue'
 
-
 export default {
     setup() {
         const state = reactive({
@@ -73,14 +72,11 @@ export default {
         async submitForm() {
             const isFormCorrect = await this.v$.$validate()
             if(isFormCorrect) {
-                let config = {
-                    headers: {
-                        authorization: 123
-                    }
-                }
-                await axios.post('http://localhost:5000/auth/sign-in', this.state.form, config)
-                .then((res) => {
-                    console.log(res.data.auth_token)
+                
+                await axios.post('http://localhost:5000/auth/sign-in', this.state.form)
+                .then(async (res) => {
+                    localStorage.setItem('token', res.data.auth_token);
+                    await this.$store.dispatch('setToken', res.data.auth_token)
                     this.$router.push('/profile')
                 })
                 .catch((e)=> {

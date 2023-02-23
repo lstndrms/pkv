@@ -1,6 +1,7 @@
 import AuthPage from '@/pages/AuthPage.vue';
 import RegisterPage from '@/pages/RegisterPage.vue';
 import ProfilePage from '@/pages/ProfilePage.vue';
+import RecoverPage from '@/pages/RecoverPage';
 import { createRouter, createWebHistory} from 'vue-router';
 const routes = [
     {
@@ -18,6 +19,10 @@ const routes = [
     {
         path: '/profile',
         component: ProfilePage
+    },
+    {
+        path: '/password_recover',
+        component: RecoverPage
     }
 ]
 

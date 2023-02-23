@@ -75,11 +75,11 @@ export default {
                 fio: '',
                 date_of_birth_unformatted: '',
                 date_of_birth: '',
-                gender: '1',
+                gender: 'male',
                 phone_number: '',
                 parent_phone_number: '',
                 current_school: '',
-                education_year: 10,
+                education_year: 9,
                 confirm: ''
             }
         })
@@ -133,9 +133,10 @@ export default {
             this.state.form.date_of_birth = this.parseDate()
             if(isFormCorrect) {
                 await axios.post('http://localhost:5000/auth/sign-up', this.state.form)
+                //eslint-disable-next-line
                 .then((res) => {
-                    console.log(res)
-                    this.$router.push('/profile')
+                    
+                    this.$router.push('/login')
                 })
                 .catch((e)=> {
                     this.showError(e.response.data.message)
