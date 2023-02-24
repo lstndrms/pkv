@@ -1,17 +1,12 @@
 /* eslint-disable */
 import {createStore} from 'vuex';
-// import {stat} from "@babel/core/lib/gensync-utils/fs";
 
 export default createStore({
     state() {
         return {
             auth_token: '',
             user_data: {},
-            user_first_profile: {},
-            user_second_profile: {},
-            user_foreign_language: {},
-            user_first_subject: {},
-            user_second_subject: {},
+            user_status: {}
         }
     },
     getters: {
@@ -36,6 +31,9 @@ export default createStore({
         USER_SECOND_SUBJECT: state => {
             return state.user_second_subject
         },
+        USER_STATUS: state => {
+            return state.user_status
+        }
     },
     mutations: {
         setToken: (state, payload) => {
@@ -46,6 +44,9 @@ export default createStore({
         },
         setUser: (state, payload) => {
             state.user_data = payload
+        },
+        setStatus: (state, payload) => {
+            state.user_status = payload
         },
         setUserFirstProfile: (state, payload) => {
             state.user_first_profile = payload
@@ -70,6 +71,7 @@ export default createStore({
         removeToken: async (context) => {
             context.commit('removeToken');
         },
+
         setUser: async (context, payload) => {
             context.commit('setUser', payload)
             context.commit('setUserFirstProfile', payload.first_profile)
