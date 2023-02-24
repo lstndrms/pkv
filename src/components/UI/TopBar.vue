@@ -4,7 +4,7 @@
             <div class="row">
                 <div class="top-bar">
                     <div class="top-block left">
-                        <img src="@/assets/logo.png" alt="" class="top-logo">
+                        <img src="@/assets/placeholder.svg" alt="" class="top-logo">
                         <strong>ГБОУ Школа "Покровский квартал"</strong>
                     </div>
                     <div class="top-block right">
@@ -39,13 +39,11 @@ export default {
 
 <style scoped>
 .top-bar {
-    
     display: flex;
     justify-content: space-between;
     
 }
 .top-logo {
-    
     height: auto;
     width: auto;
     max-width: 50px;
@@ -67,7 +65,7 @@ export default {
 }
 .top-bgc {
     background-color: #F1F1F1;
-    padding-bottom: 1%;
-    padding-top: 1%;
+    padding-bottom: 0.2rem;
+    padding-top: 0.2rem;
 }
 </style>

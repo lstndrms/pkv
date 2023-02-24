@@ -4,6 +4,9 @@ import ProfilePage from '@/pages/ProfilePage.vue';
 import ProfileDataPage from '@/pages/ProfileDataPage.vue';
 import ProfileResultsPage from '@/pages/ProfileResultsPage.vue';
 import RecoverPage from '@/pages/RecoverPage';
+import TestDates from "@/pages/TestDates.vue";
+import ProfileDataPage from "@/pages/ProfileDataPage.vue";
+import ProfileResultsPage from "@/pages/ProfileResultsPage.vue";
 import { createRouter, createWebHistory} from 'vue-router';
 const routes = [
     {
@@ -25,6 +28,10 @@ const routes = [
     {
         path: '/password_recover',
         component: RecoverPage
+    },
+    {
+        path: '/tds',
+        component: TestDates,
     },
     {
         path: '/profile/data',
