@@ -6,7 +6,6 @@ import TestDates from "@/pages/TestDates.vue";
 import ProfileDataPage from "@/pages/ProfileDataPage.vue";
 import ProfileResultsPage from "@/pages/ProfileResultsPage.vue";
 import { createRouter, createWebHistory} from 'vue-router';
-import TestDates from "@/pages/TestDates.vue";
 const routes = [
     {
         path: '/',
