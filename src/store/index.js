@@ -6,6 +6,7 @@ export default createStore({
         return {
             auth_token: '',
             user_data: {},
+            user_status: {}
         }
     },
     getters: {
@@ -14,6 +15,9 @@ export default createStore({
         },
         USER: state => {
             return state.user_data
+        },
+        USER_STATUS: state => {
+            return state.user_status
         }
     },
     mutations: {
@@ -25,6 +29,9 @@ export default createStore({
         },
         setUser: (state, payload) => {
             state.user_data = payload
+        },
+        setStatus: (state, payload) => {
+            state.user_status = payload
         }
     },
     actions: {
@@ -37,6 +44,7 @@ export default createStore({
 
         setUser: async (context, payload) => {
             context.commit('setUser', payload)
+            context.commit('setStatus', payload.status)
         }
     }
 })

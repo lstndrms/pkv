@@ -42,6 +42,7 @@ export default {
     
     display: flex;
     justify-content: space-between;
+    
 }
 .top-logo {
     
@@ -54,6 +55,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    flex-wrap: wrap;
 }
 .left {
     width: 66%;
