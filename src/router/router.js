@@ -1,6 +1,8 @@
 import AuthPage from '@/pages/AuthPage.vue';
 import RegisterPage from '@/pages/RegisterPage.vue';
 import ProfilePage from '@/pages/ProfilePage.vue';
+import ProfileDataPage from '@/pages/ProfileDataPage.vue';
+import ProfileResultsPage from '@/pages/ProfileResultsPage.vue';
 import RecoverPage from '@/pages/RecoverPage';
 import TestDates from "@/pages/TestDates.vue";
 import ProfileDataPage from "@/pages/ProfileDataPage.vue";
@@ -39,10 +41,6 @@ const routes = [
         path: '/profile/results',
         component: ProfileResultsPage
     },
-    {
-        path: '/tds',
-        component: TestDates,
-    }
 ]
 
 const router = createRouter({
