@@ -2,6 +2,9 @@ import AuthPage from '@/pages/AuthPage.vue';
 import RegisterPage from '@/pages/RegisterPage.vue';
 import ProfilePage from '@/pages/ProfilePage.vue';
 import RecoverPage from '@/pages/RecoverPage';
+import TestDates from "@/pages/TestDates.vue";
+import ProfileDataPage from "@/pages/ProfileDataPage.vue";
+import ProfileResultsPage from "@/pages/ProfileResultsPage.vue";
 import { createRouter, createWebHistory} from 'vue-router';
 import TestDates from "@/pages/TestDates.vue";
 const routes = [
