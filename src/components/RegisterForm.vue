@@ -3,9 +3,18 @@
         <form @submit.prevent class="auth-form">
             <h5 style="align-self: center;">Регистрация</h5>
             <p class="input-container">
-                <span class="input-title">ФИО (полностью)</span>
-                <input type="text" class="input-field" placeholder="Иванов Иван Иванович" v-model="state.form.fio">
-                <small class="error-line" v-if="v$.form.fio.$error">Введите ФИО</small>
+                <span class="input-title">Фамилия</span>
+                <input type="text" class="input-field" placeholder="Иванов" v-model="state.form.surname">
+                <small class="error-line" v-if="v$.form.surname.$error">Введите фамилию</small>
+            </p>
+            <p class="input-container">
+                <span class="input-title">Имя</span>
+                <input type="text" class="input-field" placeholder="Иван" v-model="state.form.name">
+                <small class="error-line" v-if="v$.form.name.$error">Введите имя</small>
+            </p>
+            <p class="input-container">
+                <span class="input-title">Отчество (при наличии)</span>
+                <input type="text" class="input-field" placeholder="Иванович" v-model="state.form.sec_name">
             </p>
             <p class="input-container">
                 <span class="input-title">Дата рождения</span>
@@ -73,6 +82,9 @@ export default {
                 email: '',
                 password: '',
                 fio: '',
+                name: '',
+                surname: '',
+                sec_name: '',
                 date_of_birth_unformatted: '',
                 date_of_birth: '',
                 gender: 'male',
@@ -88,7 +100,8 @@ export default {
                 form: {
                     email: {required, email},
                     password: {required, minLength: minLength(6)},
-                    fio: {required},
+                    name: {required},
+                    surname: {required},
                     date_of_birth_unformatted: {required},
                     gender: {required},
                     phone_number: {required},
@@ -131,6 +144,7 @@ export default {
         async submitForm() {
             const isFormCorrect = await this.v$.$validate()
             this.state.form.date_of_birth = this.parseDate()
+            this.state.form.fio = this.state.form.surname + ' ' + this.state.form.name + (this.state.form.sec_name !== '' ? ' ' : '') + this.state.form.sec_name
             if(isFormCorrect) {
                 await axios.post('http://localhost:5000/auth/sign-up', this.state.form)
                 //eslint-disable-next-line
@@ -179,6 +193,7 @@ export default {
 .error-line {
     padding: 0;
     margin: 0;
+    color: red;
 }
 .input-field {
     width: 100%;

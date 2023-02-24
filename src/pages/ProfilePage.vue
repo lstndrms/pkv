@@ -1,7 +1,8 @@
 <template>
+    <TopBar/>
     <div class="container">
         <div class="row">
-            <TopBar/>
+            
         </div>
     </div>
 </template>
@@ -30,11 +31,15 @@ export default {
         }
         await axios.get('http://localhost:5000/user/me', config)
         .then((res) => {
-            console.log(res)
+            if(res.status === 200) {
+                this.$store.dispatch('setUser', res.data)
+            }
         })
         .catch((e)=> {
             if(e.response.status == 401) {
                 this.$router.push('/login')
+            } else {
+                console.log('serverError')
             }
         });
         
