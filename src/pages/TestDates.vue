@@ -1,6 +1,8 @@
 <template>
-  <TopBar/>
+  
   <DynamicDialog />
+  <div id="content" class="w-12 mt-4 mx-auto" style="margin-bottom: 100px;">
+    <div id="my-tds" class="flex align-items-center justify-content-between" style="margin-bottom: 20px;margin-top: 100px;">
   <Toast />
   <div v-if="userRole === 'admin'" id="content-admin" class="w-10 mt-4 mx-auto" style="height: calc(100vh - 147px)">
     <div id="my-tds" class="flex align-items-center justify-content-between mb-3">
@@ -25,7 +27,7 @@
   <div v-if="userRole === 'user'" id="content-user" class="w-10 mt-4 mx-auto">
     <div id="my-tds" class="flex align-items-center justify-content-between mb-3">
       <span class="text-xl font-bold ml-6">Мои тестирования</span>
-      <Button @click="showTestDateSelection" label="Записаться на тестирование" class="p-button-rounded p-button-secondary p-button-text text-0 surface-600" />
+      <my-button @click="showTestDateSelection">Записаться на тестирование</my-button>
     </div>
     <DataTable :value="tdData" show-gridlines responsiveLayout="scroll" :row-class="rowClass">
       <Column class="w-50" field="column1"></Column>
@@ -41,7 +43,6 @@
 <script>
 import { h } from 'vue';
 
-import TopBar from "@/components/UI/TopBar.vue";
 import DataTable from "primevue/datatable";
 import Button from "primevue/button";
 import Column from "primevue/column";
@@ -49,13 +50,14 @@ import DynamicDialog from "primevue/dynamicdialog";
 import SelectTestDateModal from "@/pages/SelectTestDateModal.vue";
 import CreateTestDateFormModal from "@/pages/CreateTestDateFormModal.vue";
 import axios from "axios";
+import MyButton from '@/components/UI/MyButton.vue'
 export default {
   name: "TestDates",
   components: {
-    TopBar,
     DataTable,
     Column,
-    DynamicDialog
+    DynamicDialog,
+    MyButton
   },
   data() {
     return {

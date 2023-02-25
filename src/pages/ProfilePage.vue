@@ -6,7 +6,7 @@
                 <div class="profile" v-if="this.$store.getters.USER.role === 'user'">
                     <h2>{{ this.$store.getters.USER.fio }}</h2>
                     <div class="status_block">
-                        <p style="color: #0043A8">Код участника: {{ this.$store.getters.USER_STATUS.id }}</p>
+                        <p style="color: #0043A8">Код участника: {{ this.$store.getters.USER.id }}</p>
                         <p style="color: #00A743">Текущий статус: {{ this.$store.getters.USER_STATUS.name }}</p>
                     </div>
                     <div class="tools-block">

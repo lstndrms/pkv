@@ -15,6 +15,7 @@ import Column from "primevue/column";
 import Button from "primevue/button";
 import Toast from 'primevue/toast';
 import InputText from "primevue/inputtext";
+import DropDown from 'primevue/dropdown';
 import RadioButton from "primevue/radiobutton";
 import Calendar from "primevue/calendar";
 import InputNumber from "primevue/inputnumber";
@@ -43,9 +44,8 @@ app.component('Column', Column)
 app.component('Button', Button)
 // eslint-disable-next-line vue/multi-word-component-names
 app.component('Toast', Toast)
+app.component('DropDown', DropDown)
 // eslint-disable-next-line vue/multi-word-component-names
 app.component('Calendar', Calendar)
-
-
 
 app.mount('#app')

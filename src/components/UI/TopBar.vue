@@ -10,7 +10,7 @@
                     <div class="top-block right">
                         <div>
                             <i class="pi pi-user md:text-2xl sm:text-xl"></i>
-                            <span style="text-decoration: underline;margin-left: 1rem;">{{ this.$store.getters.USER.short_fio }}</span>
+                            <span style="text-decoration: underline;margin-left: 1rem;"><router-link to="/profile" style="color: black">{{ this.$store.getters.USER.short_fio }}</router-link></span>
                         </div>
                         <my-button @click="logout">Выйти из системы</my-button>
                     </div>
