@@ -13,6 +13,7 @@ export default createStore({
             user_second_subject: {},
             user_foreign_language: {},
             user_available_test_dates: [],
+            user_test_date: {}
         }
     },
     getters: {
@@ -42,6 +43,9 @@ export default createStore({
         },
         USER_AVAILABLE_TEST_DATES: state => {
             return state.user_available_test_dates
+        },
+        USER_TEST_DATE: state => {
+            return state.user_test_date
         }
     },
     mutations: {
@@ -74,6 +78,9 @@ export default createStore({
         },
         setUserAvailableTestDates: (state, payload) => {
             state.user_available_test_dates = payload
+        },
+        setUserTestDate: (state, payload) => {
+            state.user_test_date = payload
         }
     },
     actions: {
@@ -91,6 +98,7 @@ export default createStore({
             context.commit('setUserFirstSubject', payload.first_profile_subject)
             context.commit('setUserSecondSubject', payload.second_profile_subject)
             context.commit('setUserForeignLanguage', payload.foreign_language)
+            context.commit('setUserTestDate', payload.test_date)
         },
         setAvailableTestDates: async (context, payload) => {
             context.commit('setUserAvailableTestDates', payload)
