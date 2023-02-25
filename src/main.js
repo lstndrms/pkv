@@ -15,6 +15,7 @@ import Column from "primevue/column";
 import Button from "primevue/button";
 import Toast from 'primevue/toast';
 import InputText from "primevue/inputtext";
+import DropDown from 'primevue/dropdown';
 
 const app = createApp(App)
 
@@ -36,6 +37,6 @@ app.component('Column', Column)
 app.component('Button', Button)
 // eslint-disable-next-line vue/multi-word-component-names
 app.component('Toast', Toast)
-
+app.component('DropDown', DropDown)
 
 app.mount('#app')

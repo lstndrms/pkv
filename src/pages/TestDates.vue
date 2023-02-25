@@ -1,11 +1,11 @@
 <template>
   
   <DynamicDialog />
-  <div id="content" class="w-12 mt-4 mx-auto">
-    <div id="my-tds" class="flex align-items-center justify-content-between">
+  <div id="content" class="w-12 mt-4 mx-auto" style="margin-bottom: 100px;">
+    <div id="my-tds" class="flex align-items-center justify-content-between" style="margin-bottom: 20px;margin-top: 100px;">
   <Toast />
       <span class="text-xl font-bold ml-6">Мои тестирования</span>
-      <Button @click="showTestDateSelection" label="Записаться на тестирование" class="p-button-rounded p-button-secondary p-button-text text-0 surface-600" />
+      <my-button @click="showTestDateSelection">Записаться на тестирование</my-button>
     </div>
     <DataTable :value="tdData" show-gridlines responsiveLayout="scroll" :row-class="rowClass">
       <Column class="w-50" field="column1"></Column>
@@ -27,12 +27,14 @@ import Column from "primevue/column";
 import DynamicDialog from "primevue/dynamicdialog";
 import SelectTestDateModal from "@/pages/SelectTestDateModal.vue";
 import axios from "axios";
+import MyButton from '@/components/UI/MyButton.vue'
 export default {
   name: "TestDates",
   components: {
     DataTable,
     Column,
-    DynamicDialog
+    DynamicDialog,
+    MyButton
   },
   data() {
     return {
@@ -142,5 +144,8 @@ export default {
 <style scoped>
   ::v-deep(.grey) {
     background-color: #F5F5F5 !important;
+  }
+  ::v-deep(thead) {
+      display: none;
   }
 </style>
