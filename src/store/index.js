@@ -6,7 +6,12 @@ export default createStore({
         return {
             auth_token: '',
             user_data: {},
-            user_status: {}
+            user_status: {},
+            user_first_profile: {},
+            user_second_profile: {},
+            user_foreign_language: {},
+            user_first_subject: {},
+            user_second_subject: {}
         }
     },
     getters: {
@@ -18,7 +23,22 @@ export default createStore({
         },
         USER_STATUS: state => {
             return state.user_status
-        }
+        },
+        USER_FIRST_PROFILE: state => {
+            return state.user_first_profile.name
+        },
+        USER_SECOND_PROFILE: state => {
+            return state.user_second_profile.name
+        },
+        USER_FOREIGN_LANGUAGE: state => {
+            return state.user_foreign_language.name
+        },
+        USER_FIRST_SUBJECT: state => {
+            return state.user_first_subject.name
+        },
+        USER_SECOND_SUBJECT: state => {
+            return state.user_second_subject.name
+        },
     },
     mutations: {
         setToken: (state, payload) => {
@@ -32,6 +52,21 @@ export default createStore({
         },
         setStatus: (state, payload) => {
             state.user_status = payload
+        },
+        setFP: (state, payload) => {
+            state.user_first_profile = payload
+        },
+        setSP: (state, payload) => {
+            state.user_second_profile = payload
+        },
+        setFL: (state, payload) => {
+            state.user_foreign_language = payload
+        },
+        setFS: (state, payload) => {
+            state.user_first_subject = payload
+        },
+        setSS: (state, payload) => {
+            state.user_second_subject = payload
         }
     },
     actions: {

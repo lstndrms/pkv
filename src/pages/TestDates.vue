@@ -1,7 +1,7 @@
 <template>
-  <TopBar/>
+  
   <DynamicDialog />
-  <div id="content" class="w-10 mt-4 mx-auto">
+  <div id="content" class="w-12 mt-4 mx-auto">
     <div id="my-tds" class="flex align-items-center justify-content-between">
       <span class="text-xl font-bold ml-6">Мои тестирования</span>
       <Button @click="showTestDateSelection" label="Записаться на тестирование" class="p-button-rounded p-button-secondary p-button-text text-0 surface-600" />
@@ -20,7 +20,6 @@
 <script>
 import { h } from 'vue';
 
-import TopBar from "@/components/UI/TopBar.vue";
 import DataTable from "primevue/datatable";
 import Button from "primevue/button";
 import Column from "primevue/column";
@@ -30,7 +29,6 @@ import axios from "axios";
 export default {
   name: "TestDates",
   components: {
-    TopBar,
     DataTable,
     Column,
     DynamicDialog
