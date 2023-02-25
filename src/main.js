@@ -8,10 +8,13 @@ import store from '@/store'
 import PrimeVue from 'primevue/config';
 import DialogService from 'primevue/dialogservice';
 import ConfirmationService from 'primevue/confirmationservice';
+import ToastService from 'primevue/toastservice';
 import DataTable from "primevue/datatable";
 import ConfirmPopup from "primevue/confirmpopup";
 import Column from "primevue/column";
 import Button from "primevue/button";
+import Toast from 'primevue/toast';
+import InputText from "primevue/inputtext";
 
 const app = createApp(App)
 
@@ -21,14 +24,18 @@ app.use(store)
 app.use(PrimeVue)
 app.use(DialogService)
 app.use(ConfirmationService)
+app.use(ToastService)
 
 
 app.component('DataTable', DataTable)
 app.component('ConfirmPopup', ConfirmPopup)
+app.component('InputText', InputText)
 // eslint-disable-next-line vue/multi-word-component-names
 app.component('Column', Column)
 // eslint-disable-next-line vue/multi-word-component-names
 app.component('Button', Button)
+// eslint-disable-next-line vue/multi-word-component-names
+app.component('Toast', Toast)
 
 
 app.mount('#app')
