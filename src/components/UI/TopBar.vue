@@ -3,7 +3,7 @@
         <div class="container">
             <div class="row">
                 <div class="top-bar">
-                    <div class="top-block left">
+                    <div class="top-block left" @click="this.$router.push('/profile')">
                         <img src="@/assets/placeholder.svg" alt="" class="top-logo">
                         <strong>ГБОУ Школа "Покровский квартал"</strong>
                     </div>
@@ -58,6 +58,7 @@ export default {
 .left {
     width: 66%;
     justify-content: flex-start;
+    cursor: pointer;
 }
 .right {
     width: 33%;

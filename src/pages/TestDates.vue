@@ -1,8 +1,9 @@
 <template>
   <TopBar/>
   <DynamicDialog />
+  <Toast />
   <div id="content" class="w-10 mt-4 mx-auto">
-    <div id="my-tds" class="flex align-items-center justify-content-between">
+    <div id="my-tds" class="flex align-items-center justify-content-between mb-3">
       <span class="text-xl font-bold ml-6">Мои тестирования</span>
       <Button @click="showTestDateSelection" label="Записаться на тестирование" class="p-button-rounded p-button-secondary p-button-text text-0 surface-600" />
     </div>
@@ -48,7 +49,7 @@ export default {
         {'column1': 'Профиль 2', 'column2': 'Не выбрано'},
         {'column1': 'Предмет профиля', 'column2': 'Не выбрано'},
         {'column1': 'Иностранный язык', 'column2': 'Не выбрано'},
-      ]
+      ],
     }
   },
   methods: {
@@ -75,10 +76,9 @@ export default {
         onClose: (options) => {
           const data = options.data;
           if (data) {
-            if (data.isChosen === true) {
-              console.log('Выбранный id тестирования: '+data.id)
-            } else {
-              console.log('Тестирование не выбрано')
+            if (data.isError) {
+              this.$toast.add({severity:'error', summary: 'Error Message', detail:data.error.message, life: 5000});
+              console.log(1)
             }
           }
         }
