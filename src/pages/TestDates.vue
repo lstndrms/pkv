@@ -4,6 +4,28 @@
   <div id="content" class="w-12 mt-4 mx-auto" style="margin-bottom: 100px;">
     <div id="my-tds" class="flex align-items-center justify-content-between" style="margin-bottom: 20px;margin-top: 100px;">
   <Toast />
+  <div v-if="userRole === 'admin'" id="content-admin" class="w-10 mt-4 mx-auto" style="height: calc(100vh - 147px)">
+    <div id="my-tds" class="flex align-items-center justify-content-between mb-3">
+      <span class="text-xl font-bold ml-6">Тестирования</span>
+      <Button @click="showTestCreateForm" label="Создать тестирование" class="p-button-rounded p-button-secondary p-button-text text-0 surface-600" />
+    </div>
+    <DataTable :value="adminTdData" :scrollable="true" scroll-height="flex" scrollDirection="both" show-gridlines responsive-layout="scroll">
+      <Column class="w-1" header="ID" field="id"/>
+      <Column class="w-1" header="Дата" field="date"/>
+      <Column class="w-1" header="Время" field="time"/>
+      <Column class="w-2" header="Место проведения" field="location"/>
+      <Column class="w-1" header="Записано" field="registered_persons"/>
+      <Column class="w-1" header="Мест всего" field="max_persons"/>
+      <Column class="w-1 flex align-items-center flex-column" header="Публикация" field="pub_status">
+        <template #body="slotProps">
+          <ProgressSpinner v-if="slotProps.data.isLoading" class="w-25 h-25 " :aria-label="'td'+slotProps.data.id"/>
+          <Button v-if="!slotProps.data.isLoading" @click="changePubStatus(slotProps.data)" :label=this.mapPubStatusButtonLabel(slotProps.data.pub_status) class="p-button-rounded p-button-secondary p-button-text text-0 surface-600" />
+        </template>
+      </Column>
+    </DataTable>
+  </div>
+  <div v-if="userRole === 'user'" id="content-user" class="w-10 mt-4 mx-auto">
+    <div id="my-tds" class="flex align-items-center justify-content-between mb-3">
       <span class="text-xl font-bold ml-6">Мои тестирования</span>
       <my-button @click="showTestDateSelection">Записаться на тестирование</my-button>
     </div>
@@ -26,6 +48,7 @@ import Button from "primevue/button";
 import Column from "primevue/column";
 import DynamicDialog from "primevue/dynamicdialog";
 import SelectTestDateModal from "@/pages/SelectTestDateModal.vue";
+import CreateTestDateFormModal from "@/pages/CreateTestDateFormModal.vue";
 import axios from "axios";
 import MyButton from '@/components/UI/MyButton.vue'
 export default {
@@ -38,10 +61,14 @@ export default {
   },
   data() {
     return {
+      userRole: '',
       tdData: [
         {'column1': 'Дата', 'column2': 'Не выбрано'},
         {'column1': 'Время', 'column2': 'Не выбрано'},
         {'column1': 'Место проведения', 'column2': 'Не выбрано'}
+      ],
+      adminTdData: [
+        {id: 228, date: '15.03.2023', time: '23:15', location: 'Большой Трехсвятительский переулок, д.4', registered_persons: 14, max_persons: 100, pub_status: 'hidden'}
       ],
       profileData : [
         {'column1': 'Профиль 1', 'column2': 'Не выбрано'},
@@ -84,6 +111,29 @@ export default {
         }
       })
     },
+    showTestCreateForm() {
+      this.$dialog.open(CreateTestDateFormModal, {
+        props: {
+          header: 'Создать тестирование',
+          style: {
+            width: '65vw',
+          },
+          breakpoints:{
+            '960px': '75vw',
+            '640px': '90vw'
+          },
+          modal: true,
+        },
+        onClose: (options) => {
+          const data = options.data;
+            if (data.err) {
+              this.$toast.add({severity:'error', summary: 'Error '+data.err.status, detail:data.err.message, life: 5000});
+            } else {
+              this.$router.push('/tds')
+            }
+        }
+      })
+    },
     rowClass() {
       return 'grey'
     },
@@ -93,6 +143,7 @@ export default {
       const ufl = this.$store.getters.USER_FOREIGN_LANGUAGE
       const ufs = this.$store.getters.USER_FIRST_SUBJECT
       const uss = this.$store.getters.USER_SECOND_SUBJECT
+      const utd = this.$store.getters.USER_TEST_DATE
       if (ufp.id !== 0) {
         this.profileData[0].column2 = ufp.name
       }
@@ -108,6 +159,44 @@ export default {
       if (ufl.id !== 0) {
         this.profileData[4].column2 = ufl.name
       }
+      if (utd.id !== 0) {
+        this.tdData[0].column2 = utd.date
+        this.tdData[1].column2 = utd.time
+        this.tdData[2].column2 = utd.location
+      }
+    },
+    checkUserRole() {
+      this.userRole = this.$store.getters.USER.role
+    },
+    mapPubStatusButtonLabel(status) {
+      console.log(status)
+      if (status === 'hidden') {
+        return 'Скрыто'
+      } else {
+        return 'Открыто'
+      }
+    },
+    async changePubStatus(data) {
+      const config = {
+        headers: {
+          authorization: 'Bearer ' + this.$store.getters.TOKEN
+        }
+      }
+      data.isLoading = true
+      let newStatus = ''
+      if (data.pub_status === 'hidden') {
+        newStatus = 'shown'
+      } else {
+        newStatus = 'hidden'
+      }
+      await axios.post('http://localhost:5000/td/setStatus/'+data.id+'/'+newStatus, {}, config)
+          .then(() => {
+            data.pub_status = newStatus
+          })
+          .catch((e) => {
+            this.$toast.add({severity:'error', summary: 'Error '+e.response.status, detail:e.response.data.message, life: 5000});
+          })
+      data.isLoading = false
     }
   },
   async mounted() {
@@ -130,12 +219,22 @@ export default {
           }
         })
         .catch((e)=> {
-          if(e.response.status == 401) {
+          if(e.response.status === 401) {
             this.$router.push('/login')
           } else {
             console.log('serverError')
           }
         });
+    this.checkUserRole()
+    if (this.userRole === 'admin') {
+      await axios.get('http://localhost:5000/td/list', config)
+          .then((res) => {
+            this.adminTdData = res.data
+          })
+          .catch((e) => {
+            this.$toast.add({severity:'error', summary: 'Error '+e.response.status, detail:e.response.data.message, life: 5000});
+          })
+    }
     await this.fetchData()
   },
 }
@@ -146,6 +245,6 @@ export default {
     background-color: #F5F5F5 !important;
   }
   ::v-deep(thead) {
-      display: none;
+    display: none;
   }
 </style>

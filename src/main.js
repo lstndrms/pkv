@@ -16,6 +16,10 @@ import Button from "primevue/button";
 import Toast from 'primevue/toast';
 import InputText from "primevue/inputtext";
 import DropDown from 'primevue/dropdown';
+import RadioButton from "primevue/radiobutton";
+import Calendar from "primevue/calendar";
+import InputNumber from "primevue/inputnumber";
+import ProgressSpinner from "primevue/progressspinner";
 
 const app = createApp(App)
 
@@ -31,6 +35,9 @@ app.use(ToastService)
 app.component('DataTable', DataTable)
 app.component('ConfirmPopup', ConfirmPopup)
 app.component('InputText', InputText)
+app.component('RadioButton', RadioButton)
+app.component('InputNumber', InputNumber)
+app.component('ProgressSpinner', ProgressSpinner)
 // eslint-disable-next-line vue/multi-word-component-names
 app.component('Column', Column)
 // eslint-disable-next-line vue/multi-word-component-names
@@ -38,5 +45,7 @@ app.component('Button', Button)
 // eslint-disable-next-line vue/multi-word-component-names
 app.component('Toast', Toast)
 app.component('DropDown', DropDown)
+// eslint-disable-next-line vue/multi-word-component-names
+app.component('Calendar', Calendar)
 
 app.mount('#app')
