@@ -6,9 +6,13 @@
                 <div id="my-tds" class="flex align-items-center justify-content-between" style="margin-bottom: 20px;margin-top: 30px;">
                     <span class="text-xl font-bold ml-6">Персональные данные</span>
                 </div>
-                <DataTable :value="tdData" show-gridlines responsiveLayout="scroll" :row-class="rowClass">
+                <DataTable :value="tdData" editMode="cell" @cell-edit-complete="onCellEditComplete" class="editable-cells-table" responsiveLayout="scroll">
                     <Column class="w-50" field="column1"></Column>
-                    <Column class="w-50" field="column2" ></Column>
+                    <Column class="w-50" field="column2">
+                        <template #editor="{ data, field }">
+                            <InputText v-model="data[field]" autofocus />
+                        </template>
+                    </Column>
                 </DataTable>
             </div>
         </div>

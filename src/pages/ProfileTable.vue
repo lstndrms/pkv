@@ -357,7 +357,7 @@ methods: {
             this.tdData[0].column2 = u_id
         }
         if (u_role !== '') {
-            this.tdData[1].column2 = u_role
+            this.tdData[1].column2 = (u_role === 'admin' ? 'Администратор' : 'Абитуриент')
         }
         if (u_fio !== '') {
             this.tdData[2].column2 = u_fio
