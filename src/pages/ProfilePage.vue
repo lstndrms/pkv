@@ -20,10 +20,10 @@
                         <p style="color: #0043A8">Роль: администратор</p>
                     </div>
                     <div class="tools-block">
-                        <router-link to="/login" class="tool-button">Настройки портала</router-link>
+                        <router-link to="/login" class="tool-button" hidden>Настройки портала</router-link>
                         <router-link to="/profile/users" class="tool-button">Список пользователей</router-link>
                         <router-link to="/tds" class="tool-button">Тестирования</router-link>
-                        <router-link to="/register" class="tool-button">Прием документов</router-link>
+                        <router-link to="/register" class="tool-button" hidden>Прием документов</router-link>
                     </div>
                 </div>
             </div>

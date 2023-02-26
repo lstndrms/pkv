@@ -3,20 +3,23 @@
     <div class="container">
         <div class="row">
             <ProfileTable/>
+            <UploadScreenshot/>
         </div>
     </div>
+    
     <BottomBar/>
 </template>
 <script>
 import TopBar from '@/components/UI/TopBar.vue'
 import ProfileTable from '@/pages/ProfileTable.vue'
 import BottomBar from '@/components/UI/BottomBar.vue'
-
+import UploadScreenshot from '@/components/UploadScreenshot.vue'
 export default {
     components: {
         TopBar,
         ProfileTable,
-        BottomBar
+        BottomBar,
+        UploadScreenshot
     }
 }
 

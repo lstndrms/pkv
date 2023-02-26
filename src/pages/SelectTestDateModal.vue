@@ -38,16 +38,6 @@ export default {
     return {
       isLoading: false,
       testDates: [
-        {
-          id: 228,
-          date: "23.02.2023",
-          time: "10:30",
-          location: "г.Москва ул. Академика Волгина 13",
-          registered_persons: 0,
-          max_persons: 100,
-          education_year: 10,
-          pub_status: "shown"
-        }
       ]
     }
   },
