@@ -40,9 +40,9 @@
     <div v-if="changed" id="my-tds" class="flex align-items-center justify-content-end" style="margin-bottom: 20px;margin-top: 100px;">
         <my-button @click="submitChanges">Сохранить</my-button>
     </div>
-    
+
 </div>
-    <vue-basic-alert 
+    <vue-basic-alert
        :duration="300"
        :closeIn="3000"
        ref="alert" />
@@ -96,7 +96,7 @@ data() {
             {'column1': 'Статус', 'status': ''}
         ],
         statusList: [
-            
+
         ],
     }
 },
@@ -126,7 +126,7 @@ methods: {
         const u_phone_1 = this.$store.getters.USER.phone_number
         const u_phone_2 = this.$store.getters.USER.parent_phone_number
         const u_current_school = this.$store.getters.USER.current_school
-        
+
         const u_yod = this.$store.getters.USER.education_year
         const u_status = this.$store.getters.USER_STATUS.name
 
@@ -187,7 +187,7 @@ methods: {
             }
         }
         const new_year = this.yData[0].eduYear
-        
+
         const u_id = this.$store.getters.USER.id
         const u_fio = this.$store.getters.USER.fio
         const u_bday = this.$store.getters.USER.date_of_birth
@@ -228,7 +228,7 @@ methods: {
                 this.showError(e);
             })
         }
-        
+
     }
 },
 async mounted() {

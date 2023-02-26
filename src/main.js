@@ -20,6 +20,7 @@ import RadioButton from "primevue/radiobutton";
 import Calendar from "primevue/calendar";
 import InputNumber from "primevue/inputnumber";
 import ProgressSpinner from "primevue/progressspinner";
+import MultiSelect from "primevue/multiselect";
 
 const app = createApp(App)
 
@@ -38,6 +39,7 @@ app.component('InputText', InputText)
 app.component('RadioButton', RadioButton)
 app.component('InputNumber', InputNumber)
 app.component('ProgressSpinner', ProgressSpinner)
+app.component('MultiSelect', MultiSelect)
 // eslint-disable-next-line vue/multi-word-component-names
 app.component('Column', Column)
 // eslint-disable-next-line vue/multi-word-component-names
