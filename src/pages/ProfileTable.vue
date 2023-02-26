@@ -28,7 +28,7 @@
     <DataTable :row-class="rowClass" show-gridlines :value="stData" editMode="row" dataKey="id" v-model:editingRows="editingRowsStatus" @row-edit-save="onRowEditSaveStatus" responsiveLayout="scroll">
         <Column field="column1" style="width:50%">
         </Column>
-        <Column field="eduYear" :style="{width: (this.$store.getters.USER.role === 'admin' ? ('40%') : ('50%'))}">
+        <Column field="status" :style="{width: (this.$store.getters.USER.role === 'admin' ? ('40%') : ('50%'))}">
             <template #editor="{ data, field }">
                 <DropDown v-model="data[field]" :options="statusList" optionLabel="label" optionValue="value" placeholder="Выберите класс">
                 </DropDown>
@@ -54,6 +54,7 @@ import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import MyButton from '@/components/UI/MyButton.vue'
 import axios from 'axios'
+import {getListService} from '@/services/statusesList.js'
 export default {
 name: "ProfileTable",
 components: {
@@ -64,6 +65,13 @@ components: {
 data() {
     return {
         changed: false,
+        changedFields: {
+            'year': false,
+            'status': false,
+            'profile1': false,
+            'profile2': false,
+            'language': false,
+        },
         tdData: [
         {'column1': 'Код участника', 'column2': 'Не выбрано'},
         {'column1': 'Роль', 'column2': 'Не выбрано'},
@@ -88,18 +96,20 @@ data() {
             {'column1': 'Статус', 'status': ''}
         ],
         statusList: [
-            {label: 'status', value: ''}
+            
         ],
     }
 },
 methods: {
     onRowEditSaveYear(event) {
         this.changed = true
+        this.changedFields.year = true
         let { newData, index } = event;
         this.yData[index] = newData;
     },
     onRowEditSaveStatus(event) {
         this.changed = true
+        this.changedFields.status = true
         let { newData, index } = event;
         this.stData[index] = newData;
     },
@@ -119,6 +129,7 @@ methods: {
         
         const u_yod = this.$store.getters.USER.education_year
         const u_status = this.$store.getters.USER_STATUS.name
+
         if (u_id !== 0) {
             this.tdData[0].column2 = u_id
         }
@@ -149,9 +160,15 @@ methods: {
         if (u_yod !== 0) {
             this.yData[0].eduYear = u_yod
         }
-        if (u_status !== 0) {
+        if (u_status !== '') {
             this.stData[0].status = u_status
         }
+
+
+        let stList = getListService();
+        stList.forEach((elem) => {this.statusList.push({label: elem.name, value: elem.name})})
+
+
     },
     showError(errMsg) {
         this.$refs.alert.showAlert(
@@ -170,7 +187,7 @@ methods: {
             }
         }
         const new_year = this.yData[0].eduYear
-
+        
         const u_id = this.$store.getters.USER.id
         const u_fio = this.$store.getters.USER.fio
         const u_bday = this.$store.getters.USER.date_of_birth
@@ -190,13 +207,28 @@ methods: {
             "current_school": u_current_school,
             "education_year": new_year
         }
-        await axios.put('http://localhost:5000/user/byId/' + u_id, data, config)
+        if (this.changedFields.year) {
+            await axios.put('http://localhost:5000/user/byId/' + u_id, data, config)
             .then(() => {
                 this.changed = false
+                this.changedFields.language = false
+                this.changedFields.year = false
+                this.changedFields.status = false
+                this.changedFields.profile1 = false
+                this.changedFields.profile2 = false
             })
             .catch((e) => {
                 this.showError(e)
             })
+        }
+
+        if (this.changedFields.status) {
+            await axios.post('http://localhost:5000/user/setStatus/4/22', {}, config)
+            .catch((e) => {
+                this.showError(e);
+            })
+        }
+        
     }
 },
 async mounted() {
@@ -212,6 +244,7 @@ async mounted() {
             authorization: 'Bearer ' + this.$store.getters.TOKEN
     }
     }
+
     await axios.get('http://localhost:5000/user/me', config)
         .then((res) => {
         if(res.status === 200) {
