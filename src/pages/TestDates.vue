@@ -2,14 +2,15 @@
   
   <DynamicDialog />
   <div id="content" class="w-12 mt-4 mx-auto" style="margin-bottom: 100px;">
-    <div id="my-tds" class="flex align-items-center justify-content-between" style="margin-bottom: 20px;margin-top: 100px;">
+    <div id="my-tds" class="flex align-items-center justify-content-between" style="margin-bottom: 20px;">
   <Toast />
   </div>
   </div>
-  <div v-if="userRole === 'admin'" id="content-admin" class="w-10 mt-4 mx-auto" style="height: calc(100vh - 147px)">
+  <div v-if="userRole === 'admin'" id="content-admin" class="w-12 mt-4 mx-auto" style="height: calc(100vh - 147px)">
     <div id="my-tds" class="flex align-items-center justify-content-between mb-3">
       <span class="text-xl font-bold ml-6">Тестирования</span>
-      <Button @click="showTestCreateForm" label="Создать тестирование" class="p-button-rounded p-button-secondary p-button-text text-0 surface-600" />
+      <my-button @click="showTestCreateForm">Создать тестирование</my-button>
+      <!--<Button @click="showTestCreateForm" label="Создать тестирование" class="p-button-rounded p-button-secondary p-button-text text-0 surface-600" />-->
     </div>
     <DataTable :value="adminTdData" :scrollable="true" scroll-height="flex" scrollDirection="both" show-gridlines responsive-layout="scroll">
       <Column class="w-1" header="ID" field="id"/>
@@ -70,7 +71,6 @@ export default {
         {'column1': 'Место проведения', 'column2': 'Не выбрано'}
       ],
       adminTdData: [
-        {id: 228, date: '15.03.2023', time: '23:15', location: 'Большой Трехсвятительский переулок, д.4', registered_persons: 14, max_persons: 100, pub_status: 'hidden'}
       ],
       profileData : [
         {'column1': 'Профиль 1', 'column2': 'Не выбрано'},
