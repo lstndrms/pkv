@@ -3,10 +3,9 @@
     <div class="container">
         <div class="row">
             <ProfileTable/>
-            <UploadScreenshot/>
         </div>
     </div>
-    
+    <UploadScreenshot/>
     <BottomBar/>
 </template>
 <script>

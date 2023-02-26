@@ -12,10 +12,15 @@
                 <div class="auth-form">
                     <form @submit.prevent>
                         <h5>Восстановление пароля</h5>
-                        <h6>Мы вышлем вам ссылку для восстановления на указанный адрес</h6>
+                        <h6>Введите новый пароль</h6>
                         <p>
-                            <input type="text" class="input" placeholder="email" v-model="state.form.email"><br>
-                            <small class="error-line" v-if="v$.form.email.$error">Введите корректный адрес</small>
+                            <input type="password" class="input" placeholder="" v-model="state.form.password"><br>
+                            <small class="error-line" v-if="v$.form.password.$error">Пароль не менее 6 символов</small>
+                        </p>
+                        <h6>Повторите пароль</h6>
+                        <p>
+                            <input type="password" class="input" placeholder="" v-model="state.form.confirm"><br>
+                            <small class="error-line" v-if="v$.form.confirm.$error">Пароли не совпадают</small>
                         </p>
                         <button @click="submitForm" class="form-button">Отправить</button> 
                     </form>
@@ -35,25 +40,27 @@
 <script>
 import axios from 'axios'
 import useValidate from '@vuelidate/core'
-import { email, required } from '@vuelidate/validators'
+import { required, minLength, sameAs } from '@vuelidate/validators'
 import { computed, reactive } from 'vue'
 import LogoBlock from '@/components/UI/LogoBlock.vue'
 
 export default {
-    name: 'RecoverPage', 
+    name: 'SetPassword', 
     components: {
         LogoBlock
     },
     setup() {
         const state = reactive({
             form: {
-                email: ''
+                password: '',
+                confirm: ''
             }
         })
         const rules = computed(() => {
             return {
                 form: {
-                    email: {required, email},
+                    password: {required, minLength: minLength(6)},
+                    confirm: {required, sameAs: sameAs(state.form.password)}
                 }
             }
         })
@@ -76,13 +83,10 @@ export default {
                 position: 'top right' } // Position of the alert 'top right', 'top left', 'bottom left', 'bottom right'
           )
         },
-        clearEmail() {
-            this.state.form.email = '';
-        },
         showSucc() {
             this.$refs.alert_succ.showAlert(
                 'success', // There are 4 types of alert: success, info, warning, error
-                'Письмо выслано, ожидайте', // Message of the alert
+                'Пароль изменен', // Message of the alert
                 'Ура', // Header of the alert
                 { iconSize: 35, // Size of the icon (px)
                 iconType: 'solid', // Icon styles: now only 2 styles 'solid' and 'regular'
@@ -92,8 +96,12 @@ export default {
         async submitForm() {
             const isFormCorrect = await this.v$.$validate()
             if(isFormCorrect) {
+                let body = {
+                    password: this.state.form.password
+                }
+                let token = this.$route.params.token
                 
-                await axios.post('http://localhost:5000/auth/recover/' + this.state.form.email)
+                await axios.post('http://localhost:5000/auth/confirmRecover/' + token, body)
                 //eslint-disable-next-line
                 .then(async (res) => {
                     this.showSucc();
@@ -108,45 +116,5 @@ export default {
     }
 }
 </script>
-
-<style>
-.auth-form {
-    padding-top: 20px;
-    padding-bottom: 20px;
-    width: 100%;
-    text-align: center;
-    background-color: #F1F1F1;
-    border-radius: 10px;
-}
-
-.form-button {
-    width: 50%;
-    border: none;
-    background-color: #D9D9D9;
-    border-radius: 10px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    margin-bottom: 20px;
-}
-.error-line {
-    padding: 0;
-    margin: 0;
-}
-.input {
-    width: 80%;
-    border: none;
-    padding-left: 5%;
-    padding-right: 5%;
-    padding-top: 2%;
-    padding-bottom: 2%;
-    border-radius: 7px;
-}
-.checkbox-box {
-    text-align: left;
-    padding-left: 11%;
-}
-.checkbox-box input {
-    margin-right: 10px;
-}
-
+<style scoped>
 </style>

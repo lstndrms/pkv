@@ -5,7 +5,8 @@
     <div class="row" style="height: calc(100vh - 105px)">
       <DataTable :value="usersData" data-key="id" v-model:filters="filters"
                  filter-display="row" :loading="isLoading"
-                 :global-filter-fields="['id', 'info']" :scrollable="true" scroll-height="flex" scrollDirection="both" show-gridlines responsive-layout="scroll">
+                 :global-filter-fields="['id', 'info']" :scrollable="true" scroll-height="flex" scrollDirection="both" show-gridlines responsive-layout="scroll"
+                 @row-click="rowClick($event)">
         <template #header>
           <div class="flex justify-content-between">
             <div style="text-align:left">
@@ -60,7 +61,7 @@
             </MultiSelect>
           </template>
         </Column>
-        <Column v-if="this.checkColumnChosen('Роль')" class="w-2" header="Роль" :sortable="true" filter-field="role" :show-filter-menu="false">
+        <Column v-if="this.checkColumnChosen('Роль')" class="w-2" header="Роль" filter-field="role" :show-filter-menu="false">
           <template #body="{data}">
             {{data.role}}
           </template>
@@ -74,7 +75,7 @@
             </MultiSelect>
           </template>
         </Column>
-        <Column v-if="this.checkColumnChosen('Пол')" class="w-2" header="Пол" :sortable="true" filter-field="gender" :show-filter-menu="false">
+        <Column v-if="this.checkColumnChosen('Пол')" class="w-2" header="Пол" filter-field="gender" :show-filter-menu="false">
           <template #body="{data}">
             {{data.gender}}
           </template>
@@ -88,7 +89,7 @@
             </MultiSelect>
           </template>
         </Column>
-        <Column v-if="this.checkColumnChosen('Класс поступления')" class="w-2" header="Класс поступления" :sortable="true" filter-field="education_year" :show-filter-menu="false">
+        <Column v-if="this.checkColumnChosen('Класс поступления')" class="w-2" header="Класс поступления" filter-field="education_year" :show-filter-menu="false">
           <template #body="{data}">
             {{data.education_year}}
           </template>
@@ -223,6 +224,7 @@ export default {
     }
   },
   methods: {
+    
     async setToken() {
       const token = localStorage.getItem("token")
       if (token === null) {
@@ -319,6 +321,9 @@ export default {
     },
     checkColumnChosen(name) {
       return this.selectedColumns.includes(name)
+    },
+    rowClick(event) {
+      this.$router.push('/profile/users/'+ event.data.id)
     }
   },
   async mounted() {
@@ -336,5 +341,8 @@ export default {
 <style scoped>
   .p-multiselect {
     max-width: 15rem;
+  }
+  .container {
+    margin-top: 30px;
   }
 </style>

@@ -1,14 +1,14 @@
 <template>
 
 <div id="content" class="w-12 mt-4 mx-auto" style="margin-bottom: 100px;">
-    <div id="my-tds" class="flex align-items-center justify-content-between" style="margin-bottom: 20px;margin-top: 100px;">
+    <div id="my-tds" class="flex align-items-center justify-content-between" style="margin-bottom: 20px;margin-top: 30px;">
       <span class="text-xl font-bold ml-6">Персональные данные</span>
     </div>
     <DataTable :value="tdData" show-gridlines responsiveLayout="scroll" :row-class="rowClass">
       <Column class="w-50" field="column1"></Column>
       <Column class="w-50" field="column2" ></Column>
     </DataTable>
-    <div id="my-tds" class="flex align-items-center justify-content-between" style="margin-bottom: 20px;margin-top: 100px;">
+    <div id="my-tds" class="flex align-items-center justify-content-between" style="margin-bottom: 20px;margin-top: 30px;">
       <span class="text-xl font-bold ml-6">Поступление</span>
     </div>
 

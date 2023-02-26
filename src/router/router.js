@@ -3,6 +3,8 @@ import RegisterPage from '@/pages/RegisterPage.vue';
 import ProfilePage from '@/pages/ProfilePage.vue';
 import RecoverPage from '@/pages/RecoverPage';
 //import TestDates from "@/pages/TestDates.vue";
+import SetPassword from '@/pages/SetPassword.vue'
+import AdminPanel from '@/pages/AdminPanel.vue'
 import ProfileDataPage from "@/pages/ProfileDataPage.vue";
 import ProfileResultsPage from "@/pages/ProfileResultsPage.vue";
 import { createRouter, createWebHistory} from 'vue-router';
@@ -44,6 +46,14 @@ const routes = [
         path: '/profile/users',
         component: UserList
     },
+    {
+        path: '/setPassword/:token',
+        component: SetPassword
+    },
+    {
+        path: '/profile/users/:id',
+        component: AdminPanel
+    }
 ]
 
 const router = createRouter({
