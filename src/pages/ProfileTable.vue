@@ -102,8 +102,9 @@
     <div v-if="changed" id="my-tds" class="flex align-items-center justify-content-end" style="margin-bottom: 20px;margin-top: 50px;">
         <my-button @click="submitChanges">Сохранить</my-button>
     </div>
+
 </div>
-    <vue-basic-alert 
+    <vue-basic-alert
        :duration="300"
        :closeIn="3000"
        ref="alert" />
@@ -163,7 +164,7 @@ data() {
             {'column1': 'Статус', 'status': ''}
         ],
         statusList: [
-            
+
         ],
         pf1Data: [
             {'column1': 'Профиль 1', 'profile1': 'Не выбрано'}
@@ -343,7 +344,7 @@ methods: {
         const u_phone_1 = this.$store.getters.USER.phone_number
         const u_phone_2 = this.$store.getters.USER.parent_phone_number
         const u_current_school = this.$store.getters.USER.current_school
-        
+
         const u_yod = this.$store.getters.USER.education_year
         const u_status = this.$store.getters.USER_STATUS.name
         const u_profile1 = this.$store.getters.USER_FIRST_PROFILE

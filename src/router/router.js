@@ -6,6 +6,7 @@ import RecoverPage from '@/pages/RecoverPage';
 import ProfileDataPage from "@/pages/ProfileDataPage.vue";
 import ProfileResultsPage from "@/pages/ProfileResultsPage.vue";
 import { createRouter, createWebHistory} from 'vue-router';
+import UserList from "@/pages/UserList.vue";
 const routes = [
     {
         path: '/',
@@ -41,7 +42,7 @@ const routes = [
     },
     {
         path: '/profile/users',
-        component: ProfileResultsPage
+        component: UserList
     },
 ]
 

@@ -1,12 +1,7 @@
 <template>
-  
-  <DynamicDialog />
-  <div id="content" class="w-12 mt-4 mx-auto" style="margin-bottom: 100px;">
-    <div id="my-tds" class="flex align-items-center justify-content-between" style="margin-bottom: 20px;">
   <Toast />
-  </div>
-  </div>
-  <div v-if="userRole === 'admin'" id="content-admin" class="w-12 mt-4 mx-auto" style="height: calc(100vh - 147px)">
+  <DynamicDialog />
+  <div v-if="userRole === 'admin'" id="content-admin" class="w-10 mt-4 mx-auto" style="height: calc(100vh - 195px)">
     <div id="my-tds" class="flex align-items-center justify-content-between mb-3">
       <span class="text-xl font-bold ml-6">Тестирования</span>
       <my-button @click="showTestCreateForm">Создать тестирование</my-button>
