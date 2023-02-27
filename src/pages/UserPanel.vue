@@ -16,7 +16,7 @@
                     <Column class="w-50" field="column1"></Column>
                     <Column class="w-50" field="role" >
                         <template #editor="{ data, field }">
-                            <DropDown disabled v-model="data[field]" :options="rolesList" optionLabel="label" optionValue="value" placeholder="Выберите роль" style="max-width: 100%;">
+                            <DropDown v-model="data[field]" :options="rolesList" optionLabel="label" optionValue="value" placeholder="Выберите роль" style="max-width: 100%;">
                             </DropDown>
                         </template>
                     </Column>
@@ -133,7 +133,7 @@
                 <div class="flex align-items-center justify-content-between" style="margin-bottom: 20px;margin-top: 30px;" v-if="this.userData.role !== 'admin'">
                     <span class="text-xl font-bold ml-6">Прикрепленные документы</span>
                 </div>
-                <p style="margin-left: 1rem;" @click="downloadScreenshot" v-if="this.screenshot.file_name !== ''">
+                <p style="margin-left: 1rem;" @click="downloadScreenshot" v-if="this.userData.role !== 'admin'">
                     {{ this.screenshot_type_mapped[this.screenshot.screenshot_type] }}
                 </p>
                 <p class="sh-title" @click="downloadScreenshot" v-if="this.userData.role !== 'admin'">
@@ -600,6 +600,7 @@ export default {
             const new_year = this.yData[0].eduYear
             const new_status = this.stData[0].status
             const new_lang = this.langData[0].lang
+            const new_role = (this.roleData[0].role === 'Администратор') ? 'admin' : 'user'
 
             const u_id = this.staticData[0].column2
             const u_fio = this.utData[0].column2
@@ -640,6 +641,11 @@ export default {
                 await axios.put('user/byId/' + u_id, data, this.config)
                 .then(() => {
                 })
+                .catch((e) => {
+                    this.showError(e.response.data.message)
+                    no_err = false
+                })
+                await axios.post('user/setUserRole/' + u_id + '/' + new_role, {}, this.config)
                 .catch((e) => {
                     this.showError(e.response.data.message)
                     no_err = false
@@ -761,7 +767,7 @@ export default {
 
 <style scoped>
 ::v-deep(.grey) {
-    background-color: #F5F5F5 !important;
+    background-color: #f5f5f5!important;
 }
 ::v-deep(thead) {
     display: none;

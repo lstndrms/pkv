@@ -84,6 +84,10 @@ export default {
     flex-direction: column;
     margin-top: 100px;
     margin-bottom: 100px;
+    background-color: rgba(255, 255, 255, 1);
+    filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, .2));
+    border-radius: 20px;
+    padding: 50px;
 }
 
 .status_block {
@@ -96,7 +100,7 @@ export default {
 .tool-button {
 
     border: none;
-    background-color: #D9D9D9;
+    background-color: #B7C4D9;
     border-radius: 10px;
     max-width: 300px; 
     padding: 10px;
@@ -104,6 +108,7 @@ export default {
     margin-top: 20px;
     color: black;
     text-decoration: none;
+    filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, .2));
 }
 .tool-button:hover {
     text-decoration: underline;

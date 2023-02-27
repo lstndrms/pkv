@@ -615,7 +615,7 @@ async mounted() {
 
 <style scoped>
 ::v-deep(.grey) {
-    background-color: #F5F5F5 !important;
+    background-color: #F8F9FA !important;
 }
 ::v-deep(thead) {
     display: none;

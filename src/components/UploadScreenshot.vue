@@ -1,6 +1,6 @@
 <template>
-    <div class="w-12 mt-4 mx-auto" style="margin-bottom: 100px;">
-        <div class="flex align-items-center justify-content-between">
+    <div class="w-12 mt-4 mx-auto blck-cont" style="margin-bottom: 100px;">
+        <div class="flex align-items-center justify-content-between ">
             <span class="text-xl font-bold ml-6">Поступление без тестирования</span>
         </div>
         <p class="flex align-items-center justify-content-between">
@@ -20,7 +20,7 @@
         </FileUpload>
         
     </div>
-    <div class="w-12 mt-4 mx-auto" style="margin-bottom: 100px;">
+    <div class="w-12 mt-4 mx-auto blck-cont" style="margin-bottom: 100px;">
         <div class="flex align-items-center justify-content-between" style="margin-bottom: 30px;">
             <span class="text-xl font-bold ml-6">Вы успешно прикрепили скриншот</span>
         </div>
@@ -113,5 +113,17 @@ export default {
 }
 .sh-title:hover {
     cursor: pointer;
+}
+.blck-cont {
+    background-color: rgba(255, 255, 255, 1);
+    filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, .2));
+    border-radius: 20px;
+    padding: 20px;
+}
+::v-deep(.p-button) {
+    background-color: #EFBFBE;
+}
+::v-deep(.p-button:hover) {
+    background-color: #F59797;
 }
 </style>

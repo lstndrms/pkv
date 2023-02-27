@@ -117,4 +117,7 @@ export default {
 }
 </script>
 <style scoped>
+.form-button {
+    filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, .2));
+}
 </style>

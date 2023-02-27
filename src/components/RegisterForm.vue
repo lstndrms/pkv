@@ -165,28 +165,25 @@ export default {
 </script>
 
 <style scoped>
-.auth-form-container {
-    padding-top: 20px;
-    padding-bottom: 20px;
-    width: 100%;
-    background-color: #F1F1F1;
-    border-radius: 10px;
-    padding-left: 10%;
-    padding-right: 10%;
-}
 
 .auth-form {
     display: flex;
     flex-direction: column;
+    background-color: rgba(255, 255, 255, 1);
+    filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, .2));
+    border-radius: 20px;
+    padding-left: 40px;
+    padding-right: 40px;
+    margin-bottom: 100px;
 }
 
 .form-button {
     width: 50%;
     border: none;
-    background-color: #D9D9D9;
+    background-color: #B7C4D9;
     border-radius: 10px;
-    padding-top: 5px;
-    padding-bottom: 5px;
+    padding-top: 8px;
+    padding-bottom: 8px;
     margin-bottom: 20px;
     align-self: center;
 }
@@ -197,7 +194,7 @@ export default {
 }
 .input-field {
     width: 100%;
-    border: none;
+    border: 1px solid #B7C4D9;
     padding-left: 5%;
     padding-right: 5%;
     padding-top: 2%;

@@ -4,7 +4,7 @@
   <div v-if="userRole === 'admin'" id="content-admin" class="w-12 mt-4 mx-auto" style="height: calc(100vh - 195px)">
     <div id="my-tds" class="flex align-items-center justify-content-between mb-3">
       <span class="text-xl font-bold ml-6">Тестирования</span>
-      <my-button @click="showTestCreateForm">Создать тестирование</my-button>
+      <my-button class="tool-button" @click="showTestCreateForm">Создать тестирование</my-button>
       <!--<Button @click="showTestCreateForm" label="Создать тестирование" class="p-button-rounded p-button-secondary p-button-text text-0 surface-600" />-->
     </div>
     <DataTable :value="adminTdData" :scrollable="true" scroll-height="flex" scrollDirection="both" show-gridlines responsive-layout="scroll" @row-dblclick="rowClick($event)">
@@ -14,6 +14,7 @@
       <Column class="w-2" header="Место проведения" field="location"/>
       <Column class="w-1" header="Записано" field="registered_persons"/>
       <Column class="w-1" header="Мест всего" field="max_persons"/>
+      <Column class="w-1" header="Класс" field="education_year"/>
       <Column class="w-1 flex align-items-center flex-column" header="Публикация" field="pub_status">
         <template #body="slotProps">
           <ProgressSpinner v-if="slotProps.data.isLoading" class="w-25 h-25 " :aria-label="'td'+slotProps.data.id"/>
@@ -26,7 +27,7 @@
   <div v-if="userRole === 'user'" id="content-user" class="w-12 mt-4 mx-auto">
     <div id="my-tds" class="flex align-items-center justify-content-between mb-3">
       <span class="text-xl font-bold ml-6">Мои тестирования</span>
-      <my-button @click="showTestDateSelection">Записаться на тестирование</my-button>
+      <my-button class="tool-button" @click="showTestDateSelection">Записаться на тестирование</my-button>
     </div>
     <DataTable :value="tdData" show-gridlines responsiveLayout="scroll" :row-class="rowClass">
       <Column class="w-50" field="column1"></Column>
@@ -248,9 +249,18 @@ export default {
 
 <style scoped>
   ::v-deep(.grey) {
-    background-color: #F5F5F5 !important;
+    background-color: #F8F9FA !important;
   }
   ::v-deep(thead) {
     display: none;
+  }
+  ::v-deep(.p-button) {
+      background-color: #EFBFBE;
+  }
+  ::v-deep(.p-button:hover) {
+      background-color: #F59797;
+  }
+  .tool-button {
+    background-color: #B7C4D9;filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, .2));
   }
 </style>

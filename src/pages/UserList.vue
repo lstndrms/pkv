@@ -2,15 +2,16 @@
   <TopBar/>
   <Toast/>
   <div class="container">
-    <div class="row" style="height: calc(100vh - 105px)">
+    <div class="row" style="height: calc(100vh - 200px);" >
       <DataTable :value="usersData" data-key="id" v-model:filters="filters"
                  filter-display="row" :loading="isLoading"
                  :global-filter-fields="['id', 'info']" :scrollable="true" scroll-height="flex" scrollDirection="both" show-gridlines responsive-layout="scroll"
-                 @row-dblclick="rowClick($event)">
+                 @row-dblclick="rowClick($event)"
+                 style="background-color: #fff;">
         <template #header>
           <div class="flex justify-content-between">
             <div style="text-align:left">
-              <MultiSelect v-model="selectedColumns" :options="columns" @update:modelValue="onToggle"
+              <MultiSelect v-model="selectedColumns" :options="columns" 
                            placeholder="Select Columns" style="width: 20em"/>
             </div>
             <span class="p-input-icon-left">
@@ -339,7 +340,13 @@ export default {
 </script>
 
 <style scoped>
-  .p-multiselect {
+::v-deep(.grey) {
+    background-color: #f5f5f5!important;
+}
+::v-deep(thead) {
+    display: none;
+}
+.p-multiselect {
     max-width: 15rem;
   }
   .container {

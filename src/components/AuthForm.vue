@@ -15,8 +15,8 @@
             </p>
             <button @click="submitForm" class="form-button">Войти</button> 
         </form>
-        <p><router-link to="/password_recover">Восстановить пароль</router-link></p>
-        <p><router-link to="/register">Нет аккаунта? Зарегистрироваться</router-link></p>
+        <p><router-link style="color: black;" to="/password_recover">Восстановить пароль</router-link></p>
+        <p><router-link style="color: black;" to="/register">Нет аккаунта? Зарегистрироваться</router-link></p>
     </div>
     <vue-basic-alert 
        :duration="300"
@@ -95,14 +95,15 @@ export default {
     padding-bottom: 20px;
     width: 100%;
     text-align: center;
-    background-color: #F1F1F1;
-    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 1);
+    filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, .2));
+    border-radius: 20px;
 }
 
 .form-button {
     width: 50%;
     border: none;
-    background-color: #D9D9D9;
+    background-color: #B7C4D9;
     border-radius: 10px;
     padding-top: 5px;
     padding-bottom: 5px;
@@ -114,7 +115,7 @@ export default {
 }
 .input {
     width: 80%;
-    border: none;
+    border: 1px solid #B7C4D9;
     padding-left: 5%;
     padding-right: 5%;
     padding-top: 2%;

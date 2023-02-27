@@ -8,7 +8,7 @@
     </div>
     <div class="container">
         <div class="row">
-            <div class="col-lg-4 offset-lg-4 col-sm-8 offset-sm-2">
+            <div class="col-lg-6 offset-lg-3 col-sm-8 offset-sm-2">
                 <RegisterForm/>
             </div>
         </div>

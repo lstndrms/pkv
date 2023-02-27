@@ -1,13 +1,14 @@
 <template>
     <TopBar/>
     <div class="container">
-        <div class="row">
+        <div class="row" style="height: calc(100vh - 200px);">
             <div id="content" class="w-12 mt-4 mx-auto" style="margin-bottom: 100px;">
                 <div class="flex align-items-center justify-content-between flex-wrap" style="margin-bottom: 20px;margin-top: 30px;">
                     <span class="text-xl font-bold ml-6">Тестирование #{{ this.testData.id }}</span>
                     <div class="flex w-6 align-items-center justify-content-end flex-wrap">
-                        <my-button class="tool-button">{{(this.testData.pub_status === 'shown' ? 'Скрыть' : 'Открыть')}}</my-button>
-                        <my-button class="tool-button" @click="downloadReg">Скачать лист регистрации</my-button>
+                        <my-button class="tool-button" @click="changePubStatus">{{(this.testData.pub_status === 'shown' ? 'Скрыть' : 'Открыть')}}</my-button>
+                        <my-button style="background-color: #EFBFBE;" class="tool-button" @click="downloadReg">Скачать лист регистрации</my-button>
+                        <my-button style="background-color: #CBEFBE;" class="tool-button" @click="downloadExcel">Выгрузить в Excel</my-button>
                     </div>
                 </div>
 
@@ -15,14 +16,16 @@
                     <Column class="w-50" field="column1"></Column>
                     <Column class="w-50" field="column2" ></Column>
                 </DataTable>
-                <DataTable :value="usersData" data-key="id" v-model:filters="filters"
+                <div style="margin-top: 40px;"></div>
+                <DataTable :value="usersData" data-key="id" v-model:filters="filters" rowStyle=""
                  filter-display="row" :loading="isLoading"
                  :global-filter-fields="['id', 'info']" :scrollable="true" scroll-height="flex" scrollDirection="both" show-gridlines responsive-layout="scroll"
-                 @row-dblclick="rowClick($event)">
+                 @row-dblclick="rowClick($event)"
+                 class="uData">
                     <template #header>
                     <div class="flex justify-content-between">
                         <div style="text-align:left">
-                        <MultiSelect v-model="selectedColumns" :options="columns" @update:modelValue="onToggle"
+                        <MultiSelect v-model="selectedColumns" :options="columns" 
                                     placeholder="Select Columns" style="width: 20em"/>
                         </div>
                         <span class="p-input-icon-left">
@@ -62,11 +65,11 @@
 
                     <Column v-if="this.checkColumnChosen('Присутствие')" class="w-2" header="Присутствие" filter-field="attendance" :show-filter-menu="false">
                     <template #body="{data}">
-                        ьн-игеещ{{data.attendance}}
+                        <div style="width: 100%;text-align: center;"><my-button @click="changeAttendance(data)">{{data.attendance}}</my-button></div>
                     </template>
                     <template #filter="{filterModel, filterCallback}">
                         <MultiSelect v-model="filterModel.value" @change="filterCallback"
-                                    :options="attendanceStatuses" class="p-column-filter" placeholder="Any">
+                                    :options="attendanceStatuses" class="p-column-filter" placeholder="Выбор">
                             <template #option="slotProps">
                                 <div class="p-multiselect-representative-option"></div>
                                 {{slotProps.option}}
@@ -81,7 +84,7 @@
                     </template>
                     <template #filter="{filterModel, filterCallback}">
                         <MultiSelect v-model="filterModel.value" @change="filterCallback"
-                                    :options="statuses" option-label="name" option-value="name" class="p-column-filter" placeholder="Any">
+                                    :options="statuses" option-label="name" option-value="name" class="p-column-filter" placeholder="Выбор">
                         <template #option="slotProps">
                             <div class="p-multiselect-representative-option"></div>
                             {{slotProps.option.name}}
@@ -95,7 +98,7 @@
                     </template>
                     <template #filter="{filterModel, filterCallback}">
                         <MultiSelect v-model="filterModel.value" @change="filterCallback"
-                                    :options="roles" class="p-column-filter" placeholder="Any">
+                                    :options="roles" class="p-column-filter" placeholder="Выбор">
                         <template #option="slotProps">
                             <div class="p-multiselect-representative-option"></div>
                             {{slotProps.option}}
@@ -109,7 +112,7 @@
                     </template>
                     <template #filter="{filterModel, filterCallback}">
                         <MultiSelect v-model="filterModel.value" @change="filterCallback"
-                                    :options="genders" class="p-column-filter" placeholder="Any">
+                                    :options="genders" class="p-column-filter" placeholder="Выбор">
                         <template #option="slotProps">
                             <div class="p-multiselect-representative-option"></div>
                             {{slotProps.option}}
@@ -123,7 +126,7 @@
                     </template>
                     <template #filter="{filterModel, filterCallback}">
                         <MultiSelect v-model="filterModel.value" @change="filterCallback"
-                                    :options="education_years" class="p-column-filter" placeholder="Any">
+                                    :options="education_years" class="p-column-filter" placeholder="Выбор">
                         <template #option="slotProps">
                             <div class="p-multiselect-representative-option"></div>
                             {{slotProps.option}}
@@ -137,7 +140,7 @@
                     </template>
                     <template #filter="{filterModel, filterCallback}">
                         <MultiSelect v-model="filterModel.value" @change="filterCallback"
-                                    :options="profiles" option-label="name" option-value="name" class="p-column-filter" placeholder="Any">
+                                    :options="profiles" option-label="name" option-value="name" class="p-column-filter" placeholder="Выбор">
                         <template #option="slotProps">
                             <div class="p-multiselect-representative-option"></div>
                             {{slotProps.option.name}}
@@ -151,7 +154,7 @@
                     </template>
                     <template #filter="{filterModel, filterCallback}">
                         <MultiSelect v-model="filterModel.value" @change="filterCallback"
-                                    :options="subjects" option-label="name" option-value="name" class="p-column-filter" placeholder="Any">
+                                    :options="subjects" option-label="name" option-value="name" class="p-column-filter" placeholder="Выбор">
                         <template #option="slotProps">
                             <div class="p-multiselect-representative-option"></div>
                             {{slotProps.option.name}}
@@ -165,7 +168,7 @@
                     </template>
                     <template #filter="{filterModel, filterCallback}">
                         <MultiSelect v-model="filterModel.value" @change="filterCallback"
-                                    :options="profiles" option-label="name" option-value="name" class="p-column-filter" placeholder="Any">
+                                    :options="profiles" option-label="name" option-value="name" class="p-column-filter" placeholder="Выбор">
                         <template #option="slotProps">
                             <div class="p-multiselect-representative-option"></div>
                             {{slotProps.option.name}}
@@ -179,7 +182,7 @@
                     </template>
                     <template #filter="{filterModel, filterCallback}">
                         <MultiSelect v-model="filterModel.value" @change="filterCallback"
-                                    :options="subjects" option-label="name" option-value="name" class="p-column-filter" placeholder="Any">
+                                    :options="subjects" option-label="name" option-value="name" class="p-column-filter" placeholder="Выбор">
                         <template #option="slotProps">
                             <div class="p-multiselect-representative-option"></div>
                             {{slotProps.option.name}}
@@ -193,7 +196,7 @@
                     </template>
                     <template #filter="{filterModel, filterCallback}">
                         <MultiSelect v-model="filterModel.value" @change="filterCallback"
-                                    :options="foreign_languages" option-label="name" option-value="name" class="p-column-filter" placeholder="Any">
+                                    :options="foreign_languages" option-label="name" option-value="name" class="p-column-filter" placeholder="Выбор">
                         <template #option="slotProps">
                             <div class="p-multiselect-representative-option"></div>
                             {{slotProps.option.name}}
@@ -230,16 +233,7 @@ export default {
     },
     data() {
         return {
-            testData: {
-                "id": 3,
-                "date": "25.04.2023",
-                "time": "17:19",
-                "location": "Большой Казенный пер. д. 9",
-                "registered_persons": 1,
-                "max_persons": 200,
-                "education_year": 9,
-                "pub_status": "shown"
-            },
+            testData: {},
             tdData: [
                 {'column1': 'Класс тестирования', 'column2': ''},
                 {'column1': 'Дата', 'column2': ''},
@@ -247,7 +241,8 @@ export default {
                 {'column1': 'Место проведения', 'column2': ''},
                 {'column1': 'Записано', 'column2': ''},
                 {'column1': 'Присутствовало', 'column2': ''},
-                {'column1': 'Мест всего', 'column2': ''}
+                {'column1': 'Мест всего', 'column2': ''},
+                {'column1': 'Статус', 'column2': ''}
             ],
             config: {},
             usersData: [],
@@ -320,15 +315,52 @@ export default {
                 }
             });
         },
-        async getTestDate() {
-
+        async getTestDate(id) {
+            let ans = {}
+            await axios.get('td/byId/' + id, this.config)
+            .then((res) => {
+                ans = res.data
+            })
+            .catch((e) => {
+                this.$toast.add({severity:'error', summary: 'Error '+e.response.status, detail:e.response.data.message, life: 5000});
+            })
+            return ans
+        },
+        async changeAttendance(data) {
+            let res = (data.attendance === 'Присутствовал')
+            await axios.post('td/setAttendance/' + data.id + '/' + this.testData.id + '/' + !res, {}, this.config)
+            .then(() => {
+                data.attendance = (!res) ? 'Присутствовал' : 'Не присутствовал';
+            })
+            .catch((e) => {
+                this.$toast.add({severity:'error', summary: 'Error '+e.response.status, detail:e.response.data.message, life: 5000});
+            })
         },
         async fetchData() {
-            if(this.testData.id !== 0) {
-                this.tdData[0].column2 = this.testData.id
+            if (this.testData.education_year !== '') {
+                this.tdData[0].column2 = this.testData.education_year
             }
             if (this.testData.date !== '') {
                 this.tdData[1].column2 = this.testData.date
+            }
+            if (this.testData.time !== '') {
+                this.tdData[2].column2 = this.testData.time
+            }
+            if (this.testData.location !== '') {
+                this.tdData[3].column2 = this.testData.location
+            }
+            if (this.testData.registered_persons !== '') {
+                this.tdData[4].column2 = this.testData.registered_persons
+            }
+            if (this.testData.registered_persons !== '') {
+                this.tdData[5].column2 = this.testData.registered_persons
+            }
+            if (this.testData.max_persons !== '') {
+                this.tdData[6].column2 = this.testData.max_persons
+            }
+            
+            if (this.testData.pub_status !== '') {
+                this.tdData[7].column2 = (this.testData.pub_status === 'shown') ? 'Открыто' : 'Скрыто'
             }
         },
 
@@ -408,11 +440,52 @@ export default {
         },
         rowClick(event) {
             this.$router.push('/profile/users/'+ event.data.id)
-        }
+        },
+        async changePubStatus() {
+            let newStatus = ''
+            if (this.testData.pub_status === 'hidden') {
+                newStatus = 'shown'
+            } else {
+                newStatus = 'hidden'
+            }
+            await axios.post('td/setStatus/'+this.testData.id+'/'+newStatus, {}, this.config)
+            .then(() => {
+                this.testData.pub_status = newStatus
+                this.tdData[7].column2 = (this.testData.pub_status === 'shown') ? 'Открыто' : 'Скрыто'
+            })
+            .catch((e) => {
+                this.$toast.add({severity:'error', summary: 'Error '+e.response.status, detail:e.response.data.message, life: 5000});
+            })
+        },
+        async downloadReg() {
+            await axios.get('td/regList/' + this.testData.id, this.config)
+            .then((response) => {
+                var a = document.createElement("a"); //Create <a>
+                a.href = "data:" + response.data.content_type + ";base64," + response.data.file_content; //Image Base64 Goes here
+                a.download = response.data.file_name; //File name Here
+                a.click();
+            })
+            .catch((e) => {
+                this.showError(e.response.data.message)
+            })
+        },
+        async downloadExcel() {
+            await axios.get('td/export/' + this.testData.id, this.config)
+            .then((response) => {
+                var a = document.createElement("a"); //Create <a>
+                a.href = "data:" + response.data.content_type + ";base64," + response.data.file_content; //Image Base64 Goes here
+                a.download = response.data.file_name; //File name Here
+                a.click();
+            })
+            .catch((e) => {
+                this.showError(e.response.data.message)
+            })
+        },
     },
     async mounted() {
         await this.setToken()
         await this.checkUser()
+        this.testData = await this.getTestDate(this.$route.params.id)
         await this.fetchData()
         await this.fetchUsersData()
         await this.fetchStatuses()
@@ -425,10 +498,14 @@ export default {
 
 <style scoped> 
 ::v-deep(.grey) {
-    background-color: #F5F5F5 !important;
+    background-color: #F8F9FA !important;
 }
 ::v-deep(thead) {
     display: none;
+}
+::v-deep(.uData) {
+    height: auto;
+    background-color: #fff;
 }
 .tool-button {
     margin: 1rem

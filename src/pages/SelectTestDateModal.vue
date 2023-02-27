@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ConfirmPopup/>
+    <ConfirmPopup message="Подтвердить"/>
 <!--    <Toast position="top-right" group="tr"/>-->
     <DataTable :lazy="true" :loading="isLoading" :value="testDates" responsive-layout="scroll">
       <Column field="date" header="Дата"/>
@@ -9,7 +9,7 @@
       <Column field="available" header="Мест осталось"/>
       <Column field="available">
         <template #body="slotProps">
-          <Button @click="if(this.dialogRef.data.is_admin) {selectTestDateAdmin(slotProps.data, $event);} else selectTestDate(slotProps.data, $event)" label="Выбрать" class="p-button-rounded p-button-secondary p-button-text text-0 surface-600" />
+          <my-button class="popup-sub-btn" @click="{if(this.dialogRef.data.is_admin) {selectTestDateAdmin(slotProps.data, $event);} else {selectTestDate(slotProps.data, $event)}}">Выбрать</my-button>
         </template>
       </Column>
     </DataTable>
@@ -19,20 +19,18 @@
 <script>
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
-import Button from "primevue/button";
+import MyButton from '@/components/UI/MyButton.vue'
 import ConfirmPopup from "primevue/confirmpopup";
-import Toast from "primevue/toast";
 import axios from "axios";
 export default {
   name: "SelectTestDateModal",
   inject: ['dialogRef'],
-  components: [
+  components: {
       DataTable,
       Column,
-      Button,
+      MyButton,
       ConfirmPopup,
-      Toast
-  ],
+  },
   data() {
     return {
       isLoading: false,
@@ -151,5 +149,10 @@ export default {
 </script>
 
 <style scoped>
-
+.popup-sub-btn {
+  padding: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, .2));
+}
 </style>
