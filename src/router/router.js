@@ -4,7 +4,8 @@ import ProfilePage from '@/pages/ProfilePage.vue';
 import RecoverPage from '@/pages/RecoverPage';
 //import TestDates from "@/pages/TestDates.vue";
 import SetPassword from '@/pages/SetPassword.vue'
-import AdminPanel from '@/pages/AdminPanel.vue'
+import UserPanel from '@/pages/UserPanel.vue'
+import TestPanel from '@/pages/TestPanel.vue'
 import ProfileDataPage from "@/pages/ProfileDataPage.vue";
 import ProfileResultsPage from "@/pages/ProfileResultsPage.vue";
 import { createRouter, createWebHistory} from 'vue-router';
@@ -12,47 +13,87 @@ import UserList from "@/pages/UserList.vue";
 const routes = [
     {
         path: '/',
-        redirect: '/profile'
+        redirect: '/profile',
+        meta: {
+            title: 'Профиль',
+        }
     },
     {
         path: '/login',
-        component: AuthPage
+        component: AuthPage,
+        meta: {
+            title: 'Войти',
+        }
     },
     {
         path: '/register',
-        component: RegisterPage
+        component: RegisterPage,
+        meta: {
+            title: 'Зарегистрироваться',
+        }
     },
     {
         path: '/profile',
-        component: ProfilePage
+        component: ProfilePage,
+        meta: {
+            title: 'Профиль',
+        }
     },
     {
         path: '/password_recover',
-        component: RecoverPage
+        component: RecoverPage,
+        meta: {
+            title: 'Восстановить пароль',
+        }
+    },
+    {
+        path: '/profile/data',
+        component: ProfileDataPage,
+        meta: {
+            title: 'Профиль - персональные данные',
+        }
+    },
+    {
+        path: '/profile/results',
+        component: ProfileResultsPage,
+        meta: {
+            title: 'Профиль - тестирования и результаты',
+        }
+    },
+    {
+        path: '/profile/users',
+        component: UserList,
+        meta: {
+            title: 'Пользователи',
+        }
+    },
+    {
+        path: '/setPassword/:token',
+        component: SetPassword,
+        meta: {
+            title: 'Восстановить пароль',
+        }
+    },
+    {
+        path: '/profile/users/:id',
+        component: UserPanel,
+        meta: {
+            title: 'Пользователи',
+        }
     },
     {
         path: '/tds',
         component: ProfileResultsPage,
+        meta: {
+            title: 'Тестирования',
+        }
     },
     {
-        path: '/profile/data',
-        component: ProfileDataPage
-    },
-    {
-        path: '/profile/results',
-        component: ProfileResultsPage
-    },
-    {
-        path: '/profile/users',
-        component: UserList
-    },
-    {
-        path: '/setPassword/:token',
-        component: SetPassword
-    },
-    {
-        path: '/profile/users/:id',
-        component: AdminPanel
+        path: '/tds/:id',
+        component: TestPanel,
+        meta: {
+            title: 'Тестирования',
+        }
     }
 ]
 
@@ -60,5 +101,10 @@ const router = createRouter({
     routes,
     history: createWebHistory(process.env.BASE_URL)
 });
+
+router.beforeEach((to, from, next) => {
+    document.title = `${to.meta.title}`;
+    next();
+})
 
 export default router;

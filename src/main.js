@@ -21,8 +21,11 @@ import Calendar from "primevue/calendar";
 import InputNumber from "primevue/inputnumber";
 import ProgressSpinner from "primevue/progressspinner";
 import MultiSelect from "primevue/multiselect";
+import axios from 'axios'
 
 const app = createApp(App)
+
+axios.defaults.baseURL = 'http://localhost:5000/'
 
 app.use(router)
 app.use(VueBasicAlert)
@@ -31,7 +34,6 @@ app.use(PrimeVue)
 app.use(DialogService)
 app.use(ConfirmationService)
 app.use(ToastService)
-
 
 app.component('DataTable', DataTable)
 app.component('ConfirmPopup', ConfirmPopup)

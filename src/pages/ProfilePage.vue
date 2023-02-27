@@ -55,7 +55,7 @@ export default {
                 authorization: 'Bearer ' + this.$store.getters.TOKEN
             }
         }
-        await axios.get('http://localhost:5000/user/me', config)
+        await axios.get('user/me', config)
         .then((res) => {
             if(res.status === 200) {
                 this.$store.dispatch('setUser', res.data)

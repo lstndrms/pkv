@@ -93,7 +93,7 @@ export default {
             const isFormCorrect = await this.v$.$validate()
             if(isFormCorrect) {
                 
-                await axios.post('http://localhost:5000/auth/recover/' + this.state.form.email)
+                await axios.post('auth/recover/' + this.state.form.email)
                 //eslint-disable-next-line
                 .then(async (res) => {
                     this.showSucc();

@@ -102,7 +102,7 @@
     <div v-if="changed" id="my-tds" class="flex align-items-center justify-content-end" style="margin-bottom: 20px;margin-top: 50px;">
         <my-button @click="submitChanges">Сохранить</my-button>
     </div>
-
+    
 </div>
     <vue-basic-alert
        :duration="300"
@@ -181,9 +181,9 @@ data() {
         langData: [
             {'column1': 'Иностранный язык', 'lang': 'Не выбрано'}
         ],
-        profileList: [],
-        sub1List: [],
-        sub2List: [],
+        profileList: [{label: 'Не выбрано', value: 'Не выбрано'}],
+        sub1List: [{label: 'Не выбрано', value: 'Не выбрано'}],
+        sub2List: [{label: 'Не выбрано', value: 'Не выбрано'}],
         langList: []
     }
 },
@@ -207,11 +207,14 @@ methods: {
         this.pf1Data[index] = newData;
         this.sub1Data[index] = {'column1': 'Профильный предмет', 'subject1': 'Не выбрано'}
         let prList = await this.getListProfile();
-        let p = prList.find((element) => element.name === newData.profile1)
-        let new_list = await this.getListSubject(p.id)
-        this.sub1List = []
-        new_list.forEach((elem) => {this.sub1List.push({label: elem.name, value: elem.name})})
-        console.log('newList, id', new_list, p.id)
+        if (newData.profile1 === 'Не выбрано') {
+            this.sub1List = [{label: 'Не выбрано', value: 'Не выбрано'}]
+        } else {
+            let p = prList.find((element) => element.name === newData.profile1)
+            let new_list = await this.getListSubject(p.id)
+            this.sub1List = [{label: 'Не выбрано', value: 'Не выбрано'}]
+            new_list.forEach((elem) => {this.sub1List.push({label: elem.name, value: elem.name})})
+        }
     },
     onRowEditSaveSubject1(event) {
         this.changed = true
@@ -226,11 +229,14 @@ methods: {
         this.pf2Data[index] = newData;
         this.sub2Data[index] = {'column1': 'Профильный предмет', 'subject2': 'Не выбрано'}
         let prList = await this.getListProfile();
-        let p = prList.find((element) => element.name === newData.profile2)
-        let new_list = await this.getListSubject(p.id)
-        this.sub2List = []
-        new_list.forEach((elem) => {this.sub2List.push({label: elem.name, value: elem.name})})
-        console.log('newList, id', new_list, p.id)
+        if (newData.profile2 === 'Не выбрано') {
+            this.sub2List = [{label: 'Не выбрано', value: 'Не выбрано'}]
+        } else {
+            let p = prList.find((element) => element.name === newData.profile2)
+            let new_list = await this.getListSubject(p.id)
+            this.sub2List = [{label: 'Не выбрано', value: 'Не выбрано'}]
+            new_list.forEach((elem) => {this.sub2List.push({label: elem.name, value: elem.name})})
+        }
     },
     onRowEditSaveSubject2(event) {
         this.changed = true
@@ -258,7 +264,7 @@ methods: {
             "available_for_9_th_class": (yod === 9)
         }
         let ans = {}
-        await axios.post('http://localhost:5000/user/listStatuses', body, config)
+        await axios.post('user/listStatuses', body, config)
         .then((res) => {
             if (res.status === 200) {
                 ans = res.data
@@ -278,7 +284,7 @@ methods: {
             }
         }
         let ans = {}
-        await axios.get('http://localhost:5000/profiles/list', config)
+        await axios.get('profiles/list', config)
         .then((res) => {
             if (res.status === 200) {
                 ans = res.data
@@ -301,7 +307,7 @@ methods: {
             "profile_id": p_id
         }
         let ans = {}
-        await axios.post('http://localhost:5000/subjects/list', body, config)
+        await axios.post('subjects/list', body, config)
         .then((res) => {
             if (res.status === 200) {
                 ans = res.data
@@ -321,7 +327,7 @@ methods: {
             }
         }
         let ans = {}
-        await axios.get('http://localhost:5000/fl/list', config)
+        await axios.get('fl/list', config)
         .then((res) => {
             if (res.status === 200) {
                 ans = res.data
@@ -469,7 +475,7 @@ methods: {
             "education_year": new_year
         }
         if (this.changedFields.year) {
-            await axios.put('http://localhost:5000/user/byId/' + u_id, data, config)
+            await axios.put('user/byId/' + u_id, data, config)
             .then(() => {
             })
             .catch((e) => {
@@ -481,7 +487,7 @@ methods: {
         if (this.changedFields.status) {
             let s_list = await this.getListService()
             let new_st_id = s_list.find((element) => element.name === new_status)
-            await axios.post('http://localhost:5000/user/setStatus/' + u_id + '/' + new_st_id.id, {}, config)
+            await axios.post('user/setStatus/' + u_id + '/' + new_st_id.id, {}, config)
             .then(() => {
             })
             .catch((e) => {
@@ -491,18 +497,45 @@ methods: {
         }
         
         if(this.changedFields.profile1 || this.changedFields.profile2 || this.changedFields.subject1 || this.changedFields.subject2) {
-            if (this.pf1Data[0].profile1 === this.pf2Data[0].profile2) {
+            if (this.pf1Data[0].profile1 === this.pf2Data[0].profile2 && this.pf2Data[0].profile2 !== 'Не выбрано') {
                 this.showError("Пожалуйста, выберите 2 разных профиля!")
                 
-            } else if (this.sub1Data[0].subject1 === 'Не выбрано' || this.sub2Data[0].subject2 === 'Не выбрано') {
-                this.showError("Пожалуйста, заполните все поля!")
-            } else {
+            } else if ((this.sub1Data[0].subject1 === 'Не выбрано' && this.sub2Data[0].subject2 === 'Не выбрано') && 
+                    (this.pf1Data[0].profile1 === this.pf2Data[0].profile2 === 'Не выбрано')) {
+                this.showError("Пожалуйста, заполните хотя бы 1 профиль!")
+            } else if((this.pf1Data[0].profile1 !== 'Не выбрано' && this.sub1Data[0].subject1 === 'Не выбрано') ||
+                      (this.pf2Data[0].profile2 !== 'Не выбрано' && this.sub2Data[0].subject2 === 'Не выбрано')) {
+                this.showError("Пожалуйста, выберите профильный предмет!")
+            }
+            else {
                 let prList = await this.getListProfile();
                 let sbList = await this.getListSubject(0);
-                let new_pf1 = prList.find((element) => element.name === this.pf1Data[0].profile1)
-                let new_pf2 = prList.find((element) => element.name === this.pf2Data[0].profile2)
-                let new_sb1 = sbList.find((element) => element.name === this.sub1Data[0].subject1)
-                let new_sb2 = sbList.find((element) => element.name === this.sub2Data[0].subject2)
+
+                
+
+                let new_pf1 = {}, new_pf2 = {}, new_sb1 = {}, new_sb2 = {}
+                if(this.pf1Data[0].profile1 === 'Не выбрано') {
+                    new_pf1 = {id: 0, name: ''}
+                } else {
+                    new_pf1 = prList.find((element) => element.name === this.pf1Data[0].profile1)
+                }
+                if(this.pf2Data[0].profile2 === 'Не выбрано') {
+                    new_pf2 = {id: 0, name: ''}
+                } else {
+                    new_pf2 = prList.find((element) => element.name === this.pf2Data[0].profile2)
+                }
+                if(this.sub1Data[0].subject1 === 'Не выбрано') {
+                    new_sb1 = {id: 0, name: ''}
+                } else {
+                    new_sb1 = sbList.find((element) => element.name === this.sub1Data[0].subject1)
+                }
+                if(this.sub2Data[0].subject2 === 'Не выбрано') {
+                    new_sb2 = {id: 0, name: ''}
+                } else {
+                    new_sb2 = sbList.find((element) => element.name === this.sub2Data[0].subject2)
+                }
+                console.log(this.sub2Data[0].subject2)
+                console.log(new_pf1, new_sb1, new_pf2, new_sb2)
                 let body1 = {
                     "first_profile_id": new_pf1.id,
                     "second_profile_id": new_pf2.id
@@ -511,14 +544,14 @@ methods: {
                     "first_subject_id": new_sb1.id,
                     "second_subject_id": new_sb2.id
                 }
-                await axios.post('http://localhost:5000/profiles/setToMe', body1, config)
+                await axios.post('profiles/setToMe', body1, config)
                 .then(() => {
                 })
                 .catch((e) => {
                     this.showError(e.response.data.message);
                     no_err = false
                 })
-                await axios.post('http://localhost:5000/subjects/setToMe', body2, config)
+                await axios.post('subjects/setToMe', body2, config)
                 .then(() => {
                 })
                 .catch((e) => {
@@ -528,15 +561,19 @@ methods: {
             }
         }
         if (this.changedFields.language) {
-            let l_list = await this.getListLang();
-            let new_lang_id = l_list.find((element) => element.name === new_lang)
-            await axios.post('http://localhost:5000/fl/setToMe/' + new_lang_id.id, {}, config)
-            .then(() => {
-            })
-            .catch((e) => {
-                this.showError(e.response.data.message);
-                no_err = false
-            })
+            if (this.langData[0].lang === '') {
+                this.showError("Выберите язык")
+            } else {
+                let l_list = await this.getListLang();
+                let new_lang_id = l_list.find((element) => element.name === new_lang)
+                await axios.post('fl/setToMe/' + new_lang_id.id, {}, config)
+                .then(() => {
+                })
+                .catch((e) => {
+                    this.showError(e.response.data.message);
+                    no_err = false
+                })
+            }
         }
 
         if (no_err) {
@@ -558,7 +595,7 @@ async mounted() {
     }
     }
 
-    await axios.get('http://localhost:5000/user/me', config)
+    await axios.get('user/me', config)
         .then((res) => {
         if(res.status === 200) {
             this.$store.dispatch('setUser', res.data)

@@ -2,7 +2,6 @@
   <div>
     <ConfirmPopup/>
 <!--    <Toast position="top-right" group="tr"/>-->
-
     <DataTable :lazy="true" :loading="isLoading" :value="testDates" responsive-layout="scroll">
       <Column field="date" header="Дата"/>
       <Column field="time" header="Время"/>
@@ -10,7 +9,7 @@
       <Column field="available" header="Мест осталось"/>
       <Column field="available">
         <template #body="slotProps">
-          <Button @click="selectTestDate(slotProps.data, $event)" label="Выбрать" class="p-button-rounded p-button-secondary p-button-text text-0 surface-600" />
+          <Button @click="if(this.dialogRef.data.is_admin) {selectTestDateAdmin(slotProps.data, $event);} else selectTestDate(slotProps.data, $event)" label="Выбрать" class="p-button-rounded p-button-secondary p-button-text text-0 surface-600" />
         </template>
       </Column>
     </DataTable>
@@ -59,7 +58,37 @@ export default {
         accept: async () => {
           data.isChosen = true
           this.isLoading = true
-          await axios.post('http://localhost:5000/td/signUpMe/'+data.id, {}, config)
+          await axios.post('td/signUpMe/'+data.id, {}, config)
+              .then(() => {
+                this.isLoading = false
+                this.dialogRef.close(data)
+              })
+              .catch((e)=> {
+                data.isError = true
+                data.error = e.response.data
+                this.dialogRef.close(data)
+              })
+        },
+      })
+    },
+    async selectTestDateAdmin(data, event) {
+      let config = {
+        headers: {
+          authorization: 'Bearer ' + await this.$store.getters.TOKEN
+        }
+      }
+
+      this.$confirm.require({
+        target: event.currentTarget,
+        message: 'Записать на выбранное тестирование?',
+        icon: 'pi pi-info-circle',
+        acceptClass: 'p-button-danger',
+        acceptLabel: 'Да',
+        rejectLabel: 'Нет',
+        accept: async () => {
+          data.isChosen = true
+          this.isLoading = true
+          await axios.post('td/signUpUser/' + this.dialogRef.data.user_id +'/' +data.id, {}, config)//user_id, td_id
               .then(() => {
                 this.isLoading = false
                 this.dialogRef.close(data)
@@ -93,7 +122,8 @@ export default {
       }
     }
 
-    await axios.get('http://localhost:5000/td/listAvailable', config)
+    if(this.dialogRef.data.is_admin){
+      await axios.post('td/list',{education_year: this.dialogRef.data.user_yod}, config)
         .then((res) => {
           if(res.status === 200) {
             this.$store.dispatch('setAvailableTestDates', res.data)
@@ -102,6 +132,17 @@ export default {
         .catch((e)=> {
           console.log('serverError: '+e.error)
         })
+    } else {
+        await axios.get('td/listAvailable', config)
+          .then((res) => {
+            if(res.status === 200) {
+              this.$store.dispatch('setAvailableTestDates', res.data)
+            }
+          })
+          .catch((e)=> {
+            console.log('serverError: '+e.error)
+          })
+    }
 
     this.fetchData()
     this.isLoading = false

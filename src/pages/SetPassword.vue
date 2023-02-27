@@ -101,7 +101,7 @@ export default {
                 }
                 let token = this.$route.params.token
                 
-                await axios.post('http://localhost:5000/auth/confirmRecover/' + token, body)
+                await axios.post('auth/confirmRecover/' + token, body)
                 //eslint-disable-next-line
                 .then(async (res) => {
                     this.showSucc();

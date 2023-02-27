@@ -10,7 +10,7 @@
                 <input type="password" class="input" placeholder="пароль" v-model="state.form.password"><br>
                 <small class="error-line" v-if="v$.form.password.$error">Минимальная длина пароля 8 символов</small>
             </p>
-            <p class="checkbox-box">
+            <p class="checkbox-box" hidden>
                 <input type="checkbox">Запомнить меня
             </p>
             <button @click="submitForm" class="form-button">Войти</button> 
@@ -73,7 +73,7 @@ export default {
             const isFormCorrect = await this.v$.$validate()
             if(isFormCorrect) {
                 
-                await axios.post('http://localhost:5000/auth/sign-in', this.state.form)
+                await axios.post('/auth/sign-in', this.state.form)
                 .then(async (res) => {
                     localStorage.setItem('token', res.data.auth_token);
                     await this.$store.dispatch('setToken', res.data.auth_token)

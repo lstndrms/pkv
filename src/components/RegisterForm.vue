@@ -146,7 +146,7 @@ export default {
             this.state.form.date_of_birth = this.parseDate()
             this.state.form.fio = this.state.form.surname + ' ' + this.state.form.name + (this.state.form.sec_name !== '' ? ' ' : '') + this.state.form.sec_name
             if(isFormCorrect) {
-                await axios.post('http://localhost:5000/auth/sign-up', this.state.form)
+                await axios.post('auth/sign-up', this.state.form)
                 //eslint-disable-next-line
                 .then((res) => {
                     

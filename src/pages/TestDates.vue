@@ -1,13 +1,13 @@
 <template>
   <Toast />
   <DynamicDialog />
-  <div v-if="userRole === 'admin'" id="content-admin" class="w-10 mt-4 mx-auto" style="height: calc(100vh - 195px)">
+  <div v-if="userRole === 'admin'" id="content-admin" class="w-12 mt-4 mx-auto" style="height: calc(100vh - 195px)">
     <div id="my-tds" class="flex align-items-center justify-content-between mb-3">
       <span class="text-xl font-bold ml-6">Тестирования</span>
       <my-button @click="showTestCreateForm">Создать тестирование</my-button>
       <!--<Button @click="showTestCreateForm" label="Создать тестирование" class="p-button-rounded p-button-secondary p-button-text text-0 surface-600" />-->
     </div>
-    <DataTable :value="adminTdData" :scrollable="true" scroll-height="flex" scrollDirection="both" show-gridlines responsive-layout="scroll">
+    <DataTable :value="adminTdData" :scrollable="true" scroll-height="flex" scrollDirection="both" show-gridlines responsive-layout="scroll" @row-dblclick="rowClick($event)">
       <Column class="w-1" header="ID" field="id"/>
       <Column class="w-1" header="Дата" field="date"/>
       <Column class="w-1" header="Время" field="time"/>
@@ -17,12 +17,13 @@
       <Column class="w-1 flex align-items-center flex-column" header="Публикация" field="pub_status">
         <template #body="slotProps">
           <ProgressSpinner v-if="slotProps.data.isLoading" class="w-25 h-25 " :aria-label="'td'+slotProps.data.id"/>
-          <Button v-if="!slotProps.data.isLoading" @click="changePubStatus(slotProps.data)" :label=this.mapPubStatusButtonLabel(slotProps.data.pub_status) class="p-button-rounded p-button-secondary p-button-text text-0 surface-600" />
+          <my-button v-if="!slotProps.data.isLoading" @click="changePubStatus(slotProps.data)">{{ this.mapPubStatusButtonLabel(slotProps.data.pub_status) }}</my-button>
+          <!--<Button v-if="!slotProps.data.isLoading" @click="changePubStatus(slotProps.data)" :label=this.mapPubStatusButtonLabel(slotProps.data.pub_status) class="p-button-rounded p-button-secondary p-button-text text-0 surface-600" />-->
         </template>
       </Column>
     </DataTable>
   </div>
-  <div v-if="userRole === 'user'" id="content-user" class="w-10 mt-4 mx-auto">
+  <div v-if="userRole === 'user'" id="content-user" class="w-12 mt-4 mx-auto">
     <div id="my-tds" class="flex align-items-center justify-content-between mb-3">
       <span class="text-xl font-bold ml-6">Мои тестирования</span>
       <my-button @click="showTestDateSelection">Записаться на тестирование</my-button>
@@ -105,6 +106,11 @@ export default {
               console.log(1)
             }
           }
+        },
+        data: {
+            is_admin: false, 
+            user_yod: 0,
+            user_id: 0
         }
       })
     },
@@ -186,7 +192,7 @@ export default {
       } else {
         newStatus = 'hidden'
       }
-      await axios.post('http://localhost:5000/td/setStatus/'+data.id+'/'+newStatus, {}, config)
+      await axios.post('td/setStatus/'+data.id+'/'+newStatus, {}, config)
           .then(() => {
             data.pub_status = newStatus
           })
@@ -194,6 +200,9 @@ export default {
             this.$toast.add({severity:'error', summary: 'Error '+e.response.status, detail:e.response.data.message, life: 5000});
           })
       data.isLoading = false
+    },
+    rowClick(event) {
+      this.$router.push('/tds/'+ event.data.id)
     }
   },
   async mounted() {
@@ -209,7 +218,7 @@ export default {
         authorization: 'Bearer ' + this.$store.getters.TOKEN
       }
     }
-    await axios.get('http://localhost:5000/user/me', config)
+    await axios.get('user/me', config)
         .then((res) => {
           if(res.status === 200) {
             this.$store.dispatch('setUser', res.data)
@@ -224,7 +233,7 @@ export default {
         });
     this.checkUserRole()
     if (this.userRole === 'admin') {
-      await axios.get('http://localhost:5000/td/list', config)
+      await axios.post('td/list',{}, config)
           .then((res) => {
             this.adminTdData = res.data
           })

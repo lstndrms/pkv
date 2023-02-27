@@ -76,7 +76,7 @@ export default {
         }
       }
       const RuDate = Intl.DateTimeFormat('ru')
-      await axios.post('http://localhost:5000/td/create', {
+      await axios.post('td/create', {
         date: RuDate.format(new Date(this.dateString)),
         time: this.timeString.getHours()+":"+(this.timeString.getMinutes() < 10 ? '0'+this.timeString.getMinutes() : this.timeString.getMinutes()),
         location: this.location,
@@ -95,7 +95,7 @@ export default {
           authorization: 'Bearer ' + this.$store.getters.TOKEN
         }
       }
-      await axios.get('http://localhost:5000/td/listCommonLocations', config)
+      await axios.get('td/listCommonLocations', config)
           .then((res) => {
             this.commonTdLocations = res.data
           })

@@ -6,7 +6,7 @@
       <DataTable :value="usersData" data-key="id" v-model:filters="filters"
                  filter-display="row" :loading="isLoading"
                  :global-filter-fields="['id', 'info']" :scrollable="true" scroll-height="flex" scrollDirection="both" show-gridlines responsive-layout="scroll"
-                 @row-click="rowClick($event)">
+                 @row-dblclick="rowClick($event)">
         <template #header>
           <div class="flex justify-content-between">
             <div style="text-align:left">
@@ -235,7 +235,7 @@ export default {
       }
     },
     async checkUser() {
-      await axios.get('http://localhost:5000/user/me', this.headerConfig)
+      await axios.get('user/me', this.headerConfig)
           .then((res) => {
             if(res.status === 200) {
               this.$store.dispatch('setUser', res.data)
@@ -253,7 +253,7 @@ export default {
           });
     },
     async fetchUsersData() {
-      await axios.post('http://localhost:5000/user/list', {}, this.headerConfig)
+      await axios.post('user/list', {}, this.headerConfig)
           .then((res) => {
             res.data.forEach((elem) => {
               this.usersData.push({
@@ -281,7 +281,7 @@ export default {
           });
     },
     async fetchStatuses() {
-      await axios.post('http://localhost:5000/user/listStatuses', {}, this.headerConfig)
+      await axios.post('user/listStatuses', {}, this.headerConfig)
           .then((res) => {
             this.statuses = res.data
           })
@@ -290,7 +290,7 @@ export default {
           });
     },
     async fetchProfiles() {
-      await axios.get('http://localhost:5000/profiles/list', this.headerConfig)
+      await axios.get('profiles/list', this.headerConfig)
           .then((res) => {
             this.profiles = res.data
             this.profiles.unshift({id: 0, name: 'Не выбран'})
@@ -300,7 +300,7 @@ export default {
           });
     },
     async fetchSubjects() {
-      await axios.post('http://localhost:5000/subjects/list', {}, this.headerConfig)
+      await axios.post('subjects/list', {}, this.headerConfig)
           .then((res) => {
             this.subjects = res.data
             this.subjects.unshift({id: 0, name: 'Не выбран'})
@@ -310,7 +310,7 @@ export default {
           });
     },
     async fetchForeignLanguages() {
-      await axios.get('http://localhost:5000/fl/list', this.headerConfig)
+      await axios.get('fl/list', this.headerConfig)
           .then((res) => {
             this.foreign_languages = res.data
             this.foreign_languages.unshift({id: 0, name: 'Не выбран'})
