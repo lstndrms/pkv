@@ -25,7 +25,7 @@ import axios from 'axios'
 
 const app = createApp(App)
 
-axios.defaults.baseURL = 'http://localhost:5000/'
+axios.defaults.baseURL = 'http://api.pkportaldev.space'
 
 app.use(router)
 app.use(VueBasicAlert)
