@@ -8,6 +8,9 @@
       <!--<Button @click="showTestCreateForm" label="Создать тестирование" class="p-button-rounded p-button-secondary p-button-text text-0 surface-600" />-->
     </div>
     <DataTable :value="adminTdData" :scrollable="true" scroll-height="flex" scrollDirection="both" show-gridlines responsive-layout="scroll" @row-dblclick="rowClick($event)">
+      <template #empty>
+          Тестирования не найдены
+      </template>
       <Column class="w-1" header="ID" field="id"/>
       <Column class="w-1" header="Дата" field="date"/>
       <Column class="w-1" header="Время" field="time"/>
