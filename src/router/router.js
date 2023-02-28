@@ -94,7 +94,17 @@ const routes = [
         meta: {
             title: 'Тестирования',
         }
-    }
+    },
+    { 
+        path: '/:pathMatch(.*)*',
+        redirect: '/profile'
+    },
+  // if you omit the last `*`, the `/` character in params will be encoded when resolving or pushing
+    { 
+        path: '/:pathMatch(.*)',
+        redirect: '/profile'
+    },
+    
 ]
 
 const router = createRouter({

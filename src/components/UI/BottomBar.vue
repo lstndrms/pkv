@@ -1,5 +1,5 @@
 <template>
-    <div class="btm-hid">
+    <div class="btm">
         <div class="bottom-bar">
             <div class="container">
                 <div class="row">
@@ -28,17 +28,19 @@
 
 <style scoped>
 .btm {
+    
     position: fixed;
     bottom: 0;
-    height: 50px;
+    height: 100px;
     width: 100vw;
 }
 .bottom-bar {
     position: fixed;
-    bottom: 0px;
+    bottom: -50px;
     background-color: #D2DBE8;
     width: 100%;
     height: auto;
+    transition: 0.5s;
 }
 .btm:hover .bottom-bar{
     bottom: 0;

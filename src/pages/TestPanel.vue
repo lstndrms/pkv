@@ -1,7 +1,7 @@
 <template>
     <TopBar/>
     <div class="container">
-        <div class="row" style="height: calc(100vh - 200px);">
+        <div class="row" style="min-height: calc(100vh - 200px);">
             <div id="content" class="w-12 mt-4 mx-auto" style="margin-bottom: 100px;">
                 <div class="flex align-items-center justify-content-between flex-wrap" style="margin-bottom: 20px;margin-top: 30px;">
                     <span class="text-xl font-bold ml-6">Тестирование #{{ this.testData.id }}</span>

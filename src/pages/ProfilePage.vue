@@ -9,9 +9,13 @@
                         <p style="color: #0043A8">Код участника: {{ this.$store.getters.USER.id }}</p>
                         <p style="color: #00A743">Текущий статус: {{ this.$store.getters.USER_STATUS.name }}</p>
                     </div>
-                    <div class="tools-block">
+                    <div class="tools-block" v-if="this.$store.getters.USER.is_activated">
                         <router-link to="/profile/data" class="tool-button">Личные данные</router-link>
                         <router-link to="/profile/results" class="tool-button">Тестирования и результаты</router-link>
+                    </div>
+                    <div class="tools-block" v-else>
+                        <span style="color: #F59797">Аккаунт не активирован</span>
+                        <button class="tool-button" @click="sendActivation">Отправить письмо активации</button>
                     </div>
                 </div>
                 <div class="profile" v-else-if="this.$store.getters.USER.role === 'admin'">
@@ -30,6 +34,13 @@
         </div>
     </div>
     <BottomBar/>
+    <vue-basic-alert 
+       :duration="300"
+       :closeIn="3000"
+       ref="alert" />
+       <vue-basic-alert 
+       :duration="300"
+       ref="alert_succ" />
 </template>
 
 <script>
@@ -40,6 +51,44 @@ export default {
     components: {
         TopBar,
         BottomBar,
+    },
+    methods: {
+        showError(errMsg) {
+            this.$refs.alert.showAlert(
+                'error', // There are 4 types of alert: success, info, warning, error
+                errMsg, // Message of the alert
+                'Ошибка', // Header of the alert
+                { iconSize: 35, // Size of the icon (px)
+                iconType: 'solid', // Icon styles: now only 2 styles 'solid' and 'regular'
+                position: 'top right' } // Position of the alert 'top right', 'top left', 'bottom left', 'bottom right'
+            )
+        },
+        showSucc(succMsg) {
+            this.$refs.alert_succ.showAlert(
+                'success', // There are 4 types of alert: success, info, warning, error
+                succMsg, // Message of the alert
+                'Ура', // Header of the alert
+                { iconSize: 35, // Size of the icon (px)
+                iconType: 'solid', // Icon styles: now only 2 styles 'solid' and 'regular'
+                position: 'top right' } // Position of the alert 'top right', 'top left', 'bottom left', 'bottom right'
+          )
+        },
+        async sendActivation() {
+            let config = {
+                headers: {
+                    authorization: 'Bearer ' + this.$store.getters.TOKEN
+                }
+            }
+            await axios.post('user/resendActivation', {}, config)
+            .then((res) => {
+                if (res.status) {
+                    this.showSucc("Письмо успешно выслано, ожидайте")
+                }
+            })
+            .catch((e) => {
+                this.showError(e.response.data.message)
+            })
+        }
     },
     ///*
     async mounted() {
@@ -68,7 +117,6 @@ export default {
                 console.log('serverError')
             }
         });
-        
     }
     //*/
 }

@@ -8,7 +8,7 @@
             </p>
             <p>
                 <input type="password" class="input" placeholder="пароль" v-model="state.form.password"><br>
-                <small class="error-line" v-if="v$.form.password.$error">Минимальная длина пароля 8 символов</small>
+                <small class="error-line" v-if="v$.form.password.$error">Минимальная длина пароля 6 символов</small>
             </p>
             <p class="checkbox-box" hidden>
                 <input type="checkbox">Запомнить меня
