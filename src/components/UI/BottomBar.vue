@@ -5,7 +5,7 @@
                 <div class="row">
                     <div class="btm-links">
                         <div>
-                            <a href="#" >Техническая поддержка</a>
+                            Тех. поддержка <a href="mailto:pkportal.help@gmail.com">pkportal.help@gmail.com</a>
                         </div>
                         <div>
                             <a href="https://pkvartal.mskobr.ru/" target="_blank" rel="noopener noreferrer">Официальный сайт</a>
