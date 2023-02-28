@@ -2,7 +2,7 @@
   <TopBar/>
   <Toast/>
   <div class="container">
-    <div class="row" style="height: calc(100vh - 200px); margin-bottom: 300px;" >
+    <div class="row" style="height: calc(100vh - 200px);" >
       <DataTable :value="usersData" data-key="id" v-model:filters="filters"
                  filter-display="row" :loading="isLoading"
                  :global-filter-fields="['id', 'info']" :scrollable="true" scroll-height="flex" scrollDirection="both" show-gridlines responsive-layout="scroll"
