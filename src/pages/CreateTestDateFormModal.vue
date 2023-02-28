@@ -30,7 +30,7 @@
           <label :for="'locrb'+loc.id">{{loc.name}}</label>
         </div>
         <div class="field-radiobutton">
-          <RadioButton input-id="locrbother" name="other" :value="locationOther" v-model="location" />
+          <RadioButton input-id="locrbother" name="other" value="other" v-model="location" />
           <label for="locrbother">Другое</label>
         </div>
         <InputText type="text" v-model="locationOther" placeholder="Другой адрес"/>
@@ -79,7 +79,7 @@ export default {
       await axios.post('td/create', {
         date: RuDate.format(new Date(this.dateString)),
         time: this.timeString.getHours()+":"+(this.timeString.getMinutes() < 10 ? '0'+this.timeString.getMinutes() : this.timeString.getMinutes()),
-        location: this.location,
+        location: (this.location === 'other') ? this.locationOther : this.location,
         max_persons: Number(this.maxPersons),
         education_year: Number(this.education_year)
       }, config)
