@@ -66,6 +66,10 @@
             <button @click="submitForm" class="form-button">Зарегистрироваться</button> 
         </form>
     </div>
+    <vue-basic-alert
+       :duration="300"
+       :closeIn="3000"
+       ref="alert" />
 </template>
 
 <script>
@@ -123,6 +127,7 @@ export default {
     methods: {
         clearPassword() {
             this.state.form.password = ''
+            this.state.form.confirm = ''
         },
         parseDate() {
             const dob = new Date(this.state.form.date_of_birth_unformatted)
@@ -153,7 +158,12 @@ export default {
                     this.$router.push('/login')
                 })
                 .catch((e)=> {
-                    this.showError(e.response.data.message)
+                    if (e.response.status === 400) {
+                        this.showError("Пользователь с таким email уже существует")
+                    }
+                    else {
+                        this.showError(e.response.data.message)
+                    }
                 });
             }else {
                  console.log(this.v$.$errors)
@@ -181,6 +191,7 @@ export default {
     width: 50%;
     border: none;
     background-color: #B7C4D9;
+    filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, .2));
     border-radius: 10px;
     padding-top: 8px;
     padding-bottom: 8px;
@@ -202,17 +213,21 @@ export default {
     border-radius: 7px;
 }
 .radio {
-    padding-left: 5%;
-    padding-right: 5%;
+    margin-left: 5%;
+    margin-right: 5%;
     padding-top: 2%;
     padding-bottom: 2%;
     border-radius: 7px;
+}
+.radio input {
+    margin-right: 5px;
 }
 
 .input-title {
     display: block;
     width: 100%;
     padding-left: 5%;
+    padding-right: 5%;
 }
 
 </style>

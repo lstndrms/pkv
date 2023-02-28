@@ -578,6 +578,7 @@ methods: {
 
         if (no_err) {
             this.clearChanges()
+            this.$router.go()
         }
     }
 },

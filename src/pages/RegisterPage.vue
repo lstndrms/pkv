@@ -1,4 +1,5 @@
 <template>
+    <Toast/>
     <div class="container">
         <div class="row">
             <div class="col-lg-6 offset-lg-3">
@@ -19,11 +20,13 @@
 <script>
 import LogoBlock from '@/components/UI/LogoBlock.vue';
 import RegisterForm from '@/components/RegisterForm.vue';
+import Toast from 'primevue/toast';
 export default {
     name: 'RegisterPage',
     components: {
         LogoBlock,
-        RegisterForm
+        RegisterForm,
+        Toast
     }
 }
 </script>

@@ -105,6 +105,8 @@ export default {
             if (data.isError) {
               this.$toast.add({severity:'error', summary: 'Error Message', detail:data.error.message, life: 5000});
               console.log(1)
+            } else {
+              this.$router.go()
             }
           }
         },
@@ -130,11 +132,11 @@ export default {
         },
         onClose: (options) => {
           const data = options.data;
-            if (data.err) {
-              this.$toast.add({severity:'error', summary: 'Error '+data.err.status, detail:data.err.message, life: 5000});
-            } else {
-              this.$router.push('/tds')
-            }
+          if (data.err) {
+            this.$toast.add({severity:'error', summary: 'Error '+data.err.status, detail:data.err.message, life: 5000});
+          } else {
+            this.$router.go()
+          }
         }
       })
     },
@@ -173,7 +175,6 @@ export default {
       this.userRole = this.$store.getters.USER.role
     },
     mapPubStatusButtonLabel(status) {
-      console.log(status)
       if (status === 'hidden') {
         return 'Скрыто'
       } else {
@@ -229,7 +230,7 @@ export default {
           if(e.response.status === 401) {
             this.$router.push('/login')
           } else {
-            console.log('serverError')
+            this.$toast.add({severity:'error', summary: 'Error '+e.response.status, detail:e.response.data.message, life: 5000});
           }
         });
     this.checkUserRole()

@@ -40,7 +40,7 @@
         <InputNumber inputId="maxPersons" v-model="maxPersons" mode="decimal" :useGrouping="false" min="0" placeholder="200"/>
       </div>
       <div class="w-100 flex align-items-center justify-content-end">
-        <Button @click="createTestDate" label="Submit" icon="pi pi-check" />
+        <Button @click="createTestDate" label="Подтвердить" icon="pi pi-check" />
       </div>
     </div>
   </div>

@@ -1,5 +1,5 @@
 <template>
-    <div class="w-12 mt-4 mx-auto blck-cont" style="margin-bottom: 100px;">
+    <div class="w-12 mt-4 mx-auto blck-cont" style="margin-bottom: 50px;">
         <div class="flex align-items-center justify-content-between ">
             <span class="text-xl font-bold ml-6">Поступление без тестирования</span>
         </div>
@@ -13,20 +13,29 @@
             <p><input type="radio" v-model="way" v-bind:value="'MCKO'" class="radio-input">По результатам конкурса на квотное место для учеников ПК</p>
             <p><input type="radio" v-model="way" v-bind:value="'quota'" class="radio-input">По результатам написания работ МЦКО</p>
         </form>
-        <FileUpload v-if="this.way !== ''" chooseLabel="Выбрать" uploadLabel='Загрузить' cancelLabel='Отмена' name="demo[]" :customUpload="true" @uploader="myUploader" :multiple="false" :fileLimit="1" accept="image/*" :maxFileSize="1000000">
+        <FileUpload v-if="this.way !== ''" chooseLabel="Выбрать" uploadLabel='Загрузить' 
+        cancelLabel='Отмена' name="demo[]" :customUpload="true" 
+        @uploader="myUploader" :multiple="false" :fileLimit="1" accept="image/*" :maxFileSize="1000000"
+        invalidFileSizeMessage="{0}: Размер файла не должен превышать {1}."
+        invalidFileLimitMessage="Можно загрузить не более {0} файла."
+        invalidFileTypeMessage="{0}: Неверный формат файла, допустимые расширения: {1}">
             <template #empty>
                 <p>Прикрепите изображение</p>
             </template>
         </FileUpload>
         
     </div>
-    <div class="w-12 mt-4 mx-auto blck-cont" style="margin-bottom: 100px;">
-        <div class="flex align-items-center justify-content-between" style="margin-bottom: 30px;">
+    <div class="w-12 mt-4 mx-auto blck-cont" style="margin-bottom: 100px;" v-if="this.$store.getters.USER_SCREENSHOT.file_name !== ''">
+        <div class="flex align-items-center justify-content-between" style="margin-bottom: 10px;">
             <span class="text-xl font-bold ml-6">Вы успешно прикрепили скриншот</span>
         </div>
-        <p class="sh-title" @click="downloadScreenshot">
-            {{ this.$store.getters.USER_SCREENSHOT.file_name}}
-        </p>
+        <div class="flex align-items-center justify-flex-start" style="margin-bottom: 10px;margin-left: 40px;">
+            {{ this.screenshot_type_mapped[this.$store.getters.USER_SCREENSHOT.screenshot_type] }}
+            <span class="sh-title" @click="downloadScreenshot">
+                 {{ this.$store.getters.USER_SCREENSHOT.file_name}}
+            </span>
+        </div>
+        
     </div>
     <vue-basic-alert
        :duration="300"
@@ -45,6 +54,12 @@ export default {
     data() {
         return {
             way: '',
+            screenshot_type_mapped: {
+                'lyceum': 'По результатам вступительных в лицей НИУ ВШЭ',
+                'olympiad': 'По результатам олимпиад и конкурсов',
+                'MCKO': 'По результатам написания работ МЦКО',
+                'quota': 'По результатам конкурса на квотное место для учеников ПК'
+            },
         }
     },
     methods: {
@@ -73,6 +88,7 @@ export default {
             .catch((e) => {
                 this.showError(e.response.data.message)
             })
+            this.$router.go()
         },
         async downloadScreenshot() {
             let config = {

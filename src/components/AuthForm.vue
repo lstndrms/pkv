@@ -104,6 +104,7 @@ export default {
     width: 50%;
     border: none;
     background-color: #B7C4D9;
+    filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, .2));
     border-radius: 10px;
     padding-top: 5px;
     padding-bottom: 5px;

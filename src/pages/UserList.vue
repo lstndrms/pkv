@@ -2,7 +2,7 @@
   <TopBar/>
   <Toast/>
   <div class="container">
-    <div class="row" style="height: calc(100vh - 200px);" >
+    <div class="row" style="height: calc(100vh - 200px); margin-bottom: 300px;" >
       <DataTable :value="usersData" data-key="id" v-model:filters="filters"
                  filter-display="row" :loading="isLoading"
                  :global-filter-fields="['id', 'info']" :scrollable="true" scroll-height="flex" scrollDirection="both" show-gridlines responsive-layout="scroll"
@@ -12,7 +12,7 @@
           <div class="flex justify-content-between">
             <div style="text-align:left">
               <MultiSelect v-model="selectedColumns" :options="columns" 
-                           placeholder="Select Columns" style="width: 20em"/>
+                           placeholder="Выберите столбцы" style="width: 20em"/>
             </div>
             <span class="p-input-icon-left">
               <i class="pi pi-search"/>
@@ -54,7 +54,7 @@
           </template>
           <template #filter="{filterModel, filterCallback}">
             <MultiSelect v-model="filterModel.value" @change="filterCallback"
-                         :options="statuses" option-label="name" option-value="name" class="p-column-filter" placeholder="Any">
+                         :options="statuses" option-label="name" option-value="name" class="p-column-filter" placeholder="Выбор">
               <template #option="slotProps">
                 <div class="p-multiselect-representative-option"></div>
                 {{slotProps.option.name}}
@@ -68,7 +68,7 @@
           </template>
           <template #filter="{filterModel, filterCallback}">
             <MultiSelect v-model="filterModel.value" @change="filterCallback"
-                         :options="roles" class="p-column-filter" placeholder="Any">
+                         :options="roles" class="p-column-filter" placeholder="Выбор">
               <template #option="slotProps">
                 <div class="p-multiselect-representative-option"></div>
                 {{slotProps.option}}
@@ -82,7 +82,7 @@
           </template>
           <template #filter="{filterModel, filterCallback}">
             <MultiSelect v-model="filterModel.value" @change="filterCallback"
-                         :options="genders" class="p-column-filter" placeholder="Any">
+                         :options="genders" class="p-column-filter" placeholder="Выбор">
               <template #option="slotProps">
                 <div class="p-multiselect-representative-option"></div>
                 {{slotProps.option}}
@@ -96,7 +96,7 @@
           </template>
           <template #filter="{filterModel, filterCallback}">
             <MultiSelect v-model="filterModel.value" @change="filterCallback"
-                         :options="education_years" class="p-column-filter" placeholder="Any">
+                         :options="education_years" class="p-column-filter" placeholder="Выбор">
               <template #option="slotProps">
                 <div class="p-multiselect-representative-option"></div>
                 {{slotProps.option}}
@@ -110,7 +110,7 @@
           </template>
           <template #filter="{filterModel, filterCallback}">
             <MultiSelect v-model="filterModel.value" @change="filterCallback"
-                         :options="profiles" option-label="name" option-value="name" class="p-column-filter" placeholder="Any">
+                         :options="profiles" option-label="name" option-value="name" class="p-column-filter" placeholder="Выбор">
               <template #option="slotProps">
                 <div class="p-multiselect-representative-option"></div>
                 {{slotProps.option.name}}
@@ -124,7 +124,7 @@
           </template>
           <template #filter="{filterModel, filterCallback}">
             <MultiSelect v-model="filterModel.value" @change="filterCallback"
-                         :options="subjects" option-label="name" option-value="name" class="p-column-filter" placeholder="Any">
+                         :options="subjects" option-label="name" option-value="name" class="p-column-filter" placeholder="Выбор">
               <template #option="slotProps">
                 <div class="p-multiselect-representative-option"></div>
                 {{slotProps.option.name}}
@@ -138,7 +138,7 @@
           </template>
           <template #filter="{filterModel, filterCallback}">
             <MultiSelect v-model="filterModel.value" @change="filterCallback"
-                         :options="profiles" option-label="name" option-value="name" class="p-column-filter" placeholder="Any">
+                         :options="profiles" option-label="name" option-value="name" class="p-column-filter" placeholder="Выбор">
               <template #option="slotProps">
                 <div class="p-multiselect-representative-option"></div>
                 {{slotProps.option.name}}
@@ -152,7 +152,7 @@
           </template>
           <template #filter="{filterModel, filterCallback}">
             <MultiSelect v-model="filterModel.value" @change="filterCallback"
-                         :options="subjects" option-label="name" option-value="name" class="p-column-filter" placeholder="Any">
+                         :options="subjects" option-label="name" option-value="name" class="p-column-filter" placeholder="Выбор">
               <template #option="slotProps">
                 <div class="p-multiselect-representative-option"></div>
                 {{slotProps.option.name}}
@@ -166,7 +166,7 @@
           </template>
           <template #filter="{filterModel, filterCallback}">
             <MultiSelect v-model="filterModel.value" @change="filterCallback"
-                         :options="foreign_languages" option-label="name" option-value="name" class="p-column-filter" placeholder="Any">
+                         :options="foreign_languages" option-label="name" option-value="name" class="p-column-filter" placeholder="Выбор">
               <template #option="slotProps">
                 <div class="p-multiselect-representative-option"></div>
                 {{slotProps.option.name}}

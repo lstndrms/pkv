@@ -9,7 +9,7 @@
                     <div class="top-block right">
                         <div style="display: flex;align-items: center;">
                             <i class="pi pi-user md:text-2xl sm:text-xl"></i>
-                            <span style="text-decoration: underline;margin-left: 0.5rem;font-size: 1.2rem;margin-right: 3rem"><router-link to="/profile" style="color: black">{{ this.$store.getters.USER.short_fio }}</router-link></span>
+                            <span style="text-decoration: underline;margin-left: 0.5rem;font-size: 1.2rem;margin-right: 3rem"><router-link to="/profile/data" style="color: black">{{ this.$store.getters.USER.short_fio }}</router-link></span>
                         </div>
                         <my-button style="background-color: #fff;" @click="logout">Выйти из системы</my-button>
                     </div>

@@ -130,15 +130,17 @@
                 <div v-if="changed" id="my-tds" class="flex align-items-center justify-content-end" style="margin-bottom: 20px;margin-top: 50px;">
                     <my-button @click="submitChanges">Сохранить</my-button>
                 </div>
-                <div class="flex align-items-center justify-content-between" style="margin-bottom: 20px;margin-top: 30px;" v-if="this.userData.role !== 'admin'">
-                    <span class="text-xl font-bold ml-6">Прикрепленные документы</span>
+                <div class="attached-docs" v-if="this.screenshot.file_name !== ''">
+                    <div class="flex align-items-center justify-content-between" style="margin-bottom: 20px;margin-top: 30px;" v-if="this.userData.role !== 'admin'">
+                        <span class="text-xl font-bold ml-6">Прикрепленные документы</span>
+                    </div>
+                    <p style="margin-left: 1rem;"  v-if="this.userData.role !== 'admin'">
+                        <span>{{ this.screenshot_type_mapped[this.screenshot.screenshot_type] }}</span>
+                    </p>
+                    <p class="sh-title" v-if="this.userData.role !== 'admin'">
+                        <span @click="downloadScreenshot">{{ (this.screenshot.file_name !== '' ? this.screenshot.file_name : 'Файлы не найдены')}}</span>
+                    </p>
                 </div>
-                <p style="margin-left: 1rem;" @click="downloadScreenshot" v-if="this.userData.role !== 'admin'">
-                    {{ this.screenshot_type_mapped[this.screenshot.screenshot_type] }}
-                </p>
-                <p class="sh-title" @click="downloadScreenshot" v-if="this.userData.role !== 'admin'">
-                    {{ (this.screenshot.file_name !== '' ? this.screenshot.file_name : 'Файлы не найдены')}}
-                </p>
 
                 <div class="flex align-items-center justify-content-between" style="margin-top: 30px;" v-if="this.userData.role !== 'admin'">
                     <span class="text-xl font-bold ml-6">Тестирования</span>
@@ -147,7 +149,7 @@
                 <Toast />
                 <DynamicDialog />
                 <div id="content-user" class="w-12 mt-4 mx-auto" v-if="this.userData.role !== 'admin'">
-                    <div id="my-tds" class="flex align-items-center justify-content-between mb-3">
+                    <div id="my-tds" class="flex align-items-center justify-content-end mb-3">
                     <my-button @click="showTestDateSelection">Записать на тестирование</my-button>
                     </div>
                     <DataTable :value="tdData" show-gridlines responsiveLayout="scroll" :row-class="rowClass">
@@ -191,10 +193,10 @@ export default {
             userData: {},
             screenshot: {},
             screenshot_type_mapped: {
-                'lyceum': 'Лицей',
-                'olympiad': 'Олимпиада',
-                'MCKO': 'МЦКО',
-                'quota': 'Квота'
+                'lyceum': 'По результатам вступительных в лицей НИУ ВШЭ',
+                'olympiad': 'По результатам олимпиад и конкурсов',
+                'MCKO': 'По результатам написания работ МЦКО',
+                'quota': 'По результатам конкурса на квотное место для учеников ПК'
             },
             config: {
                 headers: {
@@ -308,6 +310,8 @@ export default {
                 if (data.isError) {
                 this.$toast.add({severity:'error', summary: 'Error Message', detail:data.error.message, life: 5000});
                 console.log(1)
+                } else {
+                    this.$router.go()
                 }
             }
             },
@@ -726,6 +730,7 @@ export default {
                         no_err = false
                     })
                 }
+                
             }
             if (this.changedFields.language) {
                 let l_list = await this.getListLang();
@@ -739,6 +744,7 @@ export default {
 
             if (no_err) {
                 this.clearChanges()
+                this.$router.go()
             }
         },
         async downloadScreenshot() {
@@ -779,5 +785,13 @@ export default {
 }
 .sh-title:hover {
     cursor: pointer;
+}
+.attached-docs {
+    margin-top: 20px;
+    background-color: rgba(255, 255, 255, 1);
+    filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, .2));
+    border-radius: 20px;
+    padding-top: 1px;
+    padding-bottom: 30px;
 }
 </style>
