@@ -31,7 +31,8 @@
     
     position: fixed;
     bottom: 0;
-    height: 100px;
+    min-height: 50px;
+    height: auto;
     width: 100vw;
 }
 .bottom-bar {
