@@ -1,5 +1,5 @@
 <template>
-    <div class="w-12 mt-4 mx-auto blck-cont" style="margin-bottom: 50px;">
+    <div class="w-12 mt-4 mx-auto blck-cont" style="margin-bottom: 50px;" v-if="this.$store.getters.USER.role !== 'admin'">
         <div class="flex align-items-center justify-content-between ">
             <span class="text-xl font-bold ml-6">Поступление без тестирования</span>
         </div>

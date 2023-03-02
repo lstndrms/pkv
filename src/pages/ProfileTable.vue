@@ -8,96 +8,100 @@
       <Column class="w-50" field="column1"></Column>
       <Column class="w-50" field="column2" ></Column>
     </DataTable>
-    <div id="my-tds" class="flex align-items-center justify-content-between" style="margin-bottom: 20px;margin-top: 30px;">
-      <span class="text-xl font-bold ml-6">Поступление</span>
+
+    <div v-if="this.$store.getters.USER.role !== 'admin'">
+
+        <div id="my-tds" class="flex align-items-center justify-content-between" style="margin-bottom: 20px;margin-top: 30px;">
+            <span class="text-xl font-bold ml-6">Поступление</span>
+        </div>
+
+
+        <DataTable :row-class="rowClass" show-gridlines :value="yData" editMode="row" dataKey="id" v-model:editingRows="editingRowsYear" @row-edit-save="onRowEditSaveYear" responsiveLayout="scroll" scroll-direction="horizontal">
+            <Column field="column1" style="width: 30%">
+            </Column>
+            <Column field="eduYear" :style="{width: (this.$store.getters.USER.role === 'admin' ? ('60%') : ('70%'))}">
+                <template #editor="{ data, field }">
+                    <DropDown v-model="data[field]" :options="eduYears" optionLabel="label" optionValue="value" placeholder="Выберите класс">
+                    </DropDown>
+                </template>
+            </Column>
+            <Column v-if="this.$store.getters.USER.role === 'admin'" :rowEditor="true" style="width:10%; min-width:8rem" bodyStyle="text-align:center"></Column>
+        </DataTable>
+
+        <DataTable :row-class="rowClass" show-gridlines :value="stData" editMode="row" dataKey="id" v-model:editingRows="editingRowsStatus" @row-edit-save="onRowEditSaveStatus" responsiveLayout="scroll" scroll-direction="horizontal">
+            <Column field="column1" style="width: 30%">
+            </Column>
+            <Column field="status" :style="{width: (this.$store.getters.USER.role === 'admin' ? ('60%') : ('70%'))}">
+                <template #editor="{ data, field }">
+                    <DropDown v-model="data[field]" :options="statusList" optionLabel="label" optionValue="value" placeholder="Выберите статус" style="max-width: 100%;">
+                    </DropDown>
+                </template>
+            </Column>
+            <Column v-if="this.$store.getters.USER.role === 'admin'" :rowEditor="true" style="width:10%; min-width:8rem" bodyStyle="text-align:center"></Column>
+        </DataTable>
+
+        <DataTable :row-class="rowClass" show-gridlines :value="pf1Data" editMode="row" dataKey="id" v-model:editingRows="editingRowsProfile1" @row-edit-save="onRowEditSaveProfile1" responsiveLayout="scroll" scroll-direction="horizontal">
+            <Column field="column1" style="width: 30%">
+            </Column>
+            <Column field="profile1" :style="{width: '60%'}">
+                <template #editor="{ data, field }">
+                    <DropDown v-model="data[field]" :options="profileList" optionLabel="label" optionValue="value" placeholder="Выберите первый профиль" style="max-width: 100%;">
+                    </DropDown>
+                </template>
+            </Column>
+            <Column :rowEditor="true" style="width:10%; min-width:8rem" bodyStyle="text-align:center"></Column>
+        </DataTable>
+        
+
+        <DataTable :row-class="rowClass" show-gridlines :value="sub1Data" editMode="row" dataKey="id" v-model:editingRows="editingRowsSubject1" @row-edit-save="onRowEditSaveSubject1" responsiveLayout="scroll" scroll-direction="horizontal">
+            <Column field="column1" style="width: 30%">
+            </Column>
+            <Column field="subject1" :style="{width: '60%'}">
+                <template #editor="{ data, field }">
+                    <DropDown v-model="data[field]" :options="sub1List" optionLabel="label" optionValue="value" placeholder="Выберите профильный предмет" style="max-width: 100%;">
+                    </DropDown>
+                </template>
+            </Column>
+            <Column :rowEditor="true" style="width:10%; min-width:8rem" bodyStyle="text-align:center"></Column>
+        </DataTable>
+
+
+        <DataTable :row-class="rowClass" show-gridlines :value="pf2Data" editMode="row" dataKey="id" v-model:editingRows="editingRowsProfile2" @row-edit-save="onRowEditSaveProfile2" responsiveLayout="scroll" scroll-direction="horizontal">
+            <Column field="column1" style="width: 30%">
+            </Column>
+            <Column field="profile2" :style="{width: '60%'}">
+                <template #editor="{ data, field }">
+                    <DropDown v-model="data[field]" :options="profileList" optionLabel="label" optionValue="value" placeholder="Выберите второй профиль" style="max-width: 100%;">
+                    </DropDown>
+                </template>
+            </Column>
+            <Column :rowEditor="true" style="width:10%; min-width:8rem" bodyStyle="text-align:center"></Column>
+        </DataTable>
+
+        <DataTable :row-class="rowClass" show-gridlines :value="sub2Data" editMode="row" dataKey="id" v-model:editingRows="editingRowsSubject2" @row-edit-save="onRowEditSaveSubject2" responsiveLayout="scroll" scroll-direction="horizontal">
+            <Column field="column1" style="width: 30%">
+            </Column>
+            <Column field="subject2" :style="{width: '60%'}">
+                <template #editor="{ data, field }">
+                    <DropDown v-model="data[field]" :options="sub2List" optionLabel="label" optionValue="value" placeholder="Выберите профильный предмет" style="max-width: 100%;">
+                    </DropDown>
+                </template>
+            </Column>
+            <Column :rowEditor="true" style="width:10%; min-width:8rem" bodyStyle="text-align:center"></Column>
+        </DataTable>
+
+        <DataTable :row-class="rowClass" show-gridlines :value="langData" editMode="row" dataKey="id" v-model:editingRows="editingRowsLang" @row-edit-save="onRowEditSaveLang" responsiveLayout="scroll" scroll-direction="horizontal">
+            <Column field="column1" style="width: 30%">
+            </Column>
+            <Column field="lang" :style="{width: '60%'}">
+                <template #editor="{ data, field }">
+                    <DropDown v-model="data[field]" :options="langList" optionLabel="label" optionValue="value" placeholder="Выберите иностранный язык" style="max-width: 100%;">
+                    </DropDown>
+                </template>
+            </Column>
+            <Column :rowEditor="true" style="width:10%; min-width:8rem" bodyStyle="text-align:center"></Column>
+        </DataTable>
     </div>
-
-
-    <DataTable :row-class="rowClass" show-gridlines :value="yData" editMode="row" dataKey="id" v-model:editingRows="editingRowsYear" @row-edit-save="onRowEditSaveYear" responsiveLayout="scroll" scroll-direction="horizontal">
-        <Column field="column1" style="width: 30%">
-        </Column>
-        <Column field="eduYear" :style="{width: (this.$store.getters.USER.role === 'admin' ? ('60%') : ('70%'))}">
-            <template #editor="{ data, field }">
-                <DropDown v-model="data[field]" :options="eduYears" optionLabel="label" optionValue="value" placeholder="Выберите класс">
-                </DropDown>
-            </template>
-        </Column>
-        <Column v-if="this.$store.getters.USER.role === 'admin'" :rowEditor="true" style="width:10%; min-width:8rem" bodyStyle="text-align:center"></Column>
-    </DataTable>
-
-    <DataTable :row-class="rowClass" show-gridlines :value="stData" editMode="row" dataKey="id" v-model:editingRows="editingRowsStatus" @row-edit-save="onRowEditSaveStatus" responsiveLayout="scroll" scroll-direction="horizontal">
-        <Column field="column1" style="width: 30%">
-        </Column>
-        <Column field="status" :style="{width: (this.$store.getters.USER.role === 'admin' ? ('60%') : ('70%'))}">
-            <template #editor="{ data, field }">
-                <DropDown v-model="data[field]" :options="statusList" optionLabel="label" optionValue="value" placeholder="Выберите статус" style="max-width: 100%;">
-                </DropDown>
-            </template>
-        </Column>
-        <Column v-if="this.$store.getters.USER.role === 'admin'" :rowEditor="true" style="width:10%; min-width:8rem" bodyStyle="text-align:center"></Column>
-    </DataTable>
-
-    <DataTable :row-class="rowClass" show-gridlines :value="pf1Data" editMode="row" dataKey="id" v-model:editingRows="editingRowsProfile1" @row-edit-save="onRowEditSaveProfile1" responsiveLayout="scroll" scroll-direction="horizontal">
-        <Column field="column1" style="width: 30%">
-        </Column>
-        <Column field="profile1" :style="{width: '60%'}">
-            <template #editor="{ data, field }">
-                <DropDown v-model="data[field]" :options="profileList" optionLabel="label" optionValue="value" placeholder="Выберите первый профиль" style="max-width: 100%;">
-                </DropDown>
-            </template>
-        </Column>
-        <Column :rowEditor="true" style="width:10%; min-width:8rem" bodyStyle="text-align:center"></Column>
-    </DataTable>
-    
-
-    <DataTable :row-class="rowClass" show-gridlines :value="sub1Data" editMode="row" dataKey="id" v-model:editingRows="editingRowsSubject1" @row-edit-save="onRowEditSaveSubject1" responsiveLayout="scroll" scroll-direction="horizontal">
-        <Column field="column1" style="width: 30%">
-        </Column>
-        <Column field="subject1" :style="{width: '60%'}">
-            <template #editor="{ data, field }">
-                <DropDown v-model="data[field]" :options="sub1List" optionLabel="label" optionValue="value" placeholder="Выберите профильный предмет" style="max-width: 100%;">
-                </DropDown>
-            </template>
-        </Column>
-        <Column :rowEditor="true" style="width:10%; min-width:8rem" bodyStyle="text-align:center"></Column>
-    </DataTable>
-
-
-    <DataTable :row-class="rowClass" show-gridlines :value="pf2Data" editMode="row" dataKey="id" v-model:editingRows="editingRowsProfile2" @row-edit-save="onRowEditSaveProfile2" responsiveLayout="scroll" scroll-direction="horizontal">
-        <Column field="column1" style="width: 30%">
-        </Column>
-        <Column field="profile2" :style="{width: '60%'}">
-            <template #editor="{ data, field }">
-                <DropDown v-model="data[field]" :options="profileList" optionLabel="label" optionValue="value" placeholder="Выберите второй профиль" style="max-width: 100%;">
-                </DropDown>
-            </template>
-        </Column>
-        <Column :rowEditor="true" style="width:10%; min-width:8rem" bodyStyle="text-align:center"></Column>
-    </DataTable>
-
-    <DataTable :row-class="rowClass" show-gridlines :value="sub2Data" editMode="row" dataKey="id" v-model:editingRows="editingRowsSubject2" @row-edit-save="onRowEditSaveSubject2" responsiveLayout="scroll" scroll-direction="horizontal">
-        <Column field="column1" style="width: 30%">
-        </Column>
-        <Column field="subject2" :style="{width: '60%'}">
-            <template #editor="{ data, field }">
-                <DropDown v-model="data[field]" :options="sub2List" optionLabel="label" optionValue="value" placeholder="Выберите профильный предмет" style="max-width: 100%;">
-                </DropDown>
-            </template>
-        </Column>
-        <Column :rowEditor="true" style="width:10%; min-width:8rem" bodyStyle="text-align:center"></Column>
-    </DataTable>
-
-    <DataTable :row-class="rowClass" show-gridlines :value="langData" editMode="row" dataKey="id" v-model:editingRows="editingRowsLang" @row-edit-save="onRowEditSaveLang" responsiveLayout="scroll" scroll-direction="horizontal">
-        <Column field="column1" style="width: 30%">
-        </Column>
-        <Column field="lang" :style="{width: '60%'}">
-            <template #editor="{ data, field }">
-                <DropDown v-model="data[field]" :options="langList" optionLabel="label" optionValue="value" placeholder="Выберите иностранный язык" style="max-width: 100%;">
-                </DropDown>
-            </template>
-        </Column>
-        <Column :rowEditor="true" style="width:10%; min-width:8rem" bodyStyle="text-align:center"></Column>
-    </DataTable>
 
     <div v-if="changed" id="my-tds" class="flex align-items-center justify-content-end" style="margin-bottom: 20px;margin-top: 50px;">
         <my-button @click="submitChanges">Сохранить</my-button>
