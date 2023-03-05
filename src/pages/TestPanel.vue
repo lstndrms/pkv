@@ -388,7 +388,7 @@ export default {
                         first_subject: (elem.first_profile_subject.name) ? elem.first_profile_subject.name : 'Не выбран',
                         second_profile: (elem.second_profile.name) ? elem.second_profile.name : 'Не выбран',
                         second_subject: (elem.second_profile_subject.name) ? elem.second_profile_subject.name : 'Не выбран',
-                        foreign_language: (elem.second_profile_subject.name) ? elem.second_profile_subject.name : 'Не выбран'
+                        foreign_language: (elem.foreign_language.name) ? elem.foreign_language.name : 'Не выбран'
                     })
                     })
                 })

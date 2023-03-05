@@ -15,7 +15,7 @@
         </form>
         <FileUpload v-if="this.way !== ''" chooseLabel="Выбрать" uploadLabel='Загрузить' 
         cancelLabel='Отмена' name="demo[]" :customUpload="true" 
-        @uploader="myUploader" :multiple="false" :fileLimit="1" accept="image/*" :maxFileSize="1000000"
+        @uploader="myUploader" :multiple="false" :fileLimit="1" accept="image/*" :maxFileSize="3000000"
         invalidFileSizeMessage="{0}: Размер файла не должен превышать {1}."
         invalidFileLimitMessage="Можно загрузить не более {0} файла."
         invalidFileTypeMessage="{0}: Неверный формат файла, допустимые расширения: {1}">
