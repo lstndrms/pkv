@@ -352,8 +352,8 @@ export default {
             if (this.testData.registered_persons !== '') {
                 this.tdData[4].column2 = this.testData.registered_persons
             }
-            if (this.testData.registered_persons !== '') {
-                this.tdData[5].column2 = this.testData.registered_persons
+            if (this.testData.attended_persons !== '') {
+                this.tdData[5].column2 = this.testData.attended_persons
             }
             if (this.testData.max_persons !== '') {
                 this.tdData[6].column2 = this.testData.max_persons
