@@ -570,10 +570,10 @@ export default {
                 this.$toast.add({severity:'error', summary: 'Error '+e.response.status, detail:e.response.data.message, life: 5000});
             })
         },
-        async updateGrades() {
+        async updatingProcess() {
             let hasErrors = false
             for (const [key, value] of this.usersToUpdate) {
-
+                
                 let reqBody = {
                     "user_id": key,
                     "test_date_id": this.testData.id,
@@ -593,6 +593,11 @@ export default {
                     this.$toast.add({severity:'error', summary: 'Error '+e.response.status, detail:e.response.data.message, life: 5000});
                 })
             }
+            return hasErrors
+        },
+        async updateGrades() {
+            const hasErrors = await this.updatingProcess()
+            
             if (!hasErrors) {
                this.$router.go()
             }
