@@ -30,28 +30,28 @@
                 <span class="input-title">Пол</span>
                 <span class="radio"><input type="radio" v-model="state.form.gender" v-bind:value="'male'">Мужской</span>
                 <span class="radio"><input type="radio" v-model="state.form.gender" v-bind:value="'female'">Женский</span>
-                <small class="error-line" v-if="v$.form.gender.$error">Введите корректный адрес</small>
+                <small class="error-line" v-if="v$.form.gender.$error">Выберите значение</small>
             </p>
             <p class="input-container">
                 <span class="input-title">Контактный телефон</span>
-                <input type="text" class="input-field" placeholder="89161234567" v-model="state.form.phone_number" maxlength="11">
+                <input-mask class="input-field" placeholder="9(999)999-99-99" v-model="state.form.phone_number" mask="9(999)999-99-99"/>
                 <small class="error-line" v-if="v$.form.phone_number.$error">Введите номер</small>
             </p>
             <p class="input-container">
                 <span class="input-title">Моб. телефон законного представителя</span>
-                <input type="text" class="input-field" placeholder="89161234567" v-model="state.form.parent_phone_number" maxlength="11">
+                <input-mask class="input-field" placeholder="9(999)999-99-99" v-model="state.form.parent_phone_number" mask="9(999)999-99-99"/>
                 <small class="error-line" v-if="v$.form.parent_phone_number.$error">Введите номер</small>
             </p>
             <p>
                 <span class="input-title">Номер и/или название нынешней школы</span>
                 <input type="text" class="input-field" placeholder="Школа №1" v-model="state.form.current_school">
-                <small class="error-line" v-if="v$.form.current_school.$error">Введите номер</small>
+                <small class="error-line" v-if="v$.form.current_school.$error">Введите значение</small>
             </p>
             <p class="input-container">
                 <span class="input-title">Класс, в который поступаете</span>
                 <span class="radio"><input type="radio" v-model="state.form.education_year" v-bind:value="9">9</span>
                 <span class="radio"><input type="radio" v-model="state.form.education_year" v-bind:value="10">10</span>
-                <small class="error-line" v-if="v$.form.education_year.$error">Введите корректный адрес</small>
+                <small class="error-line" v-if="v$.form.education_year.$error">Выберите значение</small>
             </p>
             <p>
                 <span class="input-title">Пароль</span>
@@ -77,6 +77,7 @@ import axios from 'axios'
 import useValidate from '@vuelidate/core'
 import { email, required, minLength, sameAs} from '@vuelidate/validators'
 import { computed, reactive } from 'vue'
+import InputMask from 'primevue/inputmask';
 
 
 export default {
@@ -91,14 +92,15 @@ export default {
                 sec_name: '',
                 date_of_birth_unformatted: '',
                 date_of_birth: '',
-                gender: 'male',
+                gender: '',
                 phone_number: '',
                 parent_phone_number: '',
                 current_school: '',
-                education_year: 9,
+                education_year: 0,
                 confirm: ''
             }
         })
+        const non_zero = (value) => value !== 0
         const rules = computed(() => {
             return {
                 form: {
@@ -110,7 +112,7 @@ export default {
                     gender: {required},
                     phone_number: {required},
                     current_school: {required},
-                    education_year: {required},
+                    education_year: {required, non_zero},
                     parent_phone_number: {required},
                     confirm: {required, sameAs: sameAs(state.form.password)}
                 }
@@ -123,6 +125,9 @@ export default {
             state,
             v$
         }
+    },
+    components: {
+        InputMask,
     },
     methods: {
         clearPassword() {
@@ -229,5 +234,9 @@ export default {
     padding-left: 5%;
     padding-right: 5%;
 }
-
+::v-deep(.p-inputtext:enabled:focus) {
+    outline: 0 none;
+    box-shadow: none;
+    border-color: black;
+}
 </style>

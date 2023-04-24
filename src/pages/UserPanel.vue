@@ -25,9 +25,11 @@
                 <DataTable :row-class="rowClass" :value="utData"  show-gridlines editMode="cell" @cell-edit-complete="onCellEditComplete" class="editable-cells-table" responsiveLayout="scroll">
                     <Column class="w-50" field="column1"></Column>
                     <Column class="w-50" field="column2">
+                        
                         <template #editor="{ data, field }">
                             <InputText v-model="data[field]" autofocus />
                         </template>
+
                     </Column>
                 </DataTable>
                 
@@ -130,6 +132,9 @@
                 <div v-if="changed" id="my-tds" class="flex align-items-center justify-content-end" style="margin-bottom: 20px;margin-top: 50px;">
                     <my-button @click="submitChanges">Сохранить</my-button>
                 </div>
+                <div v-else id="my-tds" class="flex align-items-center justify-content-end" style="margin-bottom: 20px;margin-top: 50px;">
+                    <my-button @click="editMode">Редактировать</my-button>
+                </div>
                 <div class="attached-docs" v-if="this.screenshot.file_name !== ''">
                     <div class="flex align-items-center justify-content-between" style="margin-bottom: 20px;margin-top: 30px;" v-if="this.userData.role !== 'admin'">
                         <span class="text-xl font-bold ml-6">Прикрепленные документы</span>
@@ -149,13 +154,38 @@
                 <Toast />
                 <DynamicDialog />
                 <div id="content-user" class="w-12 mt-4 mx-auto" v-if="this.userData.role !== 'admin'">
-                    <div id="my-tds" class="flex align-items-center justify-content-end mb-3">
+                    <div id="my-tds" class="flex align-items-center justify-content-end mb-3" v-if="this.tests.length < 2">
                     <my-button @click="showTestDateSelection">Записать на тестирование</my-button>
                     </div>
-                    <DataTable :value="tdData" show-gridlines responsiveLayout="scroll" :row-class="rowClass">
-                    <Column class="w-50" field="column1"></Column>
-                    <Column class="w-50" field="column2" ></Column>
-                    </DataTable>
+                    <div class="test-dates-container" v-for="test of this.tests" :key="test">
+                        <!---->
+                        <DataTable :value="test" show-gridlines responsiveLayout="scroll" :row-class="rowClass">
+                        <Column class="w-50" field="column1"></Column>
+                        <Column class="w-50" field="column2" ></Column>
+                        </DataTable><!---->
+                    </div>
+                </div>
+
+
+                <div class="flex align-items-center justify-content-between" style="margin-top: 30px;" v-if="(this.userData.role !== 'admin') && (this.showResults === true)">
+                    <span class="text-xl font-bold ml-6">Результаты</span>
+                </div>
+                <div id="content-user" class="w-12 mt-4 mx-auto" v-if="(this.userData.role !== 'admin') && (this.showResults === true)">
+                    <div class="test-grades-container">
+                        <DataTable :value="this.grades" show-gridlines responsiveLayout="scroll" :row-class="rowClass"><!--editMode="cell">-->
+                        <Column class="w-25" field="column1">
+                        </Column>
+                        <Column class="w-25" field="column2" >
+                        </Column>
+                        <Column class="w-25" field="column3">
+                            <template #editor="{ data, field }">
+                                <InputText v-model="data[field]" autofocus />
+                            </template>
+                        </Column>
+                        <Column class="w-25" field="column4" >
+                        </Column>
+                        </DataTable>
+                    </div>
                 </div>
             </div>
         </div>
@@ -190,6 +220,7 @@ export default {
     },
     data() {
         return {
+            showResults: false,
             userData: {},
             screenshot: {},
             screenshot_type_mapped: {
@@ -273,11 +304,18 @@ export default {
             sub2List: [{label: 'Не выбрано', value: 'Не выбрано'}],
             langList: [],
 
-            tdData: [
-                {'column1': 'Дата', 'column2': 'Не выбрано'},
-                {'column1': 'Время', 'column2': 'Не выбрано'},
-                {'column1': 'Место проведения', 'column2': 'Не выбрано'}
+            tests: [
+                [
+                    {'column1': 'Дата', 'column2': 'Не выбрано'},
+                    {'column1': 'Время', 'column2': 'Не выбрано'},
+                    {'column1': 'Место проведения', 'column2': 'Не выбрано'},
+                    {'column1': 'Сумма по 1 профилю', 'column2': '-'},
+                    {'column1': 'Сумма по 2 профилю', 'column2': '-'}
+                ]
             ],
+            grades: [
+                {'column1': 'Дата', 'column2': 'Предмет', 'column3': 'Оценка', 'column4': 'Максимальный балл'}
+            ]
         }
     },
     methods: {
@@ -510,7 +548,6 @@ export default {
             })
             return ans
         },
-
         async fetchData() {
             let uData = this.userData
             this.screenshot = this.userData.screenshot
@@ -518,7 +555,7 @@ export default {
             const u_yod = uData.education_year
             const u_profile1 = uData.first_profile
             const u_profile2 = uData.second_profile
-            const u_td = uData.test_date
+            const u_td = uData.test_dates
             if(uData.id !== 0) {
                 this.staticData[0].column2 = uData.id
             }
@@ -567,10 +604,51 @@ export default {
             if (uData.foreign_language.id !== 0) {
                 this.langData[0].lang = uData.foreign_language.name
             }
-            if (u_td.id !== 0) {
-                this.tdData[0].column2 = u_td.date
-                this.tdData[1].column2 = u_td.time
-                this.tdData[2].column2 = u_td.location
+            if (u_td.length !== 0) {
+                this.tests.pop()
+                u_td.forEach((val) => {
+
+                        this.tests.push(
+                            [
+                                {'column1': 'Дата', 'column2': val.date},
+                                {'column1': 'Время', 'column2': val.time},
+                                {'column1': 'Место проведения', 'column2': val.location},
+                            ]
+                        )
+                        //console.log(val)
+                        if (val.has_results) {
+                            const sumFirstProfile = (val.russian_language_grade.is_valid && val.math_grade.is_valid && val.foreign_language_grade.is_valid && (u_yod === 10 ? val.first_profile_grade.is_valid : 1))
+                            const sumSecondProfile = (val.russian_language_grade.is_valid && val.math_grade.is_valid && val.foreign_language_grade.is_valid && (u_yod === 10 ? val.second_profile_grade.is_valid : 1))
+                            this.grades.push(
+                                {'column1': val.date, 'column2': 'Русский язык', 'column3': (val.russian_language_grade.is_valid) ? val.russian_language_grade.val : '-', 'column4': (u_yod === 9 ? 100 : 10)},
+                                {'column1': val.date, 'column2': 'Математика', 'column3': (val.math_grade.is_valid) ? val.math_grade.val : '-', 'column4': (u_yod === 9 ? 100 : 10)},
+                                {'column1': val.date, 'column2': 'Иностранный язык', 'column3': (val.foreign_language_grade.is_valid) ? val.foreign_language_grade.val : '-', 'column4': (u_yod === 9 ? 100 : 10)},
+                                {'column1': val.date, 'column2': uData.first_profile_subject.name, 'column3': (val.first_profile_grade.is_valid) ? val.first_profile_grade.val : '-', 'column4': (u_yod === 9 ? '-' : 20)},
+                                {'column1': val.date, 'column2': uData.second_profile_subject.name, 'column3': (val.second_profile_grade.is_valid) ? val.second_profile_grade.val : '-', 'column4': (u_yod === 9 ? '-' : 20)},
+                            )
+                            if (sumFirstProfile) {
+                            this.tests[this.tests.length - 1].push(
+                                {'column1': 'Сумма по 1 профилю', 'column2': val.russian_language_grade.val + val.math_grade.val + val.foreign_language_grade.val + (u_yod === 10 ? val.first_profile_grade.val : 0)},
+                            )
+                            } else {
+                            this.tests[this.tests.length - 1].push(
+                                {'column1': 'Сумма по 1 профилю', 'column2': '-'},
+                            )
+                            }
+                            if (sumSecondProfile) {
+                            this.tests[this.tests.length - 1].push(
+                                {'column1': 'Сумма по 2 профилю', 'column2': val.russian_language_grade.val + val.math_grade.val + val.foreign_language_grade.val + (u_yod === 10 ? val.second_profile_grade.val : 0)},
+                            )
+                            } else {
+                            this.tests[this.tests.length - 1].push(
+                                {'column1': 'Сумма по 2 профилю', 'column2': '-'},
+                            )
+                            }
+                            this.showResults = true
+                        }
+                })
+
+                //console.log(this.tests)
             }
             let stList = await this.getListService();
             stList.forEach((elem) => {this.statusList.push({label: elem.name, value: elem.name})})
@@ -597,6 +675,9 @@ export default {
             this.changedFields.status = false
             this.changedFields.profile1 = false
             this.changedFields.profile2 = false
+        },
+        editMode() {
+            this.editing = true
         },
         async submitChanges() {
             let no_err = true
@@ -793,5 +874,8 @@ export default {
     border-radius: 20px;
     padding-top: 1px;
     padding-bottom: 30px;
+}
+.test-dates-container {
+    margin-bottom: 30px;
 }
 </style>

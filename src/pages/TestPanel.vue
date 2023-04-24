@@ -17,11 +17,15 @@
                     <Column class="w-50" field="column2" ></Column>
                 </DataTable>
                 <div style="margin-top: 40px;"></div>
+                <div class="flex align-items-center justify-content-end mb-3">
+                    <my-button @click="updateGrades">Сохранить изменения</my-button>
+                </div>
                 <DataTable :value="usersData" data-key="id" v-model:filters="filters" rowStyle=""
                  filter-display="row" :loading="isLoading"
                  :global-filter-fields="['id', 'info']" :scrollable="true" scroll-height="flex" scrollDirection="both" show-gridlines responsive-layout="scroll"
                  @row-dblclick="rowClick($event)"
-                 class="uData">
+                 class="uData"
+                 editMode="cell">
                     <template #header>
                     <div class="flex justify-content-between">
                         <div style="text-align:left">
@@ -40,7 +44,7 @@
                     <template #loading>
                     Загрузка пользователей...
                     </template>
-                    <Column v-if="this.checkColumnChosen('ID')" :show-filter-menu="false" field="id" header="ID" :sortable="true" class="w-2" >
+                    <Column v-if="this.checkColumnChosen('ID')" :show-filter-menu="false" field="id" header="ID" :sortable="true" class="w-1" >
                     <template #body="{data}" >
                         {{data.id}}
                     </template>
@@ -48,7 +52,7 @@
                         <InputText @input="filterCallback" type="text" v-model="filterModel.value" :placeholder="`Поиск по ID- `"/>
                     </template>
                     </Column>
-                    <Column v-if="this.checkColumnChosen('Информация о пользователе')" :show-filter-menu="false" field="info" header="Информация о пользователе" :sortable="true" class="w-3">
+                    <Column v-if="this.checkColumnChosen('Информация о пользователе')" :show-filter-menu="false" field="info" header="Информация о пользователе" :sortable="true" class="w-2">
                     <template #body="{data}">
                         <div class="flex align-items-start flex-column">
                         <span class="text-decoration-underline font-semibold">{{data.fio}}</span>
@@ -78,7 +82,7 @@
                     </template>
                     </Column>
 
-                    <Column v-if="this.checkColumnChosen('Статус')" class="w-3" header="Статус" :sortable="true" field="status" filter-field="status" :show-filter-menu="false">
+                    <Column v-if="this.checkColumnChosen('Статус')" class="w-2" header="Статус" :sortable="true" field="status" filter-field="status" :show-filter-menu="false">
                     <template #body="{data}">
                         {{data.status}}
                     </template>
@@ -134,9 +138,79 @@
                         </MultiSelect>
                     </template>
                     </Column>
+
+                    <Column v-if="this.checkColumnChosen('Русский язык')" class="w-2" header="Русский язык" :sortable="false" field="russian_language" filter-field="russian_language.grade.val" :show-filter-menu="false">
+                    <template #body="{data}">
+                        <div v-if="data.russian_language.grade.is_valid">
+                            <p>
+                                {{data.russian_language.grade.val}}/{{ (this.testData.education_year === 9) ? 100 : 10}}
+                            </p>
+                        </div>
+                        <div v-else>
+                            <p>
+                                -   
+                            </p>
+                        </div>
+                    </template>
+                    <template #editor="{ data, field }">
+                        <InputText v-model="data[field].grade.val" autofocus @change='addChanges(data, field)'/>
+                    </template>
+                    <template #filter="{ filterModel, filterCallback }">
+                        <InputText v-model="filterModel.value" type="text" @input="filterCallback()" class="p-column-filter" placeholder="Поиск" />
+                    </template>
+                    </Column>
+
+                    <Column v-if="this.checkColumnChosen('Математика')" class="w-2" header="Математика" :sortable="false" field="math" filter-field="math.grade.val" :show-filter-menu="false">
+                    <template #body="{data}">
+                        <div v-if="data.math.grade.is_valid">
+                            <p>
+                                {{data.math.grade.val}}/{{ (this.testData.education_year === 9) ? 100 : 10}}
+                            </p>
+                        </div>
+                        <div v-else>
+                            <p>
+                                -   
+                            </p>
+                        </div>
+                    </template>
+                    <template #editor="{ data, field }">
+                        <InputText v-model="data[field].grade.val" autofocus @change='addChanges(data, field)'/>
+                    </template>
+                    <template #filter="{ filterModel, filterCallback }">
+                        <InputText v-model="filterModel.value" type="text" @input="filterCallback()" class="p-column-filter" placeholder="Поиск" />
+                    </template>
+                    </Column>
+
+                    <Column v-if="this.checkColumnChosen('Иностранный язык')" class="w-2" header="Иностранный язык" :sortable="false" field="foreign_language" filter-field="foreign_language.name" :show-filter-menu="false">
+                    <template #body="{data}">
+                        <div v-if="data.foreign_language.grade.is_valid">
+                            <p>
+                                {{data.foreign_language.name}}<br/>
+                                {{ data.foreign_language.grade.val }}/{{ (this.testData.education_year === 9) ? 100 : 10}}
+                            </p>
+                        </div>
+                        <div v-else>
+                            <p>
+                                -   
+                            </p>
+                        </div>
+                        
+                    </template>
+                    <template #editor="{ data, field }">
+                        <InputText v-model="data[field].grade.val" autofocus @change='addChanges(data, field)'/>
+                    </template>
+                    <template #filter="{ filterModel, filterCallback }">
+                        <InputText v-model="filterModel.value" type="text" @input="filterCallback()" class="p-column-filter" placeholder="Поиск" />
+                    </template>
+                    </Column>
+
                     <Column v-if="this.checkColumnChosen('Профиль 1')" class="w-2" header="Профиль 1" :sortable="true" field="first_profile" filter-field="first_profile" :show-filter-menu="false">
                     <template #body="{data}">
-                        {{data.first_profile}}
+                        <div>
+                            <p>
+                                {{data.first_profile}}
+                            </p>
+                        </div>
                     </template>
                     <template #filter="{filterModel, filterCallback}">
                         <MultiSelect v-model="filterModel.value" @change="filterCallback"
@@ -148,23 +222,37 @@
                         </MultiSelect>
                     </template>
                     </Column>
-                    <Column v-if="this.checkColumnChosen('Предмет профиля 1')" class="w-2" header="Предмет профиля 1" :sortable="true" field="first_subject" filter-field="first_subject" :show-filter-menu="false">
+                    <Column v-if="this.checkColumnChosen('Предмет профиля 1')" class="w-2" header="Предмет профиля 1" :sortable="true" field="first_subject" filter-field="first_subject.name" :show-filter-menu="false">
                     <template #body="{data}">
-                        {{data.first_subject}}
+                        <div v-if="data.first_subject.grade.is_valid">
+                            <div>
+                                <p>{{data.first_subject.name}}</p>
+                                <p v-if="this.testData.education_year !== 9">{{ data.first_subject.grade.val }}/20</p>
+                                
+                            </div>
+                        </div>
+                        <div v-else>
+                            <p>
+                                -   
+                            </p>
+                        </div>
+
+
                     </template>
-                    <template #filter="{filterModel, filterCallback}">
-                        <MultiSelect v-model="filterModel.value" @change="filterCallback"
-                                    :options="subjects" option-label="name" option-value="name" class="p-column-filter" placeholder="Выбор">
-                        <template #option="slotProps">
-                            <div class="p-multiselect-representative-option"></div>
-                            {{slotProps.option.name}}
-                        </template>
-                        </MultiSelect>
+                    <template #editor="{ data, field }" v-if="this.testData.education_year !== 9">
+                        <InputText v-model="data[field].grade.val" autofocus @change='addChanges(data, field)'/>
+                    </template>
+                    <template #filter="{ filterModel, filterCallback }">
+                        <InputText v-model="filterModel.value" type="text" @input="filterCallback()" class="p-column-filter" placeholder="Поиск" />
                     </template>
                     </Column>
                     <Column v-if="this.checkColumnChosen('Профиль 2')" class="w-2" header="Профиль 2" :sortable="true" field="second_profile" filter-field="second_profile" :show-filter-menu="false">
                     <template #body="{data}">
-                        {{data.second_profile}}
+                        <div>
+                            <p>
+                                {{data.second_profile}}
+                            </p>
+                        </div>
                     </template>
                     <template #filter="{filterModel, filterCallback}">
                         <MultiSelect v-model="filterModel.value" @change="filterCallback"
@@ -176,34 +264,29 @@
                         </MultiSelect>
                     </template>
                     </Column>
-                    <Column v-if="this.checkColumnChosen('Предмет профиля 2')" class="w-2" header="Предмет профиля 2" :sortable="true" field="second_subject" filter-field="second_subject" :show-filter-menu="false">
+                    <Column v-if="this.checkColumnChosen('Предмет профиля 2')" class="w-2" header="Предмет профиля 2" :sortable="true" field="second_subject" filter-field="second_subject.name" :show-filter-menu="false">
                     <template #body="{data}">
-                        {{data.second_subject}}
+                        <div v-if="data.second_subject.grade.is_valid">
+                            <div>
+                                <p>{{data.second_subject.name}}</p>
+                                <p v-if="this.testData.education_year !== 9">{{ data.second_subject.grade.val }}/20</p>
+                                
+                            </div>
+                        </div>
+                        <div v-else>
+                            <p>
+                                -   
+                            </p>
+                        </div>
                     </template>
-                    <template #filter="{filterModel, filterCallback}">
-                        <MultiSelect v-model="filterModel.value" @change="filterCallback"
-                                    :options="subjects" option-label="name" option-value="name" class="p-column-filter" placeholder="Выбор">
-                        <template #option="slotProps">
-                            <div class="p-multiselect-representative-option"></div>
-                            {{slotProps.option.name}}
-                        </template>
-                        </MultiSelect>
+                    <template #editor="{ data, field }" v-if="this.testData.education_year !== 9">
+                        <InputText v-model="data[field].grade.val" autofocus @change='addChanges(data, field)'/>
+                    </template>
+                    <template #filter="{ filterModel, filterCallback }">
+                        <InputText v-model="filterModel.value" type="text" @input="filterCallback()" class="p-column-filter" placeholder="Поиск" />
                     </template>
                     </Column>
-                    <Column v-if="this.checkColumnChosen('Иностранный язык')" class="w-2" header="Иностранный язык" :sortable="true" field="foreign_language" filter-field="foreign_language" :show-filter-menu="false">
-                    <template #body="{data}">
-                        {{data.foreign_language}}
-                    </template>
-                    <template #filter="{filterModel, filterCallback}">
-                        <MultiSelect v-model="filterModel.value" @change="filterCallback"
-                                    :options="foreign_languages" option-label="name" option-value="name" class="p-column-filter" placeholder="Выбор">
-                        <template #option="slotProps">
-                            <div class="p-multiselect-representative-option"></div>
-                            {{slotProps.option.name}}
-                        </template>
-                        </MultiSelect>
-                    </template>
-                    </Column>
+                    
                 </DataTable>
             </div>
         </div>
@@ -233,6 +316,8 @@ export default {
     },
     data() {
         return {
+            gradeChanged: false,
+            usersToUpdate: new Map(),
             testData: {},
             tdData: [
                 {'column1': 'Класс тестирования', 'column2': ''},
@@ -255,8 +340,10 @@ export default {
             subjects: [],
             foreign_languages: [],
             selectedColumns: ['ID', 'Информация о пользователе', 'Присутствие', 'Статус', 'Роль', 'Пол', 'Класс поступления',
-                'Профиль 1', 'Предмет профиля 1', 'Профиль 2', 'Предмет профиля 2', 'Иностранный язык'],
+                'Русский язык', 'Математика','Иностранный язык',
+                'Профиль 1', 'Предмет профиля 1', 'Профиль 2', 'Предмет профиля 2'],
             columns: ['ID', 'Информация о пользователе', 'Присутствие','Статус', 'Роль', 'Пол', 'Класс поступления',
+                'Русский язык', 'Математика','Иностранный язык',
                 'Профиль 1', 'Предмет профиля 1', 'Профиль 2', 'Предмет профиля 2', 'Иностранный язык'],
             isLoading: false,
             filters: {
@@ -269,15 +356,36 @@ export default {
                 'gender': {value: null, matchMode: FilterMatchMode.IN},
                 'education_year': {value: null, matchMode: FilterMatchMode.IN},
                 'first_profile': {value: null, matchMode: FilterMatchMode.IN},
-                'first_subject': {value: null, matchMode: FilterMatchMode.IN},
+                'first_subject.name': {value: null, matchMode: FilterMatchMode.CONTAINS},
                 'second_profile': {value: null, matchMode: FilterMatchMode.IN},
-                'second_subject': {value: null, matchMode: FilterMatchMode.IN},
-                'foreign_language': {value: null, matchMode: FilterMatchMode.IN},
+                'second_subject.name': {value: null, matchMode: FilterMatchMode.CONTAINS},
+                'russian_language.grade.val': {value: null, matchMode: FilterMatchMode.STARTS_WITH},
+                'math.grade.val': {value: null, matchMode: FilterMatchMode.STARTS_WITH},
+                'foreign_language.name': {value: null, matchMode: FilterMatchMode.CONTAINS},
             }
         }
     },
     
     methods: {
+        addChanges(newData, field) {
+            this.gradeChanged = true
+            console.log(newData)
+            let newDataVal = {
+                'russian_language': newData.russian_language.grade,
+                'math': newData.math.grade,
+                'foreign_language': newData.foreign_language.grade,
+                'first_subject': newData.first_subject.grade,
+                'second_subject': newData.second_subject.grade,
+            }
+            newDataVal.russian_language.val = Number(newDataVal.russian_language.val)
+            newDataVal.math.val = Number(newDataVal.math.val)
+            newDataVal.foreign_language.val = Number(newDataVal.foreign_language.val)
+            newDataVal.first_subject.val = Number(newDataVal.first_subject.val)
+            newDataVal.second_subject.val = Number(newDataVal.second_subject.val)
+
+            newDataVal[field].is_valid = true
+            this.usersToUpdate.set(newData.id, newDataVal)
+        },
         rowClass() {
             return 'grey'
         },
@@ -371,6 +479,8 @@ export default {
             await axios.post('user/list', body, this.config)
                 .then((res) => {
                     res.data.forEach((elem) => {
+                    let tdindex = elem.test_dates.findIndex((val) => val.id === this.testData.id)
+                    
                     this.usersData.push({
                         id: elem.id,
                         info: elem.fio+'\n'+elem.date_of_birth+'\n'+elem.email+'\n'+elem.phone_number+'\n'+elem.current_school,
@@ -381,18 +491,21 @@ export default {
                         current_school: elem.current_school,
                         status: elem.status.name,
                         role: (elem.role === 'admin') ? 'Администратор' : 'Абитуриент',
-                        attendance: (elem.test_date.is_attended) ? 'Присутствовал' : 'Не присутствовал',
+                        attendance: (elem.test_dates[tdindex].is_attended) ? 'Присутствовал' : 'Не присутствовал',
                         gender: (elem.gender === 'male') ? 'Мужской' : 'Женский',
                         education_year: elem.education_year,
                         first_profile: (elem.first_profile.name) ? elem.first_profile.name : 'Не выбран',
-                        first_subject: (elem.first_profile_subject.name) ? elem.first_profile_subject.name : 'Не выбран',
+                        first_subject: (elem.first_profile_subject.name) ? {'name': elem.first_profile_subject.name, 'grade': elem.test_dates[tdindex].first_profile_grade} : {},
                         second_profile: (elem.second_profile.name) ? elem.second_profile.name : 'Не выбран',
-                        second_subject: (elem.second_profile_subject.name) ? elem.second_profile_subject.name : 'Не выбран',
-                        foreign_language: (elem.foreign_language.name) ? elem.foreign_language.name : 'Не выбран'
+                        second_subject: (elem.second_profile_subject.name) ? {'name': elem.second_profile_subject.name, 'grade': elem.test_dates[tdindex].second_profile_grade} : {},
+                        russian_language: {'name': 'Русский язык', 'grade': elem.test_dates[tdindex].russian_language_grade},
+                        math: {'name': 'Математика', 'grade': elem.test_dates[tdindex].math_grade},
+                        foreign_language: (elem.foreign_language.name) ? {'name': elem.foreign_language.name, 'grade': elem.test_dates[tdindex].foreign_language_grade} : {}
                     })
                     })
                 })
                 .catch((e)=> {
+                    console.log(e)
                     this.$toast.add({severity:'error', summary: 'Error '+e.response.status, detail:e.response.data.message, life: 5000});
                 });
         },
@@ -457,6 +570,33 @@ export default {
                 this.$toast.add({severity:'error', summary: 'Error '+e.response.status, detail:e.response.data.message, life: 5000});
             })
         },
+        updateGrades() {
+            let hasErrors = false
+            this.usersToUpdate.forEach(async (value, key) => {
+                console.log(value)
+                let reqBody = {
+                    "user_id": key,
+                    "test_date_id": this.testData.id,
+                    "russian_language_grade": value.russian_language,
+                    "math_grade": value.math,
+                    "foreign_language_grade": value.foreign_language,
+                    "first_profile_grade": value.first_subject,
+                    "second_profile_grade": value.second_subject
+                }
+                //console.log(reqBody)
+                await axios.post('exams/setGrades', reqBody,this.config)
+                .then(() => {
+                    
+                })
+                .catch((e) => {
+                    hasErrors = true
+                    this.$toast.add({severity:'error', summary: 'Error '+e.response.status, detail:e.response.data.message, life: 5000});
+                })
+            })
+            if (!hasErrors) {
+                this.$router.go()
+            }
+        },
         async downloadReg() {
             await axios.get('td/regList/' + this.testData.id, this.config)
             .then((response) => {
@@ -507,6 +647,7 @@ export default {
     height: auto;
     background-color: #fff;
 }
+
 .tool-button {
     margin: 1rem
 }

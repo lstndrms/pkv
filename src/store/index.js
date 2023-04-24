@@ -105,7 +105,7 @@ export default createStore({
             context.commit('setUserFirstSubject', payload.first_profile_subject)
             context.commit('setUserSecondSubject', payload.second_profile_subject)
             context.commit('setUserForeignLanguage', payload.foreign_language)
-            context.commit('setUserTestDate', payload.test_date)
+            context.commit('setUserTestDate', payload.test_dates)
             context.commit('setUserScreenshot', payload.screenshot)
         },
         setAvailableTestDates: async (context, payload) => {
