@@ -239,8 +239,8 @@
 
 
                     </template>
-                    <template #editor="{ data, field }" v-if="this.testData.education_year !== 9">
-                        <InputText v-model="data[field].grade.val" autofocus @change='addChanges(data, field)'/>
+                    <template #editor="{ data, field }" v-if="(this.testData.education_year !== 9)">
+                        <InputText v-if="data.first_subject.name !== ''" v-model="data[field].grade.val" autofocus @change='addChanges(data, field)'/>
                     </template>
                     <template #filter="{ filterModel, filterCallback }">
                         <InputText v-model="filterModel.value" type="text" @input="filterCallback()" class="p-column-filter" placeholder="Поиск" />
@@ -280,7 +280,7 @@
                         </div>
                     </template>
                     <template #editor="{ data, field }" v-if="this.testData.education_year !== 9">
-                        <InputText v-model="data[field].grade.val" autofocus @change='addChanges(data, field)'/>
+                        <InputText v-if="data.second_subject.name !== ''" v-model="data[field].grade.val" autofocus @change='addChanges(data, field)'/>
                     </template>
                     <template #filter="{ filterModel, filterCallback }">
                         <InputText v-model="filterModel.value" type="text" @input="filterCallback()" class="p-column-filter" placeholder="Поиск" />
@@ -478,6 +478,7 @@ export default {
             }
             await axios.post('user/list', body, this.config)
                 .then((res) => {
+                    console.log(res.data)
                     res.data.forEach((elem) => {
                     let tdindex = elem.test_dates.findIndex((val) => val.id === this.testData.id)
                     
@@ -495,14 +496,15 @@ export default {
                         gender: (elem.gender === 'male') ? 'Мужской' : 'Женский',
                         education_year: elem.education_year,
                         first_profile: (elem.first_profile.name) ? elem.first_profile.name : 'Не выбран',
-                        first_subject: (elem.first_profile_subject.name) ? {'name': elem.first_profile_subject.name, 'grade': elem.test_dates[tdindex].first_profile_grade} : {},
+                        first_subject: (elem.first_profile_subject.name) ? {'name': elem.first_profile_subject.name, 'grade': elem.test_dates[tdindex].first_profile_grade} : {name: '', grade: {val: 0, is_valid: false}},
                         second_profile: (elem.second_profile.name) ? elem.second_profile.name : 'Не выбран',
-                        second_subject: (elem.second_profile_subject.name) ? {'name': elem.second_profile_subject.name, 'grade': elem.test_dates[tdindex].second_profile_grade} : {},
+                        second_subject: (elem.second_profile_subject.name) ? {'name': elem.second_profile_subject.name, 'grade': elem.test_dates[tdindex].second_profile_grade} : {name: '', grade: {val: 0, is_valid: false}},
                         russian_language: {'name': 'Русский язык', 'grade': elem.test_dates[tdindex].russian_language_grade},
                         math: {'name': 'Математика', 'grade': elem.test_dates[tdindex].math_grade},
-                        foreign_language: (elem.foreign_language.name) ? {'name': elem.foreign_language.name, 'grade': elem.test_dates[tdindex].foreign_language_grade} : {}
+                        foreign_language: (elem.foreign_language.name) ? {'name': elem.foreign_language.name, 'grade': elem.test_dates[tdindex].foreign_language_grade} : {name: '', grade: {val: 0, is_valid: false}}
                     })
                     })
+                    console.log(this.usersData)
                 })
                 .catch((e)=> {
                     console.log(e)
