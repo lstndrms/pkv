@@ -5,6 +5,7 @@ import RecoverPage from '@/pages/RecoverPage';
 //import TestDates from "@/pages/TestDates.vue";
 import SetPassword from '@/pages/SetPassword.vue'
 import UserPanel from '@/pages/UserPanel.vue'
+import NotificationPage from '@/pages/NotificationPage.vue'
 import TestPanel from '@/pages/TestPanel.vue'
 import ProfileDataPage from "@/pages/ProfileDataPage.vue";
 import ProfileResultsPage from "@/pages/ProfileResultsPage.vue";
@@ -30,6 +31,13 @@ const routes = [
         component: RegisterPage,
         meta: {
             title: 'Зарегистрироваться',
+        }
+    },
+    {
+        path: '/notification',
+        component: NotificationPage,
+        meta: {
+            title: 'Создать рассылку',
         }
     },
     {

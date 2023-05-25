@@ -24,9 +24,10 @@ import MultiSelect from "primevue/multiselect";
 import axios from 'axios'
 
 const app = createApp(App)
-
+axios.defaults.baseURL = 'http://pk.chul-home.ru/'
+//
 //axios.defaults.baseURL = 'https://api.pkportaldev.space'
-axios.defaults.baseURL = 'https://api.pkvartalinfo.ru'
+//axios.defaults.baseURL = 'https://api.pkvartalinfo.ru'
 app.use(router)
 app.use(VueBasicAlert)
 app.use(store)

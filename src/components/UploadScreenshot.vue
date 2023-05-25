@@ -15,19 +15,19 @@
         </form>
         <FileUpload v-if="this.way !== ''" chooseLabel="Выбрать" uploadLabel='Загрузить' 
         cancelLabel='Отмена' name="demo[]" :customUpload="true" 
-        @uploader="myUploader" :multiple="false" :fileLimit="1" accept="image/*" :maxFileSize="3000000"
+        @uploader="myUploader" :multiple="false" :fileLimit="1" accept="image/*, application/pdf" :maxFileSize="5000000"
         invalidFileSizeMessage="{0}: Размер файла не должен превышать {1}."
         invalidFileLimitMessage="Можно загрузить не более {0} файла."
         invalidFileTypeMessage="{0}: Неверный формат файла, допустимые расширения: {1}">
             <template #empty>
-                <p>Прикрепите изображение</p>
+                <p>Прикрепите документ</p>
             </template>
         </FileUpload>
         
     </div>
     <div class="w-12 mt-4 mx-auto blck-cont" style="margin-bottom: 100px;" v-if="this.$store.getters.USER_SCREENSHOT.file_name !== ''">
         <div class="flex align-items-center justify-content-between" style="margin-bottom: 10px;">
-            <span class="text-xl font-bold ml-6">Вы успешно прикрепили скриншот</span>
+            <span class="text-xl font-bold ml-6">Вы успешно прикрепили документ</span>
         </div>
         <div class="flex align-items-center justify-flex-start" style="margin-bottom: 10px;margin-left: 40px;">
             {{ this.screenshot_type_mapped[this.$store.getters.USER_SCREENSHOT.screenshot_type] }}

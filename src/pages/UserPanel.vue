@@ -39,7 +39,33 @@
                         <span class="text-xl font-bold ml-6">Поступление</span>
                     </div>
 
+                    <DataTable :row-class="rowClass" :value="asData"  show-gridlines editMode="cell" @cell-edit-complete="onCellEditComplete" class="editable-cells-table" responsiveLayout="scroll">
+                        <Column class="w-50" field="column1"></Column>
+                        <Column class="w-50" field="column2">
+                            <template #body="{data, field}">
+                                {{ data[field] }}
+                            </template>
+                            <template v-if="this.changed === true" #editor="{ data, field }">
+        
+                                <DropDown v-if="data['column1'] === 'Год обучения'" v-model="data[field]" :options="eduYears" @update:modelValue="clearTable()" optionLabel="label" optionValue="value" placeholder="Выберите класс">
+                                </DropDown>
+                                <DropDown v-else-if="data['column1'] === 'Статус'" v-model="data[field]" :options="statusList" optionLabel="label" optionValue="value" placeholder="Выберите статус" style="max-width: 100%;">
+                                </DropDown>
+                                <DropDown v-else-if="data['column1'] === 'Профиль 1'" v-model="data[field]" :options="profileList" @change="updateProfile(3)" optionLabel="label" optionValue="value" placeholder="Выберите первый профиль" style="max-width: 100%;">
+                                </DropDown>
+                                <DropDown v-else-if="data['column1'] === 'Профильный предмет 1'" v-model="data[field]" :options="sub1List" @focus="updateList(3)" optionLabel="label" optionValue="value" placeholder="Выберите профильный предмет" style="max-width: 100%;">
+                                </DropDown>
+                                <DropDown v-else-if="data['column1'] === 'Профиль 2'" v-model="data[field]" :options="profileList" @change="updateProfile(5)" optionLabel="label" optionValue="value" placeholder="Выберите второй профиль" style="max-width: 100%;">
+                                </DropDown>
+                                <DropDown v-else-if="data['column1'] === 'Профильный предмет 2'" v-model="data[field]" :options="sub2List" @focus="updateList(5)" optionLabel="label" optionValue="value" placeholder="Выберите профильный предмет" style="max-width: 100%;">
+                                </DropDown>
+                                <DropDown v-else v-model="data[field]" :options="langList" optionLabel="label" optionValue="value" placeholder="Выберите иностранный язык" style="max-width: 100%;">
+                                </DropDown>
+                            </template>
 
+                        </Column>
+                    </DataTable>
+                    <!--
                     <DataTable :row-class="rowClass" show-gridlines :value="yData" editMode="row" dataKey="id" v-model:editingRows="editingRowsYear" @row-edit-save="onRowEditSaveYear" responsiveLayout="scroll" scroll-direction="horizontal">
                         <Column field="column1" style="width: 30%">
                         </Column>
@@ -125,7 +151,8 @@
                         </Column>
                         <Column :rowEditor="true" style="width:10%; min-width:8rem" bodyStyle="text-align:center"></Column>
                     </DataTable>
-
+                    
+                    -->
                     
 
                 </div>
@@ -259,6 +286,15 @@ export default {
                 {'column1': 'Номер законного представителя', 'column2': 'Не выбрано'},
                 {'column1': 'Номер и/или название нынешней школы', 'column2': 'Не выбрано'}
             ],
+            asData: [
+                {'column1': 'Год обучения', 'column2': 'Не выбрано'},
+                {'column1': 'Статус', 'column2': 'Не выбрано'},
+                {'column1': 'Профиль 1', 'column2': 'Не выбрано'},
+                {'column1': 'Профильный предмет 1', 'column2': 'Не выбрано'},
+                {'column1': 'Профиль 2', 'column2': 'Не выбрано'},
+                {'column1': 'Профильный предмет 2', 'column2': 'Не выбрано'},
+                {'column1': 'Иностранный язык', 'column2': 'Не выбрано'}
+            ],
             editingRowsYear: [],
             editingRowsStatus: [],
             editingRowsProfile1: [],
@@ -319,6 +355,64 @@ export default {
         }
     },
     methods: {
+        async updateProfile(index) {
+            this.asData[index].column2 = 'Не выбрано'
+            if(index === 3) {
+                let prList = await this.getListProfile();
+                if (this.asData[index-1].column2 === 'Не выбрано') {
+                    this.sub1List = [{label: 'Не выбрано', value: 'Не выбрано'}]
+                } else {
+                    let p = prList.find((element) => element.name === this.asData[index-1].column2)
+                    let new_list = await this.getListSubject(p.id)
+                    this.sub1List = [{label: 'Не выбрано', value: 'Не выбрано'}]
+                    new_list.forEach((elem) => {this.sub1List.push({label: elem.name, value: elem.name})})
+                }
+                console.log(this.sub1List)
+            } else {
+                let prList = await this.getListProfile();
+                if (this.asData[index-1].column2 === 'Не выбрано') {
+                    this.sub2List = [{label: 'Не выбрано', value: 'Не выбрано'}]
+                } else {
+                    let p = prList.find((element) => element.name === this.asData[index-1].column2)
+                    let new_list = await this.getListSubject(p.id)
+                    this.sub2List = [{label: 'Не выбрано', value: 'Не выбрано'}]
+                    new_list.forEach((elem) => {this.sub2List.push({label: elem.name, value: elem.name})})
+                }
+                console.log(this.sub2List)
+            }
+            
+        },
+        async updateList(index) {
+            if(index === 3) {
+                let prList = await this.getListProfile();
+                if (this.asData[index-1].column2 === 'Не выбрано') {
+                    this.sub1List = [{label: 'Не выбрано', value: 'Не выбрано'}]
+                } else {
+                    let p = prList.find((element) => element.name === this.asData[index-1].column2)
+                    let new_list = await this.getListSubject(p.id)
+                    this.sub1List = [{label: 'Не выбрано', value: 'Не выбрано'}]
+                    new_list.forEach((elem) => {this.sub1List.push({label: elem.name, value: elem.name})})
+                }
+                console.log(this.sub1List)
+            } else {
+                let prList = await this.getListProfile();
+                if (this.asData[index-1].column2 === 'Не выбрано') {
+                    this.sub2List = [{label: 'Не выбрано', value: 'Не выбрано'}]
+                } else {
+                    let p = prList.find((element) => element.name === this.asData[index-1].column2)
+                    let new_list = await this.getListSubject(p.id)
+                    this.sub2List = [{label: 'Не выбрано', value: 'Не выбрано'}]
+                    new_list.forEach((elem) => {this.sub2List.push({label: elem.name, value: elem.name})})
+                }
+                console.log(this.sub2List)
+            }
+            
+        },
+        clearTable() {
+            for(let i = 2; i <= 7;i++) {
+                this.asData[i].column2 = 'Не выбрано'
+            }
+        },
         rowClass() {
             return 'grey'
         },
@@ -583,6 +677,31 @@ export default {
             if (uData.current_school !== '') {
                 this.utData[6].column2 = uData.current_school
             }
+
+            //
+            if (uData.education_year !== 0) {
+                this.asData[0].column2 = uData.education_year
+            }
+            if (uData.status.id !== '') {
+                this.asData[1].column2 = uData.status.name
+            }
+            if (uData.first_profile.id !== 0) {
+                this.asData[2].column2 = uData.first_profile.name
+            }
+            if (uData.first_profile_subject.id !== 0) {
+                this.asData[3].column2 = uData.first_profile_subject.name
+            }
+            if (uData.second_profile.id !== 0) {
+                this.asData[4].column2 = uData.second_profile.name
+            }
+            if (uData.second_profile_subject.id !== 0) {
+                this.asData[5].column2 = uData.second_profile_subject.name
+            }
+            if (uData.foreign_language.id !== 0) {
+                this.asData[6].column2 = uData.foreign_language.name
+            }
+            //
+
             if (uData.education_year !== 0) {
                 this.yData[0].eduYear = uData.education_year
             }
@@ -677,14 +796,14 @@ export default {
             this.changedFields.profile2 = false
         },
         editMode() {
-            this.editing = true
+            this.changed = true
         },
         async submitChanges() {
             let no_err = true
 
-            const new_year = this.yData[0].eduYear
-            const new_status = this.stData[0].status
-            const new_lang = this.langData[0].lang
+            const new_year = this.asData[0].column2
+            const new_status = this.asData[1].column2
+            const new_lang = this.asData[6].column2
             const new_role = (this.roleData[0].role === 'Администратор') ? 'admin' : 'user'
 
             const u_id = this.staticData[0].column2
@@ -737,7 +856,7 @@ export default {
                 })
             }
 
-            if (this.changedFields.status) {
+            //if (this.changedFields.status) {
                 let s_list = await this.getListService()
                 let new_st_id = s_list.find((element) => element.name === new_status)
                 await axios.post('user/setStatus/' + u_id + '/' + new_st_id.id, {}, this.config)
@@ -747,17 +866,17 @@ export default {
                     this.showError(e.response.data.message);
                     no_err = false
                 })
-            }
+            //}
             
-            if(this.changedFields.profile1 || this.changedFields.profile2 || this.changedFields.subject1 || this.changedFields.subject2) {
-                if (this.pf1Data[0].profile1 === this.pf2Data[0].profile2 && this.pf1Data[0].profile1 !== 'Не выбрано') {
+            //if(this.changedFields.profile1 || this.changedFields.profile2 || this.changedFields.subject1 || this.changedFields.subject2) {
+                if (this.asData[2].column2 === this.asData[4].column2 && this.asData[2].column2 !== 'Не выбрано') {
                     this.showError("Пожалуйста, выберите 2 разных профиля!")
                     
-                } else if ((this.sub1Data[0].subject1 === 'Не выбрано' && this.sub2Data[0].subject2 === 'Не выбрано') && 
-                            (this.pf1Data[0].profile1 === this.pf2Data[0].profile2 === 'Не выбрано')) {
+                } else if ((this.asData[3].column2 === 'Не выбрано' && this.asData[5].column2 === 'Не выбрано') && 
+                            (this.asData[2].column2 === this.asData[4].column2 === 'Не выбрано')) {
                     this.showError("Пожалуйста, заполните хотя бы 1 профиль!")
-                } else if((this.pf1Data[0].profile1 !== 'Не выбрано' && this.sub1Data[0].subject1 === 'Не выбрано') ||
-                        (this.pf2Data[0].profile2 !== 'Не выбрано' && this.sub2Data[0].subject2 === 'Не выбрано')) {
+                } else if((this.asData[2].column2 !== 'Не выбрано' && this.asData[3].column2 === 'Не выбрано') ||
+                        (this.asData[4].column2 !== 'Не выбрано' && this.asData[5].column2 === 'Не выбрано')) {
                     this.showError("Пожалуйста, выберите профильный предмет!")
                 }else {
                     let prList = await this.getListProfile();
@@ -766,27 +885,26 @@ export default {
                     
 
                     let new_pf1 = {}, new_pf2 = {}, new_sb1 = {}, new_sb2 = {}
-                    if(this.pf1Data[0].profile1 === 'Не выбрано') {
+                    if(this.asData[2].column2 === 'Не выбрано') {
                         new_pf1 = {id: 0, name: ''}
                     } else {
-                        new_pf1 = prList.find((element) => element.name === this.pf1Data[0].profile1)
+                        new_pf1 = prList.find((element) => element.name === this.asData[2].column2)
                     }
-                    if(this.pf2Data[0].profile2 === 'Не выбрано') {
+                    if(this.asData[4].column2 === 'Не выбрано') {
                         new_pf2 = {id: 0, name: ''}
                     } else {
-                        new_pf2 = prList.find((element) => element.name === this.pf2Data[0].profile2)
+                        new_pf2 = prList.find((element) => element.name === this.asData[4].column2)
                     }
-                    if(this.sub1Data[0].subject1 === 'Не выбрано') {
+                    if(this.asData[3].column2 === 'Не выбрано') {
                         new_sb1 = {id: 0, name: ''}
                     } else {
-                        new_sb1 = sbList.find((element) => element.name === this.sub1Data[0].subject1)
+                        new_sb1 = sbList.find((element) => element.name === this.asData[3].column2)
                     }
-                    if(this.sub2Data[0].subject2 === 'Не выбрано') {
+                    if(this.asData[5].column2 === 'Не выбрано') {
                         new_sb2 = {id: 0, name: ''}
                     } else {
-                        new_sb2 = sbList.find((element) => element.name === this.sub2Data[0].subject2)
+                        new_sb2 = sbList.find((element) => element.name === this.asData[5].column2)
                     }
-                    console.log(this.sub2Data[0].subject2)
                     console.log(new_pf1, new_sb1, new_pf2, new_sb2)
                     let body1 = {
                         "first_profile_id": new_pf1.id,
@@ -812,8 +930,8 @@ export default {
                     })
                 }
                 
-            }
-            if (this.changedFields.language) {
+            //}
+            //if (this.changedFields.language) {
                 let l_list = await this.getListLang();
                 let new_lang_id = l_list.find((element) => element.name === new_lang)
                 await axios.post('fl/setToUser/'+ this.userData.id + '/' + new_lang_id.id, {}, this.config)
@@ -821,7 +939,7 @@ export default {
                     this.showError(e.response.data.message);
                     no_err = false
                 })
-            }
+            //}
 
             if (no_err) {
                 this.clearChanges()
