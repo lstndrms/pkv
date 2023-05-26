@@ -10,8 +10,8 @@
         <form @sumbit.prevent class="screen-form">
             <p><input type="radio" v-model="way" v-bind:value="'lyceum'" class="radio-input">По результатам вступительных в лицей НИУ ВШЭ</p>
             <p><input type="radio" v-model="way" v-bind:value="'olympiad'" class="radio-input">По результатам олимпиад и конкурсов</p>
-            <p><input type="radio" v-model="way" v-bind:value="'MCKO'" class="radio-input">По результатам конкурса на квотное место для учеников ПК</p>
-            <p><input type="radio" v-model="way" v-bind:value="'quota'" class="radio-input">По результатам написания работ МЦКО</p>
+            <p><input type="radio" v-model="way" v-bind:value="'quota'" class="radio-input">По результатам конкурса на квотное место для учеников ПК</p>
+            <p><input type="radio" v-model="way" v-bind:value="'MCKO'" class="radio-input">По результатам написания работ МЦКО</p>
         </form>
         <FileUpload v-if="this.way !== ''" chooseLabel="Выбрать" uploadLabel='Загрузить' 
         cancelLabel='Отмена' name="demo[]" :customUpload="true" 
