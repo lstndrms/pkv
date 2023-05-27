@@ -496,83 +496,80 @@ methods: {
         }
         const new_lang = this.asData[6].column2
         
-        if(this.changedFields.profile1 || this.changedFields.profile2 || this.changedFields.subject1 || this.changedFields.subject2) {
-            if (this.asData[2].column2 === this.asData[4].column2 && this.asData[2].column2 !== 'Не выбрано') {
-                this.showError("Пожалуйста, выберите 2 разных профиля!")
-                
-            } else if ((this.asData[3].column2 === 'Не выбрано' && this.asData[5].column2 === 'Не выбрано') && 
-                        (this.asData[2].column2 === this.asData[4].column2 === 'Не выбрано')) {
-                this.showError("Пожалуйста, заполните хотя бы 1 профиль!")
-            } else if((this.asData[2].column2 !== 'Не выбрано' && this.asData[3].column2 === 'Не выбрано') ||
-                    (this.asData[4].column2 !== 'Не выбрано' && this.asData[5].column2 === 'Не выбрано')) {
-                this.showError("Пожалуйста, выберите профильный предмет!")
-            }else {
-                let prList = await this.getListProfile();
-                let sbList = await this.getListSubject(0);
+        if (this.asData[2].column2 === this.asData[4].column2 && this.asData[2].column2 !== 'Не выбрано') {
+            this.showError("Пожалуйста, выберите 2 разных профиля!")
+            
+        } else if ((this.asData[3].column2 === 'Не выбрано' && this.asData[5].column2 === 'Не выбрано') && 
+                    (this.asData[2].column2 === this.asData[4].column2 === 'Не выбрано')) {
+            this.showError("Пожалуйста, заполните хотя бы 1 профиль!")
+        } else if((this.asData[2].column2 !== 'Не выбрано' && this.asData[3].column2 === 'Не выбрано') ||
+                (this.asData[4].column2 !== 'Не выбрано' && this.asData[5].column2 === 'Не выбрано')) {
+            this.showError("Пожалуйста, выберите профильный предмет!")
+        }else {
+            let prList = await this.getListProfile();
+            let sbList = await this.getListSubject(0);
 
-                
+            
 
-                let new_pf1 = {}, new_pf2 = {}, new_sb1 = {}, new_sb2 = {}
-                if(this.asData[2].column2 === 'Не выбрано') {
-                    new_pf1 = {id: 0, name: ''}
-                } else {
-                    new_pf1 = prList.find((element) => element.name === this.asData[2].column2)
-                }
-                if(this.asData[4].column2 === 'Не выбрано') {
-                    new_pf2 = {id: 0, name: ''}
-                } else {
-                    new_pf2 = prList.find((element) => element.name === this.asData[4].column2)
-                }
-                if(this.asData[3].column2 === 'Не выбрано') {
-                    new_sb1 = {id: 0, name: ''}
-                } else {
-                    new_sb1 = sbList.find((element) => element.name === this.asData[3].column2)
-                }
-                if(this.asData[5].column2 === 'Не выбрано') {
-                    new_sb2 = {id: 0, name: ''}
-                } else {
-                    new_sb2 = sbList.find((element) => element.name === this.asData[5].column2)
-                }
-                console.log(new_pf1, new_sb1, new_pf2, new_sb2)
-                let body1 = {
-                    "first_profile_id": new_pf1.id,
-                    "second_profile_id": new_pf2.id
-                }
-                let body2 = {
-                    "first_subject_id": new_sb1.id,
-                    "second_subject_id": new_sb2.id
-                }
-                await axios.post('profiles/setToMe', body1, config)
-                .then(() => {
-                })
-                .catch((e) => {
-                    this.showError(e.response.data.message);
-                    no_err = false
-                })
-                await axios.post('subjects/setToMe', body2, config)
-                .then(() => {
-                })
-                .catch((e) => {
-                    this.showError(e.response.data.message);
-                    no_err = false
-                })
-            }
-        }
-        //if (this.changedFields.language) {
-            if (this.asData[6].column2 === '') {
-                this.showError("Выберите язык")
+            let new_pf1 = {}, new_pf2 = {}, new_sb1 = {}, new_sb2 = {}
+            if(this.asData[2].column2 === 'Не выбрано') {
+                new_pf1 = {id: 0, name: ''}
             } else {
-                let l_list = await this.getListLang();
-                let new_lang_id = l_list.find((element) => element.name === new_lang)
-                await axios.post('fl/setToMe/' + new_lang_id.id, {}, config)
-                .then(() => {
-                })
-                .catch((e) => {
-                    this.showError(e.response.data.message);
-                    no_err = false
-                })
+                new_pf1 = prList.find((element) => element.name === this.asData[2].column2)
             }
-        //}
+            if(this.asData[4].column2 === 'Не выбрано') {
+                new_pf2 = {id: 0, name: ''}
+            } else {
+                new_pf2 = prList.find((element) => element.name === this.asData[4].column2)
+            }
+            if(this.asData[3].column2 === 'Не выбрано') {
+                new_sb1 = {id: 0, name: ''}
+            } else {
+                new_sb1 = sbList.find((element) => element.name === this.asData[3].column2)
+            }
+            if(this.asData[5].column2 === 'Не выбрано') {
+                new_sb2 = {id: 0, name: ''}
+            } else {
+                new_sb2 = sbList.find((element) => element.name === this.asData[5].column2)
+            }
+            console.log(new_pf1, new_sb1, new_pf2, new_sb2)
+            let body1 = {
+                "first_profile_id": new_pf1.id,
+                "second_profile_id": new_pf2.id
+            }
+            let body2 = {
+                "first_subject_id": new_sb1.id,
+                "second_subject_id": new_sb2.id
+            }
+            await axios.post('profiles/setToMe', body1, config)
+            .then(() => {
+            })
+            .catch((e) => {
+                this.showError(e.response.data.message);
+                no_err = false
+            })
+            await axios.post('subjects/setToMe', body2, config)
+            .then(() => {
+            })
+            .catch((e) => {
+                this.showError(e.response.data.message);
+                no_err = false
+            })
+        }
+    
+        if (this.asData[6].column2 === '') {
+            this.showError("Выберите язык")
+        } else {
+            let l_list = await this.getListLang();
+            let new_lang_id = l_list.find((element) => element.name === new_lang)
+            await axios.post('fl/setToMe/' + new_lang_id.id, {}, config)
+            .then(() => {
+            })
+            .catch((e) => {
+                this.showError(e.response.data.message);
+                no_err = false
+            })
+        }
 
         if (no_err) {
             this.clearChanges()
