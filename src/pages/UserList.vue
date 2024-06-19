@@ -2,6 +2,11 @@
   <TopBar/>
   <Toast/>
   <div class="container">
+      <div class="flex w-12 align-items-center justify-content-end flex-wrap">
+          <my-button style="background-color: #CBEFBE;" class="tool-button" @click="downloadExcel">Выгрузить в Excel</my-button>
+      </div>
+  </div>
+  <div class="container">
     <div class="row" style="height: calc(100vh - 200px);" >
       <DataTable :value="usersData" data-key="id" v-model:filters="filters"
                  filter-display="row" :loading="isLoading"
@@ -185,12 +190,14 @@ import TopBar from "@/components/UI/TopBar.vue";
 import BottomBar from "@/components/UI/BottomBar.vue";
 import {FilterMatchMode} from 'primevue/api';
 import axios from "axios";
+import MyButton from "@/components/UI/MyButton.vue";
 
 export default {
   name: "UserList",
   components: {
     TopBar,
-    BottomBar
+    BottomBar,
+    MyButton
   },
   data() {
     return {
@@ -325,8 +332,21 @@ export default {
     },
     rowClick(event) {
       this.$router.push('/profile/users/'+ event.data.id)
-    }
+    },
+    async downloadExcel() {
+        await axios.get('user/export', this.headerConfig)
+        .then((response) => {
+            var a = document.createElement("a"); //Create <a>
+            a.href = "data:" + response.data.content_type + ";base64," + response.data.file_content; //Image Base64 Goes here
+            a.download = 'users'; //File name Here
+            a.click();
+        })
+        .catch((e) => {
+            this.showError(e.response.data.message)
+        })
+    },
   },
+  
   async mounted() {
     await this.setToken()
     await this.checkUser()
