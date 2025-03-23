@@ -188,7 +188,7 @@
 <script>
 import TopBar from "@/components/UI/TopBar.vue";
 import BottomBar from "@/components/UI/BottomBar.vue";
-import {FilterMatchMode} from 'primevue/api';
+import {FilterMatchMode} from '@primevue/core/api';
 import axios from "axios";
 import MyButton from "@/components/UI/MyButton.vue";
 

@@ -304,7 +304,7 @@ import BottomBar from '@/components/UI/BottomBar.vue'
 import MyButton from '@/components/UI/MyButton.vue';
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
-import {FilterMatchMode} from 'primevue/api';
+import {FilterMatchMode} from '@primevue/core/api';
 import axios from 'axios'
 export default {
     components: {

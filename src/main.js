@@ -15,13 +15,14 @@ import Column from "primevue/column";
 import Button from "primevue/button";
 import Toast from 'primevue/toast';
 import InputText from "primevue/inputtext";
-import DropDown from 'primevue/dropdown';
+import Select from 'primevue/select';
 import RadioButton from "primevue/radiobutton";
-import Calendar from "primevue/calendar";
+import DatePicker from "primevue/datepicker";
 import InputNumber from "primevue/inputnumber";
 import ProgressSpinner from "primevue/progressspinner";
 import MultiSelect from "primevue/multiselect";
 import axios from 'axios'
+import Aura from '@primeuix/themes/aura';
 
 const app = createApp(App)
 axios.defaults.baseURL = process.env.VUE_APP_BASE_URL
@@ -31,7 +32,17 @@ axios.defaults.baseURL = process.env.VUE_APP_BASE_URL
 app.use(router)
 app.use(VueBasicAlert)
 app.use(store)
-app.use(PrimeVue)
+app.use(PrimeVue , {
+    // Default theme configuration
+    theme: {
+        preset: Aura,
+        options: {
+            prefix: 'p',
+            darkModeSelector: 'light',
+            cssLayer: false
+        }
+    }
+ })
 app.use(DialogService)
 app.use(ConfirmationService)
 app.use(ToastService)
@@ -49,8 +60,8 @@ app.component('Column', Column)
 app.component('Button', Button)
 // eslint-disable-next-line vue/multi-word-component-names
 app.component('Toast', Toast)
-app.component('DropDown', DropDown)
+app.component('DropDown', Select)
 // eslint-disable-next-line vue/multi-word-component-names
-app.component('Calendar', Calendar)
+app.component('Calendar', DatePicker)
 
 app.mount('#app')
