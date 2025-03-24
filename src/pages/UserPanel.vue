@@ -7,20 +7,20 @@
                     <span class="text-xl font-bold ml-6">Персональные данные</span>
                 </div>
 
-                <DataTable :value="staticData" show-gridlines responsiveLayout="scroll" :row-class="rowClass">
-                    <Column class="w-50" field="column1"></Column>
-                    <Column class="w-50" field="column2" ></Column>
-                </DataTable>
-
-                <DataTable :value="roleData" show-gridlines responsiveLayout="scroll" :row-class="rowClass" editMode="cell" @cell-edit-complete="onCellEditComplete"> 
-                    <Column class="w-50" field="column1"></Column>
-                    <Column class="w-50" field="role" >
-                        <template #editor="{ data, field }">
-                            <DropDown v-model="data[field]" :options="rolesList" optionLabel="label" optionValue="value" placeholder="Выберите роль" style="max-width: 100%;">
-                            </DropDown>
-                        </template>
-                    </Column>
-                </DataTable>
+                <div class="flex flex-column">
+                    <div class="flex">
+                        <div class="col-6 p-2 custom-border"><span class="vertical-align-middle">Код участника</span></div>
+                        <div class="col-6 p-2 custom-border"><span class="vertical-align-middle"> {{ staticData[0].column2 }}</span></div>
+                    </div>
+                </div>
+                <div class="flex flex-column">
+                    <div class="flex">
+                        <div class="col-6 p-2 custom-border"><span class="vertical-align-middle">Роль</span></div>
+                        <div class="col-6 p-2 custom-border"><span class="vertical-align-middle">
+                            <PrimeSelect v-model="roleData[0].role" :options="rolesList" optionLabel="label" optionValue="value" @changed="editing = true"></PrimeSelect>
+                        </span></div>
+                    </div>
+                </div>
 
                 <DataTable :row-class="rowClass" :value="utData"  show-gridlines editMode="cell" @cell-edit-complete="onCellEditComplete" class="editable-cells-table" responsiveLayout="scroll">
                     <Column class="w-50" field="column1"></Column>
@@ -39,129 +39,67 @@
                         <span class="text-xl font-bold ml-6">Поступление</span>
                     </div>
 
-                    <DataTable :row-class="rowClass" :value="asData"  show-gridlines editMode="cell" @cell-edit-complete="onCellEditComplete" class="editable-cells-table" responsiveLayout="scroll">
-                        <Column class="w-50" field="column1"></Column>
-                        <Column class="w-50" field="column2">
-                            <template #body="{data, field}">
-                                {{ data[field] }}
-                            </template>
-                            <template v-if="this.changed === true" #editor="{ data, field }">
-        
-                                <DropDown v-if="data['column1'] === 'Год обучения'" v-model="data[field]" :options="eduYears" @update:modelValue="clearTable()" optionLabel="label" optionValue="value" placeholder="Выберите класс">
-                                </DropDown>
-                                <DropDown v-else-if="data['column1'] === 'Статус'" v-model="data[field]" :options="statusList" optionLabel="label" optionValue="value" placeholder="Выберите статус" style="max-width: 100%;">
-                                </DropDown>
-                                <DropDown v-else-if="data['column1'] === 'Профиль 1'" v-model="data[field]" :options="profileList" @change="updateProfile(3)" optionLabel="label" optionValue="value" placeholder="Выберите первый профиль" style="max-width: 100%;">
-                                </DropDown>
-                                <DropDown v-else-if="data['column1'] === 'Профильный предмет 1'" v-model="data[field]" :options="sub1List" @focus="updateList(3)" optionLabel="label" optionValue="value" placeholder="Выберите профильный предмет" style="max-width: 100%;">
-                                </DropDown>
-                                <DropDown v-else-if="data['column1'] === 'Профиль 2'" v-model="data[field]" :options="profileList" @change="updateProfile(5)" optionLabel="label" optionValue="value" placeholder="Выберите второй профиль" style="max-width: 100%;">
-                                </DropDown>
-                                <DropDown v-else-if="data['column1'] === 'Профильный предмет 2'" v-model="data[field]" :options="sub2List" @focus="updateList(5)" optionLabel="label" optionValue="value" placeholder="Выберите профильный предмет" style="max-width: 100%;">
-                                </DropDown>
-                                <DropDown v-else v-model="data[field]" :options="langList" optionLabel="label" optionValue="value" placeholder="Выберите иностранный язык" style="max-width: 100%;">
-                                </DropDown>
-                            </template>
+                    <div class="flex flex-column">
+                        <div class="flex">
+                            <div class="col-6 p-2 custom-border"><span class="vertical-align-middle">{{ asData[0].column1 }}</span></div>
+                            <div class="col-6 p-2 custom-border"><span class="vertical-align-middle">{{ asData[0].column2 }}</span></div>
+                        </div>
+                    </div>
+                    <div class="flex flex-column">
+                        <div class="flex">
+                            <div class="col-6 p-2 custom-border"><span class="vertical-align-middle">{{ asData[1].column1 }}</span></div>
+                            <div class="col-6 p-2 custom-border"><span class="vertical-align-middle">
+                                <PrimeSelect v-model="asData[1].column2" :options="statusList" @change="editing = true" optionLabel="label" optionValue="value" placeholder="Выберите статус" style="max-width: 100%;"></PrimeSelect>
+                            </span></div>
+                        </div>
+                    </div>
+                    <div class="flex flex-column">
+                        <div class="flex">
+                            <div class="col-6 p-2 custom-border"><span class="vertical-align-middle">{{ asData[2].column1 }}</span></div>
+                            <div class="col-6 p-2 custom-border"><span class="vertical-align-middle">
+                                <PrimeSelect v-model="asData[2].column2" :options="profileList" @change="updateProfile(3); editing = true" optionLabel="label" optionValue="value" placeholder="Выберите первый профиль" style="max-width: 100%;"></PrimeSelect>
+                            </span></div>
+                        </div>
+                    </div>
+                    <div class="flex flex-column">
+                        <div class="flex">
+                            <div class="col-6 p-2 custom-border"><span class="vertical-align-middle">{{ asData[3].column1 }}</span></div>
+                            <div class="col-6 p-2 custom-border"><span class="vertical-align-middle">
+                                <PrimeSelect v-model="asData[3].column2" :options="sub1List" @focus="updateList(3)" @change="editing = true" optionLabel="label" optionValue="value" placeholder="Выберите профильный предмет" style="max-width: 100%;"></PrimeSelect>
+                            </span></div>
+                        </div>
+                    </div>
+                    <div class="flex flex-column">
+                        <div class="flex">
+                            <div class="col-6 p-2 custom-border"><span class="vertical-align-middle">{{ asData[4].column1 }}</span></div>
+                            <div class="col-6 p-2 custom-border"><span class="vertical-align-middle">
+                                <PrimeSelect v-model="asData[4].column2" :options="profileList" @change="updateProfile(5);editing = true" optionLabel="label" optionValue="value" placeholder="Выберите второй профиль" style="max-width: 100%;"></PrimeSelect>
+                            </span></div>
+                        </div>
+                    </div>
+                    <div class="flex flex-column">
+                        <div class="flex">
+                            <div class="col-6 p-2 custom-border"><span class="vertical-align-middle">{{ asData[5].column1 }}</span></div>
+                            <div class="col-6 p-2 custom-border"><span class="vertical-align-middle">
+                                <PrimeSelect v-model="asData[5].column2" :options="sub2List" @focus="updateList(5)" @change="editing = true" optionLabel="label" optionValue="value" placeholder="Выберите профильный предмет" style="max-width: 100%;"></PrimeSelect>
+                            </span></div>
+                        </div>
+                    </div>
+                    <div class="flex flex-column">
+                        <div class="flex">
+                            <div class="col-6 p-2 custom-border"><span class="vertical-align-middle">{{ asData[6].column1 }}</span></div>
+                            <div class="col-6 p-2 custom-border"><span class="vertical-align-middle">
+                                <PrimeSelect v-model="asData[6].column2" :options="langList" @change="editing = true" optionLabel="label" optionValue="value" placeholder="Выберите иностранный язык" style="max-width: 100%;"></PrimeSelect>
+                            </span></div>
+                        </div>
+                    </div>
 
-                        </Column>
-                    </DataTable>
-                    <!--
-                    <DataTable :row-class="rowClass" show-gridlines :value="yData" editMode="row" dataKey="id" v-model:editingRows="editingRowsYear" @row-edit-save="onRowEditSaveYear" responsiveLayout="scroll" scroll-direction="horizontal">
-                        <Column field="column1" style="width: 30%">
-                        </Column>
-                        <Column field="eduYear" :style="{width: (this.$store.getters.USER.role === 'admin' ? ('60%') : ('70%'))}">
-                            <template #editor="{ data, field }">
-                                <DropDown v-model="data[field]" :options="eduYears" optionLabel="label" optionValue="value" placeholder="Выберите класс">
-                                </DropDown>
-                            </template>
-                        </Column>
-                        <Column v-if="this.$store.getters.USER.role === 'admin'" :rowEditor="true" style="width:10%; min-width:8rem" bodyStyle="text-align:center"></Column>
-                    </DataTable>
-
-                    <DataTable :row-class="rowClass" show-gridlines :value="stData" editMode="row" dataKey="id" v-model:editingRows="editingRowsStatus" @row-edit-save="onRowEditSaveStatus" responsiveLayout="scroll" scroll-direction="horizontal">
-                        <Column field="column1" style="width: 30%">
-                        </Column>
-                        <Column field="status" :style="{width: (this.$store.getters.USER.role === 'admin' ? ('60%') : ('70%'))}">
-                            <template #editor="{ data, field }">
-                                <DropDown v-model="data[field]" :options="statusList" optionLabel="label" optionValue="value" placeholder="Выберите статус" style="max-width: 100%;">
-                                </DropDown>
-                            </template>
-                        </Column>
-                        <Column v-if="this.$store.getters.USER.role === 'admin'" :rowEditor="true" style="width:10%; min-width:8rem" bodyStyle="text-align:center"></Column>
-                    </DataTable>
-
-                    <DataTable :row-class="rowClass" show-gridlines :value="pf1Data" editMode="row" dataKey="id" v-model:editingRows="editingRowsProfile1" @row-edit-save="onRowEditSaveProfile1" responsiveLayout="scroll" scroll-direction="horizontal">
-                        <Column field="column1" style="width: 30%">
-                        </Column>
-                        <Column field="profile1" :style="{width: '60%'}">
-                            <template #editor="{ data, field }">
-                                <DropDown v-model="data[field]" :options="profileList" optionLabel="label" optionValue="value" placeholder="Выберите первый профиль" style="max-width: 100%;">
-                                </DropDown>
-                            </template>
-                        </Column>
-                        <Column :rowEditor="true" style="width:10%; min-width:8rem" bodyStyle="text-align:center"></Column>
-                    </DataTable>
-                    
-
-                    <DataTable :row-class="rowClass" show-gridlines :value="sub1Data" editMode="row" dataKey="id" v-model:editingRows="editingRowsSubject1" @row-edit-save="onRowEditSaveSubject1" responsiveLayout="scroll" scroll-direction="horizontal">
-                        <Column field="column1" style="width: 30%">
-                        </Column>
-                        <Column field="subject1" :style="{width: '60%'}">
-                            <template #editor="{ data, field }">
-                                <DropDown v-model="data[field]" :options="sub1List" optionLabel="label" optionValue="value" placeholder="Выберите профильный предмет" style="max-width: 100%;">
-                                </DropDown>
-                            </template>
-                        </Column>
-                        <Column :rowEditor="true" style="width:10%; min-width:8rem" bodyStyle="text-align:center"></Column>
-                    </DataTable>
-
-
-                    <DataTable :row-class="rowClass" show-gridlines :value="pf2Data" editMode="row" dataKey="id" v-model:editingRows="editingRowsProfile2" @row-edit-save="onRowEditSaveProfile2" responsiveLayout="scroll" scroll-direction="horizontal">
-                        <Column field="column1" style="width: 30%">
-                        </Column>
-                        <Column field="profile2" :style="{width: '60%'}">
-                            <template #editor="{ data, field }">
-                                <DropDown v-model="data[field]" :options="profileList" optionLabel="label" optionValue="value" placeholder="Выберите второй профиль" style="max-width: 100%;">
-                                </DropDown>
-                            </template>
-                        </Column>
-                        <Column :rowEditor="true" style="width:10%; min-width:8rem" bodyStyle="text-align:center"></Column>
-                    </DataTable>
-
-                    <DataTable :row-class="rowClass" show-gridlines :value="sub2Data" editMode="row" dataKey="id" v-model:editingRows="editingRowsSubject2" @row-edit-save="onRowEditSaveSubject2" responsiveLayout="scroll" scroll-direction="horizontal">
-                        <Column field="column1" style="width: 30%">
-                        </Column>
-                        <Column field="subject2" :style="{width: '60%'}">
-                            <template #editor="{ data, field }">
-                                <DropDown v-model="data[field]" :options="sub2List" optionLabel="label" optionValue="value" placeholder="Выберите профильный предмет" style="max-width: 100%;">
-                                </DropDown>
-                            </template>
-                        </Column>
-                        <Column :rowEditor="true" style="width:10%; min-width:8rem" bodyStyle="text-align:center"></Column>
-                    </DataTable>
-
-                    <DataTable :row-class="rowClass" show-gridlines :value="langData" editMode="row" dataKey="id" v-model:editingRows="editingRowsLang" @row-edit-save="onRowEditSaveLang" responsiveLayout="scroll" scroll-direction="horizontal">
-                        <Column field="column1" style="width: 30%">
-                        </Column>
-                        <Column field="lang" :style="{width: '60%'}">
-                            <template #editor="{ data, field }">
-                                <DropDown v-model="data[field]" :options="langList" optionLabel="label" optionValue="value" placeholder="Выберите иностранный язык" style="max-width: 100%;">
-                                </DropDown>
-                            </template>
-                        </Column>
-                        <Column :rowEditor="true" style="width:10%; min-width:8rem" bodyStyle="text-align:center"></Column>
-                    </DataTable>
-                    
-                    -->
-                    
 
                 </div>
-                <div v-if="changed" id="my-tds" class="flex align-items-center justify-content-end" style="margin-bottom: 20px;margin-top: 50px;">
+                <div v-if="editing" id="my-tds" class="flex align-items-center justify-content-end" style="margin-bottom: 20px;margin-top: 50px;">
                     <my-button @click="submitChanges">Сохранить</my-button>
                 </div>
-                <div v-else id="my-tds" class="flex align-items-center justify-content-end" style="margin-bottom: 20px;margin-top: 50px;">
-                    <my-button @click="editMode">Редактировать</my-button>
-                </div>
+
                 <div class="attached-docs" v-if="this.screenshot.file_name !== ''">
                     <div class="flex align-items-center justify-content-between" style="margin-bottom: 20px;margin-top: 30px;" v-if="this.userData.role !== 'admin'">
                         <span class="text-xl font-bold ml-6">Прикрепленные документы</span>
@@ -702,27 +640,6 @@ export default {
             }
             //
 
-            if (uData.education_year !== 0) {
-                this.yData[0].eduYear = uData.education_year
-            }
-            if (uData.status.id !== '') {
-                this.stData[0].status = uData.status.name
-            }
-            if (uData.first_profile.id !== 0) {
-                this.pf1Data[0].profile1 = uData.first_profile.name
-            }
-            if (uData.first_profile_subject.id !== 0) {
-                this.sub1Data[0].subject1 = uData.first_profile_subject.name
-            }
-            if (uData.second_profile.id !== 0) {
-                this.pf2Data[0].profile2 = uData.second_profile.name
-            }
-            if (uData.second_profile_subject.id !== 0) {
-                this.sub2Data[0].subject2 = uData.second_profile_subject.name
-            }
-            if (uData.foreign_language.id !== 0) {
-                this.langData[0].lang = uData.foreign_language.name
-            }
             if (u_td.length !== 0) {
                 this.tests.pop()
                 u_td.forEach((val) => {
@@ -995,5 +912,10 @@ export default {
 }
 .test-dates-container {
     margin-bottom: 30px;
+}
+
+.custom-border {
+    border: 1px solid #e2e8f0;
+    background-color: #F5F5F5;
 }
 </style>
