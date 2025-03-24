@@ -4,17 +4,6 @@
   </div>
   <div v-else id="ctd-container">
     <div class="w-80">
-      <span class="ml-4">Класс тестирования</span>
-      <div class="flex align-items-center justify-content-around w-25 mt-1">
-        <div class="field-radiobutton">
-          <RadioButton input-id="class9" name="9" value=9 v-model="education_year"/>
-          <label for="class9">9</label>
-        </div>
-        <div class="field-radiobutton">
-          <RadioButton input-id="class10" name="10" value=10 v-model="education_year"/>
-          <label for="class10">10</label>
-        </div>
-      </div>
       <span class="ml-4 mt-3">Дата тестирования</span>
       <div class="field col-12 md:col-4 ml-3">
         <Calendar inputId="tdDate" v-model="dateString" :min-date="new Date()" autocomplete="off" date-format="dd.mm.yy" placeholder="ДД.ММ.ГГГГ"/>
@@ -54,7 +43,7 @@ export default {
   data() {
     return {
       loadingContent: true,
-      education_year: 9,
+      education_year: 10,
       dateString: '',
       timeString: '',
       location: 'Not selected',
