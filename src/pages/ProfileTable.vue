@@ -14,42 +14,137 @@
         <div id="my-tds" class="flex align-items-center justify-content-between" style="margin-bottom: 20px;margin-top: 30px;">
             <span class="text-xl font-bold ml-6">Поступление</span>
         </div>
+        
+        <div class="flex flex-column">
+            <div class="flex">
+      <div class="col-6 p-2 custom-border">{{ asData[0].column1 }}</div>
+      <div class="col-6 p-2 custom-border">{{ asData[0].column2 }}</div>
+    </div>
+    <!-- Row 2 -->
+    <div class="flex">
+      <div class="col-6 p-2 custom-border">{{ asData[1].column1 }}</div>
+      <div class="col-6 p-2 custom-border">{{ asData[1].column2 }}</div>
+    </div>
+      <!-- Row 1 -->
+      <div class="flex">
+        <div class="col-6 p-2 custom-border">{{ asData[2].column1 }}</div>
+        <div class="col-6 p-2 custom-border">
+          <PrimeSelect
+            v-model="asData[2].column2"
+            :options="profileOptionsList"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Выберите первый профиль"
+            @change="handleFirstPrimaryChange();editing = true"
+            style="max-width: 100%;"
+          />
+        </div>
+      </div>
+      <!-- Row 2 -->
+      <div class="flex">
+        <div class="col-6 p-2 custom-border">{{ asData[3].column1 }}</div>
+        <div class="col-6 p-2 custom-border">
+          <PrimeSelect
+            v-model="asData[3].column2"
+            :options="subject1OptionsList"
+            :disabled="isPrimaryEmpty(1)"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Выберите профильный предмет"
+            @change="editing = true"
+            style="max-width: 100%;"
+          />
+        </div>
+      </div>
+      <!-- Row 3 -->
+      <div class="flex">
+        <div class="col-6 p-2 custom-border">{{ asData[4].column1 }}</div>
+        <div class="col-6 p-2 custom-border">
+          <PrimeSelect
+            v-model="asData[4].column2"
+            :options="profileOptionsList.filter((e) => (e.value !== asData[2].column2))"
+            :disabled="isPrimaryEmpty(1) || isSubjectEmpty(1)"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Выберите второй профиль"
+            @change="updateSubjectList(2);editing = true"
+            style="max-width: 100%;"
+          />
+        </div>
+      </div>
+      <!-- Row 4 -->
+      <div class="flex">
+        <div class="col-6 p-2 custom-border">{{ asData[5].column1 }}</div>
+        <div class="col-6 p-2 custom-border">
+          <PrimeSelect
+            v-model="asData[5].column2"
+            :options="subject2OptionsList.filter((e) => (e.name !== asData[3].column2))"
+            :disabled="isPrimaryEmpty(2)"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Выберите профильный предмет"
+            @change="editing = true"
+            style="max-width: 100%;"
+          />
+        </div>
+      </div>
+      <!-- Row 5 -->
+      <div class="flex">
+        <div class="col-6 p-2 custom-border">{{ asData[6].column1 }}</div>
+        <div class="col-6 p-2 custom-border">
+          <PrimeSelect
+            v-model="asData[6].column2"
+            :options="languageOptions"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Выберите иностранный язык"
+            @change="editing = true"
+            style="max-width: 100%;"
+          />
+        </div>
+      </div>
+    </div>
+  
+        
+        <!--
         <DataTable :row-class="rowClass" :value="asData"  show-gridlines editMode="cell" @cell-edit-complete="onCellEditComplete" class="editable-cells-table" responsiveLayout="scroll">
             <Column class="w-50" field="column1"></Column>
             <Column class="w-50" field="column2">
                 <template #body="{data, field}">
                     {{ data[field] }}
                 </template>
-                <template v-if="this.changed === true" #editor="{ data, field }">
+                <template v-if="editing" #editor="{ data, field, index }">
 
-                    <DropDown disabled v-if="data['column1'] === 'Год обучения'" v-model="data[field]" :options="eduYears" @update:modelValue="clearTable()" optionLabel="label" optionValue="value" placeholder="Выберите класс">
-                    </DropDown>
-                    <DropDown disabled v-else-if="data['column1'] === 'Статус'" v-model="data[field]" :options="statusList" optionLabel="label" optionValue="value" placeholder="Выберите статус" style="max-width: 100%;">
-                    </DropDown>
-                    <DropDown v-else-if="data['column1'] === 'Профиль 1'" v-model="data[field]" :options="profileList" @change="updateProfile(3)" optionLabel="label" optionValue="value" placeholder="Выберите первый профиль" style="max-width: 100%;">
-                    </DropDown>
-                    <DropDown v-else-if="data['column1'] === 'Профильный предмет 1'" v-model="data[field]" :options="sub1List" @focus="updateList(3)" optionLabel="label" optionValue="value" placeholder="Выберите профильный предмет" style="max-width: 100%;">
-                    </DropDown>
-                    <DropDown v-else-if="data['column1'] === 'Профиль 2'" v-model="data[field]" :options="profileList" @change="updateProfile(5)" optionLabel="label" optionValue="value" placeholder="Выберите второй профиль" style="max-width: 100%;">
-                    </DropDown>
-                    <DropDown v-else-if="data['column1'] === 'Профильный предмет 2'" v-model="data[field]" :options="sub2List" @focus="updateList(5)" optionLabel="label" optionValue="value" placeholder="Выберите профильный предмет" style="max-width: 100%;">
-                    </DropDown>
-                    <DropDown v-else v-model="data[field]" :options="langList" optionLabel="label" optionValue="value" placeholder="Выберите иностранный язык" style="max-width: 100%;">
-                    </DropDown>
+                    <span v-if="data['column1'] === 'Год обучения'">
+                        {{ data[field] }}
+                    </span>
+                    <span v-else-if="data['column1'] === 'Статус'" style="max-width: 100%;">
+                        {{ data[field] }}
+                    </span>
+                
+                    <InputText v-else v-model="data[field]" autofocus fluid/>
+                
+                
+                    <PrimeSelect v-else-if="data['column1'] === 'Профиль 1'" v-model="asData[index].column2" :options="profileOptionsList" optionLabel="label" optionValue="value" placeholder="Выберите первый профиль" style="max-width: 100%;" fluid />
+                    <PrimeSelect v-else-if="data['column1'] === 'Профильный предмет 1'" v-model="data[field]" :options="subject1OptionsList" :disabled="isPrimaryEmpty(1)" optionLabel="label" optionValue="value" placeholder="Выберите профильный предмет" style="max-width: 100%;"/>
+                    <PrimeSelect v-else-if="data['column1'] === 'Профиль 2'" v-model="data[field]" :options="profileOptionsList" :disabled="isPrimaryEmpty(1) || isSubjectEmpty(1)" optionLabel="label" optionValue="value" placeholder="Выберите второй профиль" style="max-width: 100%;"/>
+                    <PrimeSelect v-else-if="data['column1'] === 'Профильный предмет 2'" v-model="data[field]" :options="subject2OptionsList" :disabled="isPrimaryEmpty(2)" optionLabel="label" optionValue="value" placeholder="Выберите профильный предмет" style="max-width: 100%;"/>
+                    
+                <PrimeSelect v-else v-model="data[field]" :options="langList" optionLabel="label" optionValue="value" placeholder="Выберите иностранный язык" style="max-width: 100%;"/>
                 </template>
 
             </Column>
         </DataTable>
-        
+        -->
     </div>
     
 
-    <div v-if="changed" id="my-tds" class="flex align-items-center justify-content-end" style="margin-bottom: 20px;margin-top: 50px;">
+    <div v-if="editing" id="my-tds" class="flex align-items-center justify-content-end" style="margin-bottom: 20px;margin-top: 50px;">
         <my-button @click="submitChanges">Сохранить</my-button>
     </div>
-    <div v-else id="my-tds" class="flex align-items-center justify-content-end" style="margin-bottom: 20px;margin-top: 50px;">
+    <!--<div v-else id="my-tds" class="flex align-items-center justify-content-end" style="margin-bottom: 20px;margin-top: 50px;">
         <my-button @click="editMode">Редактировать</my-button>
-    </div>
+    </div>-->
 </div>
     <vue-basic-alert
        :duration="300"
@@ -72,16 +167,7 @@ components: {
 },
 data() {
     return {
-        changed: false,
-        changedFields: {
-            'year': false,
-            'status': false,
-            'profile1': false,
-            'subject1': false,
-            'profile2': false,
-            'subject2': false,
-            'language': false,
-        },
+        editing: false,
         tdData: [
         {'column1': 'Код участника', 'column2': 'Не выбрано'},
         {'column1': 'Роль', 'column2': 'Не выбрано'},
@@ -93,208 +179,48 @@ data() {
         {'column1': 'Номер законного представителя', 'column2': 'Не выбрано'},
         {'column1': 'Номер и/или название нынешней школы', 'column2': 'Не выбрано'}
         ],
-        editingRowsYear: [],
-        editingRowsStatus: [],
-        editingRowsProfile1: [],
-        editingRowsProfile2: [],
-        editingRowsSubject1: [],
-        editingRowsSubject2: [],
-        editingRowsLang: [],
-        yData: [
-            {'column1': 'Год обучения', 'eduYear': 0}
-        ],
-        eduYears: [
-            {label: '9', value: 9},
-            {label: '10', value: 10}
-        ],
-        stData: [
-            {'column1': 'Статус', 'status': ''}
-        ],
-        statusList: [
-
-        ],
-        pf1Data: [
-            {'column1': 'Профиль 1', 'profile1': 'Не выбрано'}
-        ],
-        sub1Data: [
-            {'column1': 'Профильный предмет', 'subject1': 'Не выбрано'}
-        ],
-        pf2Data: [
-            {'column1': 'Профиль 2', 'profile2': 'Не выбрано'}
-        ],
-        sub2Data: [
-            {'column1': 'Профильный предмет', 'subject2': 'Не выбрано'}
-        ],
-        langData: [
-            {'column1': 'Иностранный язык', 'lang': 'Не выбрано'}
-        ],
-        profileList: [{label: 'Не выбрано', value: 'Не выбрано'}],
-        sub1List: [{label: 'Не выбрано', value: 'Не выбрано'}],
-        sub2List: [{label: 'Не выбрано', value: 'Не выбрано'}],
-        langList: [],
         asData: [
-            {'column1': 'Год обучения', 'column2': 'Не выбрано'},
-            {'column1': 'Статус', 'column2': 'Не выбрано'},
-            {'column1': 'Профиль 1', 'column2': 'Не выбрано'},
-            {'column1': 'Профильный предмет 1', 'column2': 'Не выбрано'},
-            {'column1': 'Профиль 2', 'column2': 'Не выбрано'},
-            {'column1': 'Профильный предмет 2', 'column2': 'Не выбрано'},
-            {'column1': 'Иностранный язык', 'column2': 'Не выбрано'}
+            {'column1': 'Год обучения', 'column2': 'Не выбрано'},          //0
+            {'column1': 'Статус', 'column2': 'Не выбрано'},                //1
+            {'column1': 'Профиль 1', 'column2': 'Не выбрано'},             //2
+            {'column1': 'Профильный предмет 1', 'column2': 'Не выбрано'},  //3
+            {'column1': 'Профиль 2', 'column2': 'Не выбрано'},             //4
+            {'column1': 'Профильный предмет 2', 'column2': 'Не выбрано'},  //5
+            {'column1': 'Иностранный язык', 'column2': 'Не выбрано'}       //6
         ],
+        getListProfileResponse: [],
+        profileOptionsList: [],
+        subjectsSet: [],
+        subject1OptionsList: [],
+        subject2OptionsList: [],
+        subjectMap: new Map([]),
+        languagesList: [],
+        languageOptions: []
     }
 },
 methods: {
-    onCellEditComplete(event) {
-        let { data, newValue, field } = event;
-        data[field] = newValue
-        this.changed = true
-    },
-    async updateProfile(index) {
-        this.asData[index].column2 = 'Не выбрано'
-        if(index === 3) {
-            let prList = await this.getListProfile();
-            if (this.asData[index-1].column2 === 'Не выбрано') {
-                this.sub1List = [{label: 'Не выбрано', value: 'Не выбрано'}]
-            } else {
-                let p = prList.find((element) => element.name === this.asData[index-1].column2)
-                let new_list = await this.getListSubject(p.id)
-                this.sub1List = [{label: 'Не выбрано', value: 'Не выбрано'}]
-                new_list.forEach((elem) => {this.sub1List.push({label: elem.name, value: elem.name})})
-            }
-            console.log(this.sub1List)
-        } else {
-            let prList = await this.getListProfile();
-            if (this.asData[index-1].column2 === 'Не выбрано') {
-                this.sub2List = [{label: 'Не выбрано', value: 'Не выбрано'}]
-            } else {
-                let p = prList.find((element) => element.name === this.asData[index-1].column2)
-                let new_list = await this.getListSubject(p.id)
-                this.sub2List = [{label: 'Не выбрано', value: 'Не выбрано'}]
-                new_list.forEach((elem) => {this.sub2List.push({label: elem.name, value: elem.name})})
-            }
-            console.log(this.sub2List)
-        }
-        
-    },
-    async updateList(index) {
-        if(index === 3) {
-            let prList = await this.getListProfile();
-            if (this.asData[index-1].column2 === 'Не выбрано') {
-                this.sub1List = [{label: 'Не выбрано', value: 'Не выбрано'}]
-            } else {
-                let p = prList.find((element) => element.name === this.asData[index-1].column2)
-                let new_list = await this.getListSubject(p.id)
-                this.sub1List = [{label: 'Не выбрано', value: 'Не выбрано'}]
-                new_list.forEach((elem) => {this.sub1List.push({label: elem.name, value: elem.name})})
-            }
-            console.log(this.sub1List)
-        } else {
-            let prList = await this.getListProfile();
-            if (this.asData[index-1].column2 === 'Не выбрано') {
-                this.sub2List = [{label: 'Не выбрано', value: 'Не выбрано'}]
-            } else {
-                let p = prList.find((element) => element.name === this.asData[index-1].column2)
-                let new_list = await this.getListSubject(p.id)
-                this.sub2List = [{label: 'Не выбрано', value: 'Не выбрано'}]
-                new_list.forEach((elem) => {this.sub2List.push({label: elem.name, value: elem.name})})
-            }
-            console.log(this.sub2List)
-        }
-        
-    },
-    clearTable() {
-        for(let i = 2; i <= 7;i++) {
-            this.asData[i].column2 = 'Не выбрано'
-        }
-    },
-    onRowEditSaveYear(event) {
-        this.changed = true
-        this.changedFields.year = true
-        let { newData, index } = event;
-        this.yData[index] = newData;
-    },
-    onRowEditSaveStatus(event) {
-        this.changed = true
-        this.changedFields.status = true
-        let { newData, index } = event;
-        this.stData[index] = newData;
-    },
-    async onRowEditSaveProfile1(event) {
-        this.changed = true
-        this.changedFields.profile1 = true
-        let { newData, index } = event;
-        this.pf1Data[index] = newData;
-        this.sub1Data[index] = {'column1': 'Профильный предмет', 'subject1': 'Не выбрано'}
-        let prList = await this.getListProfile();
-        if (newData.profile1 === 'Не выбрано') {
-            this.sub1List = [{label: 'Не выбрано', value: 'Не выбрано'}]
-        } else {
-            let p = prList.find((element) => element.name === newData.profile1)
-            let new_list = await this.getListSubject(p.id)
-            this.sub1List = [{label: 'Не выбрано', value: 'Не выбрано'}]
-            new_list.forEach((elem) => {this.sub1List.push({label: elem.name, value: elem.name})})
-        }
-    },
-    onRowEditSaveSubject1(event) {
-        this.changed = true
-        this.changedFields.subject1 = true
-        let { newData, index } = event;
-        this.sub1Data[index] = newData;
-    },
-    async onRowEditSaveProfile2(event) {
-        this.changed = true
-        this.changedFields.profile2 = true
-        let { newData, index } = event;
-        this.pf2Data[index] = newData;
-        this.sub2Data[index] = {'column1': 'Профильный предмет', 'subject2': 'Не выбрано'}
-        let prList = await this.getListProfile();
-        if (newData.profile2 === 'Не выбрано') {
-            this.sub2List = [{label: 'Не выбрано', value: 'Не выбрано'}]
-        } else {
-            let p = prList.find((element) => element.name === newData.profile2)
-            let new_list = await this.getListSubject(p.id)
-            this.sub2List = [{label: 'Не выбрано', value: 'Не выбрано'}]
-            new_list.forEach((elem) => {this.sub2List.push({label: elem.name, value: elem.name})})
-        }
-    },
-    onRowEditSaveSubject2(event) {
-        this.changed = true
-        this.changedFields.subject2 = true
-        let { newData, index } = event;
-        this.sub2Data[index] = newData;
-    },
-    onRowEditSaveLang(event) {
-        this.changed = true
-        this.changedFields.language = true
-        let { newData, index } = event;
-        this.langData[index] = newData;
-    },
     rowClass() {
       return 'grey'
     },
-    async getListService(yod) {
-        let config = {
-            headers: {
-                authorization: 'Bearer ' + this.$store.getters.TOKEN
-            }
+    onCellEditComplete(event) {
+        let { data, newValue, field } = event;
+        data[field] = newValue
+        console.log(data, data[field], newValue)
+    },
+    isPrimaryEmpty(profileIndex) {
+        if(profileIndex === 1) {
+            if (this.asData[2].column2 === 'Не выбрано') { return true }
+            else { return false }
+        } else {
+            if (this.asData[4].column2 === 'Не выбрано') { return true }
+            else { return false }
         }
-        let body = {
-            "available_for_10_th_class": (yod === 10),
-            "available_for_9_th_class": (yod === 9)
+    },
+    isSubjectEmpty(profileIndex){
+        if (profileIndex === 1) {
+            if (this.asData[3].column2 === 'Не выбрано') { return true }
+            else { return false }
         }
-        let ans = {}
-        await axios.post('user/listStatuses', body, config)
-        .then((res) => {
-            if (res.status === 200) {
-                ans = res.data
-            } else {
-                console.log('serverError')
-            }
-        })
-        .catch((e) => {
-            this.showError(e)
-        })
-        return ans
     },
     async getListProfile() {
         let config = {
@@ -359,6 +285,43 @@ methods: {
         })
         return ans
     },
+    async createSubjectMap() {
+        let response = await this.getListProfile()
+        response.forEach(element => {
+            if (element.education_year === this.asData[0].column2) {//education year
+                let _ = []
+                element.subjects.forEach(e => {
+                    _.push({label: e.name, value: e.name})
+                    this.subjectsSet.push(e)
+                })
+                this.subjectMap.set(element.name, _)
+                this.profileOptionsList.push({label: element.name, value: element.name})
+            }
+        });
+        this.getListProfileResponse = response
+    },
+    async getLanguageOptions() {
+        this.languagesList = await this.getListLang()
+        this.languagesList.forEach((e) => {
+            this.languageOptions.push({label: e.name, value: e.name})
+        })
+    },
+    getFirstProfile() {
+        return this.asData[2].column2
+    },
+    getSecondProfile() {
+        return this.asData[4].column2
+    },
+    preloadSubjectLists() {
+        if (this.getFirstProfile() !== 'Не выбрано') {
+            console.log(this.subjectMap.get(this.getFirstProfile()))
+            this.subject1OptionsList = this.subjectMap.get(this.getFirstProfile())
+        }
+        if (this.getSecondProfile() !== 'Не выбрано') {
+            console.log(this.subjectMap.get(this.getSecondProfile()))
+            this.subject2OptionsList = this.subjectMap.get(this.getSecondProfile())
+        }
+    },
     async fetchData() {
         const u_id = this.$store.getters.USER.id
         const u_role = this.$store.getters.USER.role
@@ -406,27 +369,6 @@ methods: {
             this.tdData[8].column2 = u_current_school
         }
         if (u_yod !== 0) {
-            this.yData[0].eduYear = u_yod
-        }
-        if (u_status !== '') {
-            this.stData[0].status = u_status
-        }
-        if (u_profile1.id !== 0) {
-            this.pf1Data[0].profile1 = u_profile1.name
-        }
-        if (u_subject1.id !== 0) {
-            this.sub1Data[0].subject1 = u_subject1.name
-        }
-        if (u_profile2.id !== 0) {
-            this.pf2Data[0].profile2 = u_profile2.name
-        }
-        if (u_subject2.id !== 0) {
-            this.sub2Data[0].subject2 = u_subject2.name
-        }
-        if (u_lang.id !== 0) {
-            this.langData[0].lang = u_lang.name
-        }
-        if (u_yod !== 0) {
             this.asData[0].column2 = u_yod
         }
         if (u_status.id !== '') {
@@ -447,23 +389,6 @@ methods: {
         if (u_lang.id !== 0) {
             this.asData[6].column2 = u_lang.name
         }
-        let stList = await this.getListService();
-        stList.forEach((elem) => {this.statusList.push({label: elem.name, value: elem.name})})
-
-        let prList = await this.getListProfile();
-        prList.forEach((elem) => {
-            if(elem.education_year === u_yod) {
-                this.profileList.push({label: elem.name, value: elem.name})
-            }
-        })
-
-        let sub1List = await this.getListSubject(u_profile1.id);
-        sub1List.forEach((elem) => {this.sub1List.push({label: elem.name, value: elem.name})})
-        let sub2List = await this.getListSubject(u_profile2.id);
-        sub2List.forEach((elem) => {this.sub2List.push({label: elem.name, value: elem.name})})
-
-        let langList = await this.getListLang();
-        langList.forEach((elem) => {this.langList.push({label: elem.name, value: elem.name})})
     },
     showError(errMsg) {
         this.$refs.alert.showAlert(
@@ -475,16 +400,20 @@ methods: {
             position: 'top right' } // Position of the alert 'top right', 'top left', 'bottom left', 'bottom right'
         )
     },
-    clearChanges() {
-        this.changed = false
-        this.changedFields.language = false
-        this.changedFields.year = false
-        this.changedFields.status = false
-        this.changedFields.profile1 = false
-        this.changedFields.profile2 = false
+    handleFirstPrimaryChange() {
+        if (this.getSecondProfile() === this.getFirstProfile()) {
+            this.asData[3].column2 = 'Не выбрано'
+            this.asData[4].column2 = 'Не выбрано'
+            this.asData[5].column2 = 'Не выбрано'
+        }
+        this.updateSubjectList(1)
+    },
+    updateSubjectList(index) {
+        if (index === 1) this.subject1OptionsList = this.subjectMap.get(this.getFirstProfile())
+        else this.subject2OptionsList = this.subjectMap.get(this.getSecondProfile())
     },
     editMode() {
-        this.changed = true
+        this.editing = true
     },
     async submitChanges() {
         let no_err = true
@@ -494,7 +423,6 @@ methods: {
                 authorization: 'Bearer ' + this.$store.getters.TOKEN
             }
         }
-        const new_lang = this.asData[6].column2
         
         if (this.asData[2].column2 === this.asData[4].column2 && this.asData[2].column2 !== 'Не выбрано') {
             this.showError("Пожалуйста, выберите 2 разных профиля!")
@@ -505,42 +433,33 @@ methods: {
         } else if((this.asData[2].column2 !== 'Не выбрано' && this.asData[3].column2 === 'Не выбрано') ||
                 (this.asData[4].column2 !== 'Не выбрано' && this.asData[5].column2 === 'Не выбрано')) {
             this.showError("Пожалуйста, выберите профильный предмет!")
-        }else {
-            let prList = await this.getListProfile();
-            let sbList = await this.getListSubject(0);
+        } else {
+            let new_lang_id = 0
 
-            
-
-            let new_pf1 = {}, new_pf2 = {}, new_sb1 = {}, new_sb2 = {}
-            if(this.asData[2].column2 === 'Не выбрано') {
-                new_pf1 = {id: 0, name: ''}
-            } else {
-                new_pf1 = prList.find((element) => element.name === this.asData[2].column2)
-            }
-            if(this.asData[4].column2 === 'Не выбрано') {
-                new_pf2 = {id: 0, name: ''}
-            } else {
-                new_pf2 = prList.find((element) => element.name === this.asData[4].column2)
-            }
-            if(this.asData[3].column2 === 'Не выбрано') {
-                new_sb1 = {id: 0, name: ''}
-            } else {
-                new_sb1 = sbList.find((element) => element.name === this.asData[3].column2)
-            }
-            if(this.asData[5].column2 === 'Не выбрано') {
-                new_sb2 = {id: 0, name: ''}
-            } else {
-                new_sb2 = sbList.find((element) => element.name === this.asData[5].column2)
-            }
-            console.log(new_pf1, new_sb1, new_pf2, new_sb2)
             let body1 = {
-                "first_profile_id": new_pf1.id,
-                "second_profile_id": new_pf2.id
+                "first_profile_id": 0,
+                "second_profile_id": 0
             }
             let body2 = {
-                "first_subject_id": new_sb1.id,
-                "second_subject_id": new_sb2.id
+                "first_subject_id": 0,
+                "second_subject_id": 0,
             }
+
+            if(this.asData[2].column2 !== 'Не выбрано') {
+                body1.first_profile_id = this.getListProfileResponse.filter((e) => (e.name === this.asData[2].column2))[0].id
+            if(this.asData[4].column2 !== 'Не выбрано') {
+                body1.second_profile_id = this.getListProfileResponse.filter((e) => (e.name === this.asData[4].column2))[0].id
+            }
+            if(this.asData[3].column2 !== 'Не выбрано') {
+                body2.first_subject_id = this.subjectsSet.filter((e) => (e.name === this.asData[3].column2))[0].id
+            }
+            if(this.asData[5].column2 !== 'Не выбрано') {
+                body2.second_subject_id = this.subjectsSet.filter((e) => (e.name === this.asData[5].column2))[0].id
+            }
+            if (this.asData[6].column2 !== 'Не выбрано') {
+                new_lang_id = this.languagesList.filter((e) => (e.name === this.asData[6].column2))[0].id
+            }
+
             await axios.post('profiles/setToMe', body1, config)
             .then(() => {
             })
@@ -555,24 +474,16 @@ methods: {
                 this.showError(e.response.data.message);
                 no_err = false
             })
-        }
-    
-        if (this.asData[6].column2 === '') {
-            this.showError("Выберите язык")
-        } else {
-            let l_list = await this.getListLang();
-            let new_lang_id = l_list.find((element) => element.name === new_lang)
-            await axios.post('fl/setToMe/' + new_lang_id.id, {}, config)
+            await axios.post('fl/setToMe/' + new_lang_id, {}, config)
             .then(() => {
-            })
-            .catch((e) => {
-                this.showError(e.response.data.message);
-                no_err = false
-            })
+                })
+                .catch((e) => {
+                    this.showError(e.response.data.message);
+                    no_err = false
+                })
+            }
         }
-
         if (no_err) {
-            this.clearChanges()
             this.$router.go()
         }
     }
@@ -605,6 +516,10 @@ async mounted() {
         }
     });
     await this.fetchData()
+    await this.createSubjectMap()
+    await this.getLanguageOptions()
+    this.preloadSubjectLists()
+    console.log(this.asData)
 },
 }
 </script>
@@ -616,4 +531,10 @@ async mounted() {
 ::v-deep(thead) {
     display: none;
 }
+
+.custom-border {
+    border: 1px solid #e2e8f0;
+    background-color: #F8F9FA;
+}
+
 </style>

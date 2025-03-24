@@ -60,7 +60,7 @@ app.component('Column', Column)
 app.component('Button', Button)
 // eslint-disable-next-line vue/multi-word-component-names
 app.component('Toast', Toast)
-app.component('DropDown', Select)
+app.component('PrimeSelect', Select)
 // eslint-disable-next-line vue/multi-word-component-names
 app.component('Calendar', DatePicker)
 
