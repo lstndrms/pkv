@@ -20,7 +20,7 @@
                 <div class="flex align-items-center justify-content-end mb-3">
                     <my-button @click="updateGrades">Сохранить изменения</my-button>
                 </div>
-                <DataTable :value="usersData" data-key="id" v-model:filters="filters" rowStyle=""
+                <DataTable :value="usersData" data-key="id" v-model:filters="filters"
                  filter-display="row" :loading="isLoading"
                  :global-filter-fields="['id', 'info']" :scrollable="true" scroll-height="flex" scrollDirection="both" show-gridlines responsive-layout="scroll"
                  @row-dblclick="rowClick($event)"
@@ -478,7 +478,7 @@ export default {
             }
             await axios.post('user/list', body, this.config)
                 .then((res) => {
-                    console.log(res.data)
+                    //console.log(res.data)
                     res.data.forEach((elem) => {
                     let tdindex = elem.test_dates.findIndex((val) => val.id === this.testData.id)
                     
