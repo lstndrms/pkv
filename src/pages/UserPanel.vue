@@ -42,7 +42,9 @@
                     <div class="flex flex-column">
                         <div class="flex">
                             <div class="col-6 p-2 custom-border"><span class="vertical-align-middle">{{ asData[0].column1 }}</span></div>
-                            <div class="col-6 p-2 custom-border"><span class="vertical-align-middle">{{ asData[0].column2 }}</span></div>
+                            <div class="col-6 p-2 custom-border"><span class="vertical-align-middle">
+                                <PrimeSelect v-model="asData[0].column2" :options="eduYears" @change="onEducationYearChange" optionLabel="label" optionValue="value" placeholder="Выберите класс" style="max-width: 100%;"></PrimeSelect>
+                            </span></div>
                         </div>
                     </div>
                     <div class="flex flex-column">
@@ -249,6 +251,7 @@ export default {
                 {'column1': 'Год обучения', 'eduYear': 0}
             ],
             eduYears: [
+                {label: '8', value: 8},
                 {label: '9', value: 9},
                 {label: '10', value: 10}
             ],
@@ -293,6 +296,25 @@ export default {
         }
     },
     methods: {
+        async onEducationYearChange() {
+            this.editing = true
+            this.changed = true
+            // Reset profile-dependent fields since profiles are filtered by education_year
+            this.asData[2].column2 = 'Не выбрано'
+            this.asData[3].column2 = 'Не выбрано'
+            this.asData[4].column2 = 'Не выбрано'
+            this.asData[5].column2 = 'Не выбрано'
+            this.sub1List = [{label: 'Не выбрано', value: 'Не выбрано'}]
+            this.sub2List = [{label: 'Не выбрано', value: 'Не выбрано'}]
+            // Rebuild profileList for the new education_year
+            let prList = await this.getListProfile()
+            this.profileList = [{label: 'Не выбрано', value: 'Не выбрано'}]
+            prList.forEach((elem) => {
+                if (elem.education_year === this.asData[0].column2) {
+                    this.profileList.push({label: elem.name, value: elem.name})
+                }
+            })
+        },
         async updateProfile(index) {
             this.asData[index].column2 = 'Не выбрано'
             if(index === 3) {
