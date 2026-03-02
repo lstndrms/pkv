@@ -47,8 +47,9 @@
                 <input type="text" class="input-field" placeholder="Школа №1" v-model="state.form.current_school">
                 <small class="error-line" v-if="v$.form.current_school.$error">Введите значение</small>
             </p>
-            <p class="input-container" hidden>
+            <p class="input-container">
                 <span class="input-title">Класс, в который поступаете</span>
+                <span class="radio"><input type="radio" v-model="state.form.education_year" v-bind:value="8">8</span>
                 <span class="radio"><input type="radio" v-model="state.form.education_year" v-bind:value="9">9</span>
                 <span class="radio"><input type="radio" v-model="state.form.education_year" v-bind:value="10">10</span>
                 <small class="error-line" v-if="v$.form.education_year.$error">Выберите значение</small>
@@ -96,7 +97,7 @@ export default {
                 phone_number: '',
                 parent_phone_number: '',
                 current_school: '',
-                education_year: 10,
+                education_year: 0,
                 confirm: ''
             }
         })

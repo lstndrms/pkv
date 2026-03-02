@@ -24,6 +24,21 @@
         </div>
         <InputText type="text" v-model="locationOther" placeholder="Другой адрес"/>
       </div>
+      <span class="ml-4 mt-3">Класс тестирования</span>
+      <div class="ml-4 mt-1 mb-3">
+        <div class="field-radiobutton">
+          <RadioButton input-id="ey8" name="education_year" :value="8" v-model="education_year"/>
+          <label for="ey8">8</label>
+        </div>
+        <div class="field-radiobutton">
+          <RadioButton input-id="ey9" name="education_year" :value="9" v-model="education_year"/>
+          <label for="ey9">9</label>
+        </div>
+        <div class="field-radiobutton">
+          <RadioButton input-id="ey10" name="education_year" :value="10" v-model="education_year"/>
+          <label for="ey10">10</label>
+        </div>
+      </div>
       <span class="ml-4">Максимальное число сдающих</span>
       <div class="ml-4 mt-1">
         <InputNumber inputId="maxPersons" v-model="maxPersons" mode="decimal" :useGrouping="false" min="0" placeholder="200"/>

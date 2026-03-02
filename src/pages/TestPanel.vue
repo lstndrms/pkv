@@ -335,7 +335,7 @@ export default {
             roles: ['Администратор', 'Абитуриент'],
             attendanceStatuses: ['Присутствовал', 'Не присутствовал'],
             genders: ['Мужской', 'Женский'],
-            education_years: [9, 10],
+            education_years: [8, 9, 10],
             profiles: [],
             subjects: [],
             foreign_languages: [],

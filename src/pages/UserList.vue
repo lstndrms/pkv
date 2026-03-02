@@ -206,7 +206,7 @@ export default {
       statuses: [],
       roles: ['Администратор', 'Абитуриент'],
       genders: ['Мужской', 'Женский'],
-      education_years: [9, 10],
+      education_years: [8, 9, 10],
       profiles: [],
       subjects: [],
       foreign_languages: [],
