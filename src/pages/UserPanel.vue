@@ -201,6 +201,7 @@ export default {
                     authorization: 'Bearer ' + this.$store.getters.TOKEN
                 }
             },
+            editing: false,
             changed: false,
             changedFields: {
                 'year': false,
@@ -472,6 +473,7 @@ export default {
             let { data, newValue, field } = event;
             data[field] = newValue
             this.changed = true
+            this.editing = true
         },
         onRowEditSaveYear(event) {
             this.changed = true
@@ -728,6 +730,7 @@ export default {
         },
         clearChanges() {
             this.changed = false
+            this.editing = false
             this.changedFields.language = false
             this.changedFields.year = false
             this.changedFields.status = false
