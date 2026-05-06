@@ -680,9 +680,9 @@ export default {
                             const sumFirstProfile = (val.russian_language_grade.is_valid && val.math_grade.is_valid && val.foreign_language_grade.is_valid && (u_yod === 10 ? val.first_profile_grade.is_valid : 1))
                             const sumSecondProfile = (val.russian_language_grade.is_valid && val.math_grade.is_valid && val.foreign_language_grade.is_valid && (u_yod === 10 ? val.second_profile_grade.is_valid : 1))
                             this.grades.push(
-                                {'column1': val.date, 'column2': 'Русский язык', 'column3': (val.russian_language_grade.is_valid) ? val.russian_language_grade.val : '-', 'column4': (u_yod === 9 ? 100 : 10)},
-                                {'column1': val.date, 'column2': 'Математика', 'column3': (val.math_grade.is_valid) ? val.math_grade.val : '-', 'column4': (u_yod === 9 ? 100 : 10)},
-                                {'column1': val.date, 'column2': 'Иностранный язык', 'column3': (val.foreign_language_grade.is_valid) ? val.foreign_language_grade.val : '-', 'column4': (u_yod === 9 ? 100 : 10)},
+                                {'column1': val.date, 'column2': 'Русский язык', 'column3': (val.russian_language_grade.is_valid) ? val.russian_language_grade.val : '-', 'column4': 10},
+                                {'column1': val.date, 'column2': 'Математика', 'column3': (val.math_grade.is_valid) ? val.math_grade.val : '-', 'column4': 10},
+                                {'column1': val.date, 'column2': 'Иностранный язык', 'column3': (val.foreign_language_grade.is_valid) ? val.foreign_language_grade.val : '-', 'column4': (u_yod === 10 ? 10 : 30)},
                                 {'column1': val.date, 'column2': uData.first_profile_subject.name, 'column3': (val.first_profile_grade.is_valid) ? val.first_profile_grade.val : '-', 'column4': (u_yod === 9 ? '-' : 20)},
                                 {'column1': val.date, 'column2': uData.second_profile_subject.name, 'column3': (val.second_profile_grade.is_valid) ? val.second_profile_grade.val : '-', 'column4': (u_yod === 9 ? '-' : 20)},
                             )
