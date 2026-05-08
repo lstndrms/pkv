@@ -227,19 +227,19 @@
                         <div v-if="data.first_subject.grade.is_valid">
                             <div>
                                 <p>{{data.first_subject.name}}</p>
-                                <p v-if="this.testData.education_year !== 9">{{ data.first_subject.grade.val }}/20</p>
-                                
+                                <p>{{ data.first_subject.grade.val }}/{{ this.testData.education_year === 10 ? 20 : 100 }}</p>
+
                             </div>
                         </div>
                         <div v-else>
                             <p>
-                                -   
+                                -
                             </p>
                         </div>
 
 
                     </template>
-                    <template #editor="{ data, field }" v-if="(this.testData.education_year !== 9)">
+                    <template #editor="{ data, field }">
                         <InputText v-if="data.first_subject.name !== ''" v-model="data[field].grade.val" autofocus @change='addChanges(data, field)'/>
                     </template>
                     <template #filter="{ filterModel, filterCallback }">
@@ -269,17 +269,17 @@
                         <div v-if="data.second_subject.grade.is_valid">
                             <div>
                                 <p>{{data.second_subject.name}}</p>
-                                <p v-if="this.testData.education_year !== 9">{{ data.second_subject.grade.val }}/20</p>
-                                
+                                <p>{{ data.second_subject.grade.val }}/{{ this.testData.education_year === 10 ? 20 : 100 }}</p>
+
                             </div>
                         </div>
                         <div v-else>
                             <p>
-                                -   
+                                -
                             </p>
                         </div>
                     </template>
-                    <template #editor="{ data, field }" v-if="this.testData.education_year !== 9">
+                    <template #editor="{ data, field }">
                         <InputText v-if="data.second_subject.name !== ''" v-model="data[field].grade.val" autofocus @change='addChanges(data, field)'/>
                     </template>
                     <template #filter="{ filterModel, filterCallback }">
