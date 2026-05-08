@@ -227,7 +227,7 @@
                         <div v-if="data.first_subject.grade.is_valid">
                             <div>
                                 <p>{{data.first_subject.name}}</p>
-                                <p>{{ data.first_subject.grade.val }}/{{ this.testData.education_year === 10 ? 20 : 100 }}</p>
+                                <p>{{ data.first_subject.grade.val }}/{{ this.testData.education_year === 10 ? 20 : 10 }}</p>
 
                             </div>
                         </div>
@@ -269,7 +269,7 @@
                         <div v-if="data.second_subject.grade.is_valid">
                             <div>
                                 <p>{{data.second_subject.name}}</p>
-                                <p>{{ data.second_subject.grade.val }}/{{ this.testData.education_year === 10 ? 20 : 100 }}</p>
+                                <p>{{ data.second_subject.grade.val }}/{{ this.testData.education_year === 10 ? 20 : 10 }}</p>
 
                             </div>
                         </div>
