@@ -143,7 +143,7 @@
                     <template #body="{data}">
                         <div v-if="data.russian_language.grade.is_valid">
                             <p>
-                                {{data.russian_language.grade.val}}/{{ (this.testData.education_year === 9) ? 100 : 10}}
+                                {{data.russian_language.grade.val}}/{{ (this.testData.education_year === 9) ? 100 : (this.testData.education_year === 8 ? 7 : 10)}}
                             </p>
                         </div>
                         <div v-else>
@@ -186,7 +186,7 @@
                         <div v-if="data.foreign_language.grade.is_valid">
                             <p>
                                 {{data.foreign_language.name}}<br/>
-                                {{ data.foreign_language.grade.val }}/{{ (this.testData.education_year === 9) ? 100 : 10}}
+                                {{ data.foreign_language.grade.val }}/{{ (this.testData.education_year === 9) ? 100 : (this.testData.education_year === 8 ? 23 : 10)}}
                             </p>
                         </div>
                         <div v-else>
